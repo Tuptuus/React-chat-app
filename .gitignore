@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# ignore firebase config file
+/src/components/firebase-config.js
+
 # production
 /build
 
