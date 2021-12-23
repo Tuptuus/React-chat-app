@@ -14,7 +14,7 @@
   font-size: 34px;
 }
 
-.title_appName {
+.Register_title_appName {
   font-family: "Pushster", cursive;
 }
 
@@ -30,6 +30,13 @@
 .register_input_email,
 .register_input_password {
   width: 70%;
+}
+
+.Register_error {
+  position: absolute;
+  margin-top: 18.5%;
+  font-size: 18px;
+  color: red;
 }
 
 .Register_buttons {
@@ -50,7 +57,7 @@
 }
 
 .Register_switchToLogin {
-  /* margin-top: 5%; */
+  margin-top: 2.5%;
   float: right;
 }
 
@@ -79,15 +86,15 @@
   cursor: pointer;
 }
 
-.facebook_logo {
+.Register_facebook_logo {
   width: 50px;
 }
 
-.facebook_logo_img {
+.Register_facebook_logo_img {
   width: 50px;
 }
 
-.facebook_continue {
+.Register_facebook_continue {
   margin-top: 15px;
   margin-left: 10px;
 }
@@ -103,15 +110,21 @@
   cursor: pointer;
 }
 
-.google_logo {
+.Register_google_logo {
   width: 50px;
 }
 
-.google_logo_img {
+.Register_google_logo_img {
   width: 50px;
 }
 
-.google_continue {
+.Register_google_continue {
   margin-top: 15px;
   margin-left: 10px;
+}
+
+.RegisterLoadingAnimation {
+  position: absolute;
+  margin-left: -10%;
+  margin-top: 0.5%;
 }

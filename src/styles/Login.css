@@ -1,0 +1,130 @@
+@import url("https://fonts.googleapis.com/css2?family=Pushster&display=swap");
+
+.Login_card {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Login_title {
+  margin-top: 5%;
+  color: #fd4517;
+  font-size: 34px;
+}
+
+.Login_title_appName {
+  font-family: "Pushster", cursive;
+}
+
+.Login_card_inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10%;
+  width: 100%;
+}
+
+.Login_input_name,
+.Login_input_email,
+.Login_input_password {
+  width: 70%;
+}
+
+.Login_buttons {
+  width: 70%;
+  margin-top: 9%;
+}
+
+.LoginUser_button {
+  float: left;
+  border: none;
+  outline: none;
+  width: 30%;
+  font-size: 34px;
+  border-radius: 15px;
+  text-shadow: 5px 5px 10px black;
+  color: white;
+  background-image: linear-gradient(to left, #fd4517 0%, #ffb199 100%);
+}
+
+.Login_switchToRegister {
+  margin-top: 2.5%;
+  float: right;
+}
+
+.Login_Or {
+  font-size: 34px;
+  color: #fd4517;
+}
+
+.Login_anotherOptions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5%;
+}
+
+.Login_facebookOption {
+  width: 32%;
+  margin-right: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.Login_facebook_logo {
+  width: 50px;
+}
+
+.Login_facebook_logo_img {
+  width: 50px;
+}
+
+.Login_facebook_continue {
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.Login_googleOption {
+  width: 32%;
+  margin-left: 3%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-color: #efefef;
+  cursor: pointer;
+}
+
+.Login_google_logo {
+  width: 50px;
+}
+
+.Login_google_logo_img {
+  width: 50px;
+}
+
+.Login_google_continue {
+  margin-top: 15px;
+  margin-left: 10px;
+}
+
+.Login_error {
+  position: absolute;
+  margin-top: 17%;
+  font-size: 18px;
+  color: red;
+}
+
+.LoginLoadingAnimation {
+  position: absolute;
+  margin-left: -10%;
+  margin-top: 0.5%;
+}
