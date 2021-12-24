@@ -11,6 +11,7 @@
 #### code in firebase-config.js is below
 
 import { initializeApp } from "firebase/app"; <br/>
+import { getFirestore } from "firebase/firestore";<br/>
 import { getAuth } from "firebase/auth"; <br/>
 
 const firebaseConfig = { <br/>
@@ -21,5 +22,8 @@ storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
 messagingSenderId: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
 appId: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
 }; <br/> <br/>
-const app = initializeApp(firebaseConfig); <br/>
-export const auth = getAuth(app); <br/>
+const app = initializeApp(firebaseConfig);<br/>
+const auth = getAuth(app); <br/>
+const db = getFirestore(); <br/>
+<br/>
+export { auth, db }; <br/>
