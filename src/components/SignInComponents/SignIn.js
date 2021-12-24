@@ -24,6 +24,8 @@ function SignIn(props) {
               handleChangeSignMode={props.handleChangeSignMode}
               RegisterErrorMessage={props.RegisterErrorMessage}
               RegisterLoadingAnimation={props.RegisterLoadingAnimation}
+              SignInUserWithGoogle={props.SignInUserWithGoogle}
+              SignInUserWithFacebook={props.SignInUserWithFacebook}
             />
           ) : (
             <Login
@@ -35,6 +37,8 @@ function SignIn(props) {
               LoginPasswordValue={props.LoginPasswordValue}
               LoginErrorMessage={props.LoginErrorMessage}
               LoginLoadingAnimation={props.LoginLoadingAnimation}
+              SignInUserWithGoogle={props.SignInUserWithGoogle}
+              SignInUserWithFacebook={props.SignInUserWithFacebook}
             />
           )}
         </div>

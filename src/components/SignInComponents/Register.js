@@ -66,13 +66,19 @@ function Register(props) {
       </div>
       <p className="Register_Or">Or</p>
       <div className="Register_anotherOptions">
-        <div className="Register_facebookOption">
+        <div
+          onClick={props.SignInUserWithFacebook}
+          className="Register_facebookOption"
+        >
           <div className="Register_facebook_logo">
             <img className="Register_facebook_logo_img" src={facebook} alt="" />
           </div>
           <p className="Register_facebook_continue">Continue with Facebook</p>
         </div>
-        <div className="Register_googleOption">
+        <div
+          onClick={props.SignInUserWithGoogle}
+          className="Register_googleOption"
+        >
           <div className="Register_google_logo">
             <img src={google} alt="" className="Register_google_logo_img" />
           </div>

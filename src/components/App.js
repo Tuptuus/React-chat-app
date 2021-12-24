@@ -7,6 +7,9 @@ import {
   signOut,
   updateProfile,
   onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  FacebookAuthProvider,
 } from "firebase/auth";
 import SignIn from "./SignInComponents/SignIn";
 
@@ -102,7 +105,7 @@ function App() {
       setRegisterError("Fill in all data");
       setTimeout(() => {
         setRegisterError("");
-      }, 1500);
+      }, 2000);
     }
   };
 
@@ -147,7 +150,36 @@ function App() {
       setLoginError("Fill in all data");
       setTimeout(() => {
         setLoginError("");
-      }, 1500);
+      }, 2000);
+    }
+  };
+
+  const SignInUserWithGoogle = async () => {
+    try {
+      const GoogleProvider = new GoogleAuthProvider();
+      await signInWithPopup(auth, GoogleProvider);
+      setcurrentPage("mainApp");
+      console.log(auth.currentUser);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const SignInUserWithFacebook = async () => {
+    try {
+      const facebookProvider = new FacebookAuthProvider();
+      await signInWithPopup(auth, facebookProvider);
+      setcurrentPage("mainApp");
+      console.log(auth.currentUser);
+    } catch (error) {
+      console.log(error.code);
+      if (error.code === "auth/account-exists-with-different-credential") {
+        setLoginError("account exists with different credential");
+        setRegisterError("account exists with different credential");
+        setTimeout(() => {
+          setLoginError("");
+          setRegisterError("");
+        }, 2000);
+      }
     }
   };
 
@@ -194,6 +226,8 @@ function App() {
           LoginPasswordValue={LoginPassword}
           LoginErrorMessage={LoginError}
           LoginLoadingAnimation={LoginLoadingAnimation}
+          SignInUserWithGoogle={SignInUserWithGoogle}
+          SignInUserWithFacebook={SignInUserWithFacebook}
         />
       ) : (
         <p>

@@ -53,17 +53,23 @@ function Login(props) {
       </div>
       <p className="Login_Or">Or</p>
       <div className="Login_anotherOptions">
-        <div className="Login_facebookOption">
+        <div
+          onClick={props.SignInUserWithFacebook}
+          className="Login_facebookOption"
+        >
           <div className="Login_facebook_logo">
             <img className="Login_facebook_logo_img" src={facebook} alt="" />
           </div>
-          <p className="Login_facebook_continue">Login with Facebook</p>
+          <p className="Login_facebook_continue">Continue with Facebook</p>
         </div>
-        <div className="Login_googleOption">
+        <div
+          onClick={props.SignInUserWithGoogle}
+          className="Login_googleOption"
+        >
           <div className="Login_google_logo">
             <img src={google} alt="" className="Login_google_logo_img" />
           </div>
-          <p className="Login_google_continue">Login with Google</p>
+          <p className="Login_google_continue">Continue with Google</p>
         </div>
       </div>
     </div>
