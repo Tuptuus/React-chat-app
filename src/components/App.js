@@ -62,7 +62,9 @@ function App() {
     if (
       RegisterName !== "" &&
       RegisterEmail !== "" &&
-      RegisterPassword !== ""
+      RegisterPassword !== "" &&
+      RegisterName.match(" ") &&
+      RegisterName[RegisterName.length - 1] !== " "
     ) {
       try {
         setRegisterLoadingAnimation(true);
@@ -85,27 +87,41 @@ function App() {
           setRegisterError("Invalid Email");
           setTimeout(() => {
             setRegisterError("");
-          }, 2000);
+          }, 3000);
           setRegisterLoadingAnimation(false);
         } else if (error.code === "auth/email-already-in-use") {
           setRegisterError("This email is already in use");
           setTimeout(() => {
             setRegisterError("");
-          }, 2000);
+          }, 3000);
           setRegisterLoadingAnimation(false);
         } else if (error.code === "auth/weak-password") {
           setRegisterError("Too weak password");
           setTimeout(() => {
             setRegisterError("");
-          }, 2000);
+          }, 3000);
           setRegisterLoadingAnimation(false);
         }
       }
-    } else {
+    } else if (
+      RegisterName === "" ||
+      RegisterEmail === "" ||
+      RegisterPassword === ""
+    ) {
       setRegisterError("Fill in all data");
       setTimeout(() => {
         setRegisterError("");
-      }, 2000);
+      }, 3000);
+    } else if (RegisterName[RegisterName.length - 1] === " ") {
+      setRegisterError("Remove spaces from behind of your name");
+      setTimeout(() => {
+        setRegisterError("");
+      }, 3000);
+    } else {
+      setRegisterError("Your name must contains space");
+      setTimeout(() => {
+        setRegisterError("");
+      }, 3000);
     }
   };
 
@@ -124,25 +140,25 @@ function App() {
           setLoginError("Invalid Password");
           setTimeout(() => {
             setLoginError("");
-          }, 2000);
+          }, 3000);
           setLoginLoadingAnimation(false);
         } else if (error.code === "auth/user-not-found") {
           setLoginError("User not found");
           setTimeout(() => {
             setLoginError("");
-          }, 2000);
+          }, 3000);
           setLoginLoadingAnimation(false);
         } else if (error.code === "auth/too-many-requests") {
           setLoginError("Try again later");
           setTimeout(() => {
             setLoginError("");
-          }, 2000);
+          }, 3000);
           setLoginLoadingAnimation(false);
         } else if (error.code === "auth/invalid-email") {
           setLoginError("Invalid Email");
           setTimeout(() => {
             setLoginError("");
-          }, 2000);
+          }, 3000);
           setLoginLoadingAnimation(false);
         }
       }
@@ -150,7 +166,7 @@ function App() {
       setLoginError("Fill in all data");
       setTimeout(() => {
         setLoginError("");
-      }, 2000);
+      }, 3000);
     }
   };
 
@@ -178,7 +194,7 @@ function App() {
         setTimeout(() => {
           setLoginError("");
           setRegisterError("");
-        }, 2000);
+        }, 3000);
       }
     }
   };
