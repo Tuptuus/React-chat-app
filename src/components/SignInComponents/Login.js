@@ -18,6 +18,7 @@ function Login(props) {
             placeholder="name@example.com"
             onChange={props.handleLoginEmail}
             value={props.LoginEmailValue}
+            onKeyPress={props.handleEnterLoginPress}
           />
           <label htmlFor="floatingInputCustom">Email address</label>
         </Form.Floating>
@@ -28,6 +29,7 @@ function Login(props) {
             placeholder="Password"
             onChange={props.handleLoginPassword}
             value={props.LoginPasswordValue}
+            onKeyPress={props.handleEnterLoginPress}
           />
           <label htmlFor="floatingPasswordCustom">Password</label>
         </Form.Floating>

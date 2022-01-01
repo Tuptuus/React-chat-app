@@ -26,6 +26,7 @@ function SignIn(props) {
               RegisterLoadingAnimation={props.RegisterLoadingAnimation}
               SignInUserWithGoogle={props.SignInUserWithGoogle}
               SignInUserWithFacebook={props.SignInUserWithFacebook}
+              handleEnterRegisterPress={props.handleEnterRegisterPress}
             />
           ) : (
             <Login
@@ -39,6 +40,7 @@ function SignIn(props) {
               LoginLoadingAnimation={props.LoginLoadingAnimation}
               SignInUserWithGoogle={props.SignInUserWithGoogle}
               SignInUserWithFacebook={props.SignInUserWithFacebook}
+              handleEnterLoginPress={props.handleEnterLoginPress}
             />
           )}
         </div>

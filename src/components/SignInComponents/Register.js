@@ -18,6 +18,7 @@ function Register(props) {
             type="text"
             placeholder="User Name"
             value={props.RegisterNameValue}
+            onKeyPress={props.handleEnterRegisterPress}
           />
           <label htmlFor="floatingInputCustom">First Name and Surname</label>
         </Form.Floating>
@@ -28,6 +29,7 @@ function Register(props) {
             type="email"
             placeholder="name@example.com"
             value={props.RegisterEmailValue}
+            onKeyPress={props.handleEnterRegisterPress}
           />
           <label htmlFor="floatingInputCustom">Email address</label>
         </Form.Floating>
@@ -38,6 +40,7 @@ function Register(props) {
             type="password"
             placeholder="Password"
             value={props.RegisterPasswordValue}
+            onKeyPress={props.handleEnterRegisterPress}
           />
           <label htmlFor="floatingPasswordCustom">Password</label>
         </Form.Floating>

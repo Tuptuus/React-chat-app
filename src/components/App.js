@@ -11,37 +11,49 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
 } from "firebase/auth";
+import {
+  collection,
+  doc,
+  addDoc,
+  setDoc,
+  onSnapshot,
+} from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
+import MainApp from "./mainAppComponents/MainApp";
 
 function App() {
   const [currentPage, setcurrentPage] = useState("signIn");
   const [signMode, setSignMode] = useState("login");
+
   const [RegisterName, setRegisterName] = useState("");
   const [RegisterEmail, setRegisterEmail] = useState("");
   const [RegisterPassword, setRegisterPassword] = useState("");
   const [RegisterError, setRegisterError] = useState("");
   const [RegisterloadingAnimation, setRegisterLoadingAnimation] =
     useState(false);
-
   const [LoginEmail, setLoginEmail] = useState("");
   const [LoginPassword, setLoginPassword] = useState("");
   const [LoginLoadingAnimation, setLoginLoadingAnimation] = useState(false);
   const [LoginError, setLoginError] = useState("");
-
   const [currentUser, setCurrentUser] = useState({});
 
+  // STAY LOGIN AFTER REFRESH PAGE
   onAuthStateChanged(auth, (currUser) => {
     setCurrentUser(currUser);
   });
 
   useEffect(() => {
-    setcurrentPage(window.localStorage.getItem("currentPage"));
+    const data = localStorage.getItem("currentPage");
+    if (data) {
+      setcurrentPage(data);
+    }
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("currentPage", currentPage);
-  }, [currentPage]);
+    localStorage.setItem("currentPage", currentPage);
+  });
 
+  // CHANGE PAGE BETWEEN LOGIN OR REGISTER
   const handleChangeSignMode = (e) => {
     e.preventDefault();
     if (signMode === "login") {
@@ -58,6 +70,18 @@ function App() {
     }
   };
 
+  // ADDING USER TO DATABASE
+  const AddUserToDatabase = async () => {
+    const registerUserCollRef = doc(db, "Users", auth.currentUser.uid);
+    const registerUserPayload = {
+      UID: auth.currentUser.uid,
+      name: auth.currentUser.displayName,
+      email: auth.currentUser.email,
+    };
+    await setDoc(registerUserCollRef, registerUserPayload);
+  };
+
+  // REGISTER USER WITH EMAIL AND PASSWORD
   const RegisterUser = async () => {
     if (
       RegisterName !== "" &&
@@ -76,6 +100,7 @@ function App() {
         await updateProfile(auth.currentUser, {
           displayName: RegisterName,
         }).then(() => {});
+        AddUserToDatabase();
         setRegisterName("");
         setRegisterEmail("");
         setRegisterPassword("");
@@ -125,6 +150,7 @@ function App() {
     }
   };
 
+  // LOGIN USER WITH EMAIL AND PASSWORD
   const LoginUser = async () => {
     if (LoginEmail !== "" && LoginPassword !== "") {
       try {
@@ -135,7 +161,6 @@ function App() {
         setLoginLoadingAnimation(false);
         setcurrentPage("mainApp");
       } catch (error) {
-        console.log(error.code);
         if (error.code === "auth/wrong-password") {
           setLoginError("Invalid Password");
           setTimeout(() => {
@@ -170,24 +195,14 @@ function App() {
     }
   };
 
+  // SIGN IN WITH GOOGLE OPTION
   const SignInUserWithGoogle = async () => {
     try {
       const GoogleProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, GoogleProvider);
+      AddUserToDatabase();
       setcurrentPage("mainApp");
-      console.log(auth.currentUser);
     } catch (error) {
-      console.log(error);
-    }
-  };
-  const SignInUserWithFacebook = async () => {
-    try {
-      const facebookProvider = new FacebookAuthProvider();
-      await signInWithPopup(auth, facebookProvider);
-      setcurrentPage("mainApp");
-      console.log(auth.currentUser);
-    } catch (error) {
-      console.log(error.code);
       if (error.code === "auth/account-exists-with-different-credential") {
         setLoginError("account exists with different credential");
         setRegisterError("account exists with different credential");
@@ -199,12 +214,32 @@ function App() {
     }
   };
 
+  // SIGN IN WITH FACEBOOK OPTION
+  const SignInUserWithFacebook = async () => {
+    try {
+      const facebookProvider = new FacebookAuthProvider();
+      await signInWithPopup(auth, facebookProvider);
+      AddUserToDatabase();
+      setcurrentPage("mainApp");
+    } catch (error) {
+      if (error.code === "auth/account-exists-with-different-credential") {
+        setLoginError("account exists with different credential");
+        setRegisterError("account exists with different credential");
+        setTimeout(() => {
+          setLoginError("");
+          setRegisterError("");
+        }, 3000);
+      }
+    }
+  };
+
+  // LOGOUT USER
   const LogoutUser = async () => {
     signOut(auth);
     setcurrentPage("signIn");
-    window.localStorage.setItem("currentPage", "signIn");
   };
 
+  // HANDLE ALL INPUTS ON REGISTER AND LOGIN PAGES
   const handleRegisterName = (e) => {
     setRegisterName(e.target.value);
   };
@@ -219,6 +254,16 @@ function App() {
   };
   const handleLoginPassword = (e) => {
     setLoginPassword(e.target.value);
+  };
+  const handleEnterLoginPress = (e) => {
+    if (e.key === "Enter") {
+      LoginUser();
+    }
+  };
+  const handleEnterRegisterPress = (e) => {
+    if (e.key === "Enter") {
+      RegisterUser();
+    }
   };
   return (
     <div className="App">
@@ -244,12 +289,11 @@ function App() {
           LoginLoadingAnimation={LoginLoadingAnimation}
           SignInUserWithGoogle={SignInUserWithGoogle}
           SignInUserWithFacebook={SignInUserWithFacebook}
+          handleEnterLoginPress={handleEnterLoginPress}
+          handleEnterRegisterPress={handleEnterRegisterPress}
         />
       ) : (
-        <p>
-          główna {currentUser.displayName}{" "}
-          <button onClick={LogoutUser}>logout</button>
-        </p>
+        <MainApp currentUser={currentUser} LogoutUser={LogoutUser} />
       )}
     </div>
   );
