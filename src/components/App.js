@@ -20,9 +20,12 @@ import {
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
+import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
+import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 
 function App() {
-  const [currentPage, setcurrentPage] = useState("signIn");
   const [signMode, setSignMode] = useState("login");
 
   const [RegisterName, setRegisterName] = useState("");
@@ -37,20 +40,11 @@ function App() {
   const [LoginError, setLoginError] = useState("");
   const [currentUser, setCurrentUser] = useState({});
 
+  const navigate = useNavigate();
+
   // STAY LOGIN AFTER REFRESH PAGE
   onAuthStateChanged(auth, (currUser) => {
     setCurrentUser(currUser);
-  });
-
-  useEffect(() => {
-    const data = localStorage.getItem("currentPage");
-    if (data) {
-      setcurrentPage(data);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("currentPage", currentPage);
   });
 
   // CHANGE PAGE BETWEEN LOGIN OR REGISTER
@@ -106,7 +100,7 @@ function App() {
         setRegisterPassword("");
         setRegisterError("");
         setRegisterLoadingAnimation(false);
-        setcurrentPage("mainApp");
+        navigate("/ChatApp");
       } catch (error) {
         if (error.code === "auth/invalid-email") {
           setRegisterError("Invalid Email");
@@ -159,7 +153,7 @@ function App() {
         setLoginEmail("");
         setLoginPassword("");
         setLoginLoadingAnimation(false);
-        setcurrentPage("mainApp");
+        navigate("/ChatApp");
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           setLoginError("Invalid Password");
@@ -201,7 +195,7 @@ function App() {
       const GoogleProvider = new GoogleAuthProvider();
       await signInWithPopup(auth, GoogleProvider);
       AddUserToDatabase();
-      setcurrentPage("mainApp");
+      navigate("/ChatApp");
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         setLoginError("account exists with different credential");
@@ -220,7 +214,7 @@ function App() {
       const facebookProvider = new FacebookAuthProvider();
       await signInWithPopup(auth, facebookProvider);
       AddUserToDatabase();
-      setcurrentPage("mainApp");
+      navigate("/ChatApp");
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         setLoginError("account exists with different credential");
@@ -236,7 +230,7 @@ function App() {
   // LOGOUT USER
   const LogoutUser = async () => {
     signOut(auth);
-    setcurrentPage("signIn");
+    navigate("/");
   };
 
   // HANDLE ALL INPUTS ON REGISTER AND LOGIN PAGES
@@ -267,34 +261,47 @@ function App() {
   };
   return (
     <div className="App">
-      {currentPage === "signIn" ? (
-        <SignIn
-          signMode={signMode}
-          RegisterNameValue={RegisterName}
-          RegisterEmailValue={RegisterEmail}
-          RegisterPasswordValue={RegisterPassword}
-          handleRegisterUser={RegisterUser}
-          handleRegisterName={handleRegisterName}
-          handleRegisterEmail={handleRegisterEmail}
-          handleRegisterPassword={handleRegisterPassword}
-          handleChangeSignMode={handleChangeSignMode}
-          RegisterErrorMessage={RegisterError}
-          RegisterLoadingAnimation={RegisterloadingAnimation}
-          handleLoginUser={LoginUser}
-          handleLoginEmail={handleLoginEmail}
-          handleLoginPassword={handleLoginPassword}
-          LoginEmailValue={LoginEmail}
-          LoginPasswordValue={LoginPassword}
-          LoginErrorMessage={LoginError}
-          LoginLoadingAnimation={LoginLoadingAnimation}
-          SignInUserWithGoogle={SignInUserWithGoogle}
-          SignInUserWithFacebook={SignInUserWithFacebook}
-          handleEnterLoginPress={handleEnterLoginPress}
-          handleEnterRegisterPress={handleEnterRegisterPress}
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <SignIn
+              signMode={signMode}
+              RegisterNameValue={RegisterName}
+              RegisterEmailValue={RegisterEmail}
+              RegisterPasswordValue={RegisterPassword}
+              handleRegisterUser={RegisterUser}
+              handleRegisterName={handleRegisterName}
+              handleRegisterEmail={handleRegisterEmail}
+              handleRegisterPassword={handleRegisterPassword}
+              handleChangeSignMode={handleChangeSignMode}
+              RegisterErrorMessage={RegisterError}
+              RegisterLoadingAnimation={RegisterloadingAnimation}
+              handleLoginUser={LoginUser}
+              handleLoginEmail={handleLoginEmail}
+              handleLoginPassword={handleLoginPassword}
+              LoginEmailValue={LoginEmail}
+              LoginPasswordValue={LoginPassword}
+              LoginErrorMessage={LoginError}
+              LoginLoadingAnimation={LoginLoadingAnimation}
+              SignInUserWithGoogle={SignInUserWithGoogle}
+              SignInUserWithFacebook={SignInUserWithFacebook}
+              handleEnterLoginPress={handleEnterLoginPress}
+              handleEnterRegisterPress={handleEnterRegisterPress}
+            />
+          }
         />
-      ) : (
-        <MainApp currentUser={currentUser} LogoutUser={LogoutUser} />
-      )}
+        <Route
+          path="/ChatApp"
+          element={
+            <MainApp currentUser={currentUser} LogoutUser={LogoutUser} />
+          }
+        >
+          <Route path="/ChatApp/Chats" element={<Chats />} />
+          <Route path="/ChatApp/Friends" element={<Friends />} />
+          <Route path="/ChatApp/Profile" element={<Profile />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

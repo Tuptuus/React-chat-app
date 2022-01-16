@@ -1,50 +1,10 @@
-.LeftPanelContainer {
-  height: 100vh;
-  width: 3.5%;
-  background-color: #fd4517;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  flex-direction: column;
+.LeftPanel_container {
+  background-color: red;
+  width: 20%;
+  user-select: none;
 }
 
-.LeftPanel_UserChatsIcon,
-.LeftPanel_UserIcon,
-.LeftPanel_UserFriendsIcon,
-.LeftPanel_SignOutIcon {
-  font-size: 40px;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: 0.3s;
-  /* color: #696969; */
-  color: #ffbcab;
-}
-.LeftPanel_UserChatsIcon:hover,
-.LeftPanel_UserIcon:hover,
-.LeftPanel_UserFriendsIcon:hover,
-.LeftPanel_SignOutIcon:hover {
-  /* color: white; */
-  /* color: white; */
-  color: #ffe4de;
-  /* color: #c4563b; */
-  /* color: #fd4517; */
-}
-
-.LeftPanel_BottomButton {
-  position: absolute;
-  bottom: 0;
-}
-
-.LeftPanel_Icons {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.currActive,
-.currActive:hover {
-  color: white;
+.LeftPanel_Top {
+  background-color: grey;
+  height: 10%;
 }

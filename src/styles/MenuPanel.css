@@ -1,0 +1,50 @@
+.MenuPanelContainer {
+  height: 100vh;
+  width: 3.5%;
+  background-color: #fd4517;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.MenuPanel_UserChatsIcon,
+.MenuPanel_UserIcon,
+.MenuPanel_UserFriendsIcon,
+.MenuPanel_SignOutIcon {
+  font-size: 40px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: 0.3s;
+  /* color: #696969; */
+  color: #ffbcab;
+}
+.MenuPanel_UserChatsIcon:hover,
+.MenuPanel_UserIcon:hover,
+.MenuPanel_UserFriendsIcon:hover,
+.MenuPanel_SignOutIcon:hover {
+  /* color: white; */
+  /* color: white; */
+  color: #ffe4de;
+  /* color: #c4563b; */
+  /* color: #fd4517; */
+}
+
+.MenuPanel_BottomButton {
+  position: absolute;
+  bottom: 0;
+}
+
+.MenuPanel_Icons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.currActive,
+.currActive:hover {
+  color: white;
+}

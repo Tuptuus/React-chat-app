@@ -2,8 +2,10 @@ import React from "react";
 import "../../styles/SignIn.css";
 import Register from "./Register";
 import Login from "./Login";
+import { auth } from "../firebase-config";
 
 function SignIn(props) {
+  // console.log(auth.currentUser.displayName);
   return (
     <div className="Sign_container">
       <div className="Sign_card">
