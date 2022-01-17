@@ -5,49 +5,47 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const SignOut = <FontAwesomeIcon icon={faSignOutAlt} />;
 const User = <FontAwesomeIcon icon={faUser} />;
 const UserFriends = <FontAwesomeIcon icon={faUserFriends} />;
 const UserChats = <FontAwesomeIcon icon={faCommentAlt} />;
 
 function MenuPanel(props) {
+  const location = useLocation();
   const navigate = useNavigate();
   return (
     <div className="MenuPanelContainer">
       <div className="MenuPanel_Icons">
         <span
-          onClick={(type) => {
-            props.handleCurrPage("Chats");
+          onClick={() => {
             navigate("/ChatApp/Chats");
           }}
           title="Chats"
           className={`MenuPanel_UserChatsIcon ${
-            props.activePage === "Chats" ? "currActive" : ""
+            location.pathname === "/ChatApp/Chats" ? "currActive" : ""
           }`}
         >
           {UserChats}
         </span>
         <span
-          onClick={(type) => {
-            props.handleCurrPage("Friends");
+          onClick={() => {
             navigate("/ChatApp/Friends");
           }}
           title="Friends"
           className={`MenuPanel_UserFriendsIcon ${
-            props.activePage === "Friends" ? "currActive" : ""
+            location.pathname === "/ChatApp/Friends" ? "currActive" : ""
           }`}
         >
           {UserFriends}
         </span>
         <span
-          onClick={(type) => {
-            props.handleCurrPage("Profile");
+          onClick={() => {
             navigate("/ChatApp/Profile");
           }}
           title="Profile"
           className={`MenuPanel_UserIcon ${
-            props.activePage === "Profile" ? "currActive" : ""
+            location.pathname === "/ChatApp/Profile" ? "currActive" : ""
           }`}
         >
           {User}

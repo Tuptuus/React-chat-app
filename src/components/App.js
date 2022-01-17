@@ -230,6 +230,7 @@ function App() {
   // LOGOUT USER
   const LogoutUser = async () => {
     signOut(auth);
+    setSignMode("login");
     navigate("/");
   };
 
