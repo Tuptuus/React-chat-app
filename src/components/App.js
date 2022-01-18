@@ -26,6 +26,7 @@ import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 
 function App() {
+  console.log(auth.currentUser);
   const [signMode, setSignMode] = useState("login");
 
   const [RegisterName, setRegisterName] = useState("");

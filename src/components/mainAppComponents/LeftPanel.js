@@ -3,6 +3,7 @@ import React from "react";
 import "../../styles/LeftPanel.css";
 import Chats from "./LeftPanelComponents/Chats";
 import Friends from "./LeftPanelComponents/Friends";
+import FriendsContainer from "./LeftPanelComponents/FriendsContainer";
 import Profile from "./LeftPanelComponents/Profile";
 import { auth } from "../firebase-config";
 
@@ -11,7 +12,7 @@ function LeftPanel(props) {
     <div className="LeftPanel_container">
       <Routes>
         <Route path="/Chats" element={<Chats />} />
-        <Route path="/Friends" element={<Friends />} />
+        <Route path="/Friends" element={<FriendsContainer />} />
         <Route path="/Profile" element={<Profile />} />
         <Route path="*" element={<Navigate to="/ChatApp/Chats" />} />
       </Routes>

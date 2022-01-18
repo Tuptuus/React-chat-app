@@ -42,6 +42,16 @@
   color: white;
 }
 
+.Friends_Top_addIcon {
+  margin-left: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.Friends_Top_addIcon:hover {
+  transform: scale(1.15, 1.15);
+}
+
 .Friends_contentContainer {
   display: flex;
   flex-direction: column;
@@ -115,4 +125,10 @@
   background-color: #fd4517;
   border-color: #fd4517;
   color: #2d2d2d;
+}
+
+.Friends_dontHaveFriendsSadge {
+  color: white;
+  font-weight: bold;
+  margin-top: 100%;
 }
