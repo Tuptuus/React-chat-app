@@ -20,13 +20,13 @@ import {
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
 import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 
 function App() {
-  console.log(auth.currentUser);
+  // console.log(auth.currentUser);
   const [signMode, setSignMode] = useState("login");
 
   const [RegisterName, setRegisterName] = useState("");
@@ -42,11 +42,28 @@ function App() {
   const [currentUser, setCurrentUser] = useState({});
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-  // STAY LOGIN AFTER REFRESH PAGE
+  // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
   onAuthStateChanged(auth, (currUser) => {
     setCurrentUser(currUser);
   });
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (auth.currentUser) {
+        if (location.pathname === "/ChatApp/Chats") {
+          navigate("/ChatApp/Chats");
+        } else if (location.pathname === "/ChatApp/Friends") {
+          navigate("/ChatApp/Friends");
+        } else if (location.pathname === "/ChatApp/Profile") {
+          navigate("/ChatApp/Profile");
+        } else {
+          navigate("/ChatApp");
+        }
+      }
+    }, 20);
+  }, [currentUser]);
 
   // CHANGE PAGE BETWEEN LOGIN OR REGISTER
   const handleChangeSignMode = (e) => {
