@@ -10,7 +10,7 @@
 
 .Friends_Top {
   background-color: #383f44;
-  height: 12%;
+  height: 111px;
   color: white;
   font-size: 30px;
 }
@@ -57,14 +57,14 @@
   flex-direction: column;
   align-items: center;
   background-color: #2d2d2d;
-  min-height: 88%;
+  min-height: 88vh;
 }
 
 .Friend_block {
   color: white;
   width: 95%;
-  height: 10vh;
-  margin-top: 3%;
+  height: 85px;
+  margin-top: 10px;
   border: 1px solid #ffbcab;
   border-radius: 5px;
   display: flex;

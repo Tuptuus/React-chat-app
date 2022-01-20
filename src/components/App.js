@@ -24,6 +24,7 @@ import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
 import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
+import defaultProfilePic from "../Images/defaultProfilePic.png";
 
 function App() {
   // console.log(auth.currentUser);
@@ -89,6 +90,7 @@ function App() {
       UID: auth.currentUser.uid,
       name: auth.currentUser.displayName,
       email: auth.currentUser.email,
+      profilePhoto: auth.currentUser.photoURL,
     };
     await setDoc(registerUserCollRef, registerUserPayload);
   };
@@ -111,6 +113,7 @@ function App() {
         );
         await updateProfile(auth.currentUser, {
           displayName: RegisterName,
+          photoURL: defaultProfilePic,
         }).then(() => {});
         AddUserToDatabase();
         setRegisterName("");

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { db } from "../../firebase-config";
+import "../../../styles/Friends.css";
+import { db, auth } from "../../firebase-config";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import pic from "../../../Images/profilePicture.png";
 
 const back = <FontAwesomeIcon icon={faArrowLeft} />;
 
@@ -25,7 +25,6 @@ function AddFriends(props) {
         foundUsersArray.push({ ...doc.data() });
       });
       setFoundUsers(foundUsersArray);
-      console.log("siema");
     });
   }, [userValue]);
 
@@ -33,24 +32,29 @@ function AddFriends(props) {
     setCurrUser(user);
   };
 
-  const foundUsersElement = foundUsers.map((user) => (
-    <div
-      onClick={() => handleCurrentActiveFriend(user)}
-      className={`Friend_block ${
-        currUser.UID === user.UID ? "Friend_currActive" : null
-      }`}
-      key={user.UID}
-    >
-      <div className="Friend_left">
-        <div className="Friend_icon">
-          <img src={pic} alt="" className="Friend_icon_pic" />
+  const foundUsersElement = foundUsers.map((user) => {
+    if (user.UID !== auth.currentUser.uid) {
+      return (
+        <div
+          onClick={() => handleCurrentActiveFriend(user)}
+          className={`Friend_block ${
+            currUser.UID === user.UID ? "Friend_currActive" : null
+          }`}
+          key={user.UID}
+        >
+          <div className="Friend_left">
+            <div className="Friend_icon">
+              <img src={user.profilePhoto} alt="" className="Friend_icon_pic" />
+            </div>
+          </div>
+          <div className="Friend_right">
+            <div className="Friend_title">{user.name}</div>
+          </div>
         </div>
-      </div>
-      <div className="Friend_right">
-        <div className="Friend_title">{user.name}</div>
-      </div>
-    </div>
-  ));
+      );
+    }
+  });
+
   return (
     <div className="Friends_container">
       <div className="Friends_Top">

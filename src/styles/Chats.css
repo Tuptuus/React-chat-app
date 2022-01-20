@@ -10,7 +10,7 @@
 
 .Chats_Top {
   background-color: #383f44;
-  height: 12%;
+  height: 111px;
   color: white;
   font-size: 30px;
 }
@@ -60,7 +60,7 @@
 .Chat_block {
   color: white;
   width: 95%;
-  height: 10vh;
+  height: 85px;
   margin-top: 3%;
   border: 1px solid #ffbcab;
   border-radius: 5px;
@@ -101,7 +101,7 @@
 
 .Chat_topDetails {
   display: flex;
-  height: 5vh;
+  height: 45px;
   padding-top: 15px;
 }
 
@@ -117,6 +117,6 @@
 
 .Chat_bottomDetails {
   padding-left: 5px;
-  height: 5vh;
+  height: 5px;
   text-align: left;
 }

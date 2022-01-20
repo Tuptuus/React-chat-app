@@ -1,11 +1,9 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../styles/LeftPanel.css";
 import Chats from "./LeftPanelComponents/Chats";
-import Friends from "./LeftPanelComponents/Friends";
 import FriendsContainer from "./LeftPanelComponents/FriendsContainer";
 import Profile from "./LeftPanelComponents/Profile";
-import { auth } from "../firebase-config";
 
 function LeftPanel(props) {
   return (
