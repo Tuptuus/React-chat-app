@@ -25,6 +25,7 @@ import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
 import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 import defaultProfilePic from "../Images/defaultProfilePic.png";
+import { useRef } from "react";
 
 function App() {
   // console.log(auth.currentUser);
@@ -40,31 +41,29 @@ function App() {
   const [LoginPassword, setLoginPassword] = useState("");
   const [LoginLoadingAnimation, setLoginLoadingAnimation] = useState(false);
   const [LoginError, setLoginError] = useState("");
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentLoggedUser, setCurrentLoggedUser] = useState({});
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
   onAuthStateChanged(auth, (currUser) => {
-    setCurrentUser(currUser);
+    setCurrentLoggedUser(currUser);
   });
 
   useEffect(() => {
-    setTimeout(() => {
-      if (auth.currentUser) {
-        if (location.pathname === "/ChatApp/Chats") {
-          navigate("/ChatApp/Chats");
-        } else if (location.pathname === "/ChatApp/Friends") {
-          navigate("/ChatApp/Friends");
-        } else if (location.pathname === "/ChatApp/Profile") {
-          navigate("/ChatApp/Profile");
-        } else {
-          navigate("/ChatApp");
-        }
+    if (auth.currentUser) {
+      if (location.pathname === "/ChatApp/Chats") {
+        navigate("/ChatApp/Chats");
+      } else if (location.pathname === "/ChatApp/Friends") {
+        navigate("/ChatApp/Friends");
+      } else if (location.pathname === "/ChatApp/Profile") {
+        navigate("/ChatApp/Profile");
+      } else {
+        navigate("/ChatApp");
       }
-    }, 20);
-  }, [currentUser]);
+    }
+  }, [currentLoggedUser]);
 
   // CHANGE PAGE BETWEEN LOGIN OR REGISTER
   const handleChangeSignMode = (e) => {
@@ -88,7 +87,7 @@ function App() {
     const registerUserCollRef = doc(db, "Users", auth.currentUser.uid);
     const registerUserPayload = {
       UID: auth.currentUser.uid,
-      name: auth.currentUser.displayName,
+      name: auth.currentUser.displayName.toLowerCase(),
       email: auth.currentUser.email,
       profilePhoto: auth.currentUser.photoURL,
     };
@@ -281,6 +280,12 @@ function App() {
       RegisterUser();
     }
   };
+
+  // CHANGE PROFILE PICTURE SYSTEM
+  const inputFile = useRef(null);
+  const handleUploadProfilePicture = () => {
+    inputFile.current.click();
+  };
   return (
     <div className="App">
       <Routes>
@@ -316,7 +321,12 @@ function App() {
         <Route
           path="/ChatApp"
           element={
-            <MainApp currentUser={currentUser} LogoutUser={LogoutUser} />
+            <MainApp
+              currentLoggedUser={currentLoggedUser}
+              LogoutUser={LogoutUser}
+              handleUploadProfilePicture={handleUploadProfilePicture}
+              inputFileDialogRef={inputFile}
+            />
           }
         >
           <Route path="/ChatApp/Chats" element={<Chats />} />

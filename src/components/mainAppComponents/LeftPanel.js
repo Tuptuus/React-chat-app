@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "../../styles/LeftPanel.css";
 import Chats from "./LeftPanelComponents/Chats";
 import FriendsContainer from "./LeftPanelComponents/FriendsContainer";
@@ -11,7 +11,16 @@ function LeftPanel(props) {
       <Routes>
         <Route path="/Chats" element={<Chats />} />
         <Route path="/Friends" element={<FriendsContainer />} />
-        <Route path="/Profile" element={<Profile />} />
+        <Route
+          path="/Profile"
+          element={
+            <Profile
+              handleUploadProfilePicture={props.handleUploadProfilePicture}
+              currentLoggedUser={props.currentLoggedUser}
+              inputFileDialogRef={props.inputFileDialogRef}
+            />
+          }
+        />
         <Route path="*" element={<Navigate to="/ChatApp/Chats" />} />
       </Routes>
     </div>

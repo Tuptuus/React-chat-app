@@ -1,14 +1,20 @@
-import React, { useState } from "react";
+import React from "react";
 import MenuPanel from "./MenuPanel";
 import "../../styles/MainApp.css";
 import LeftPanel from "./LeftPanel";
-import pic from "../../Images/profilePicture.png";
 
 function MainApp(props) {
   return (
     <div className="MainAppContainer">
-      <MenuPanel LogoutUser={props.LogoutUser} />
-      <LeftPanel />
+      <MenuPanel
+        currentLoggedUser={props.currentLoggedUser}
+        LogoutUser={props.LogoutUser}
+      />
+      <LeftPanel
+        handleUploadProfilePicture={props.handleUploadProfilePicture}
+        currentLoggedUser={props.currentLoggedUser}
+        inputFileDialogRef={props.inputFileDialogRef}
+      />
     </div>
   );
 }

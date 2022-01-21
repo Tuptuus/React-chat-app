@@ -17,7 +17,7 @@ function AddFriends(props) {
     setCurrUser("");
   };
   const colRef = collection(db, "Users");
-  const q = query(colRef, where("name", "==", userValue));
+  const q = query(colRef, where("name", "==", userValue.toLowerCase()));
   let foundUsersArray = [];
   useEffect(() => {
     onSnapshot(q, (snapshot) => {
@@ -33,6 +33,11 @@ function AddFriends(props) {
   };
 
   const foundUsersElement = foundUsers.map((user) => {
+    const firstName =
+      user.name[0].toUpperCase() + user.name.slice(1, user.name.indexOf(" "));
+    const lastName =
+      user.name[user.name.indexOf(" ") + 1].toUpperCase() +
+      user.name.slice(user.name.indexOf(" ") + 2);
     if (user.UID !== auth.currentUser.uid) {
       return (
         <div
@@ -48,7 +53,7 @@ function AddFriends(props) {
             </div>
           </div>
           <div className="Friend_right">
-            <div className="Friend_title">{user.name}</div>
+            <div className="Friend_title">{`${firstName} ${lastName}`}</div>
           </div>
         </div>
       );

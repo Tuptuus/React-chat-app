@@ -6,9 +6,6 @@ import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate, useLocation } from "react-router-dom";
-import { auth } from "../firebase-config";
-import { useState } from "react";
-import { useEffect } from "react";
 const SignOut = <FontAwesomeIcon icon={faSignOutAlt} />;
 const User = <FontAwesomeIcon icon={faUser} />;
 const UserFriends = <FontAwesomeIcon icon={faUserFriends} />;
@@ -17,17 +14,14 @@ const UserChats = <FontAwesomeIcon icon={faCommentAlt} />;
 function MenuPanel(props) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [userPic, setUserPic] = useState("");
-
-  useEffect(() => {
-    setTimeout(() => {
-      setUserPic(auth.currentUser.photoURL);
-    }, 50);
-  });
   return (
     <div className="MenuPanelContainer">
       <div className="MenuPanel_userProfilePhoto">
-        <img src={userPic} alt="" className="profilePhoto_pic" />
+        <img
+          src={props.currentLoggedUser.photoURL}
+          alt=""
+          className="profilePhoto_pic"
+        />
       </div>
       <div className="MenuPanel_Icons">
         <span
