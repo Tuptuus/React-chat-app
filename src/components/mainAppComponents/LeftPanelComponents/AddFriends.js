@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "../../../styles/Friends.css";
 import { db, auth } from "../../firebase-config";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  onSnapshot,
+  startAt,
+  endAt,
+  orderBy,
+} from "firebase/firestore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -17,7 +25,12 @@ function AddFriends(props) {
     setCurrUser("");
   };
   const colRef = collection(db, "Users");
-  const q = query(colRef, where("name", "==", userValue.toLowerCase()));
+  const q = query(
+    colRef,
+    orderBy("name"),
+    startAt(userValue),
+    endAt(userValue + "\uf8ff")
+  );
   let foundUsersArray = [];
   useEffect(() => {
     onSnapshot(q, (snapshot) => {
