@@ -60,7 +60,7 @@ function MenuPanel(props) {
         <div className="MenuPanel_BottomButton">
           <span
             title="SignOut"
-            onClick={props.LogoutUser}
+            onClick={() => props.handleLogoutUser("openPanel")}
             className="MenuPanel_SignOutIcon"
           >
             {SignOut}

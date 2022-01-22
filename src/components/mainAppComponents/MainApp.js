@@ -3,13 +3,14 @@ import MenuPanel from "./MenuPanel";
 import "../../styles/MainApp.css";
 import LeftPanel from "./LeftPanel";
 import UpdateProfilePhoto from "./LeftPanelComponents/UpdateProfilePhoto";
+import LogoutConfirm from "../SignInComponents/LogoutConfirm";
 
 function MainApp(props) {
   return (
     <div className="MainAppContainer">
       <MenuPanel
         currentLoggedUser={props.currentLoggedUser}
-        LogoutUser={props.LogoutUser}
+        handleLogoutUser={props.handleLogoutUser}
       />
       <LeftPanel
         currentLoggedUser={props.currentLoggedUser}
@@ -23,8 +24,18 @@ function MainApp(props) {
           currentLoggedUser={props.currentLoggedUser}
           handleCloseUploadWindow={props.handleCloseUploadWindow}
           handleSetPreviewProfilePic={props.handleSetPreviewProfilePic}
-          newProfilePic={props.newProfilePic}
+          newPreviewProfilePic={props.newPreviewProfilePic}
           handleSetNewProfilePic={props.handleSetNewProfilePic}
+          isConfirmRejectOpen={props.isConfirmRejectOpen}
+          handleConfirmReject={props.handleConfirmReject}
+          uploadPrevPicAnimation={props.uploadPrevPicAnimation}
+          uploadNewProfPicAnimation={props.uploadNewProfPicAnimation}
+        />
+      ) : null}
+      {props.confirmLogoutPanel === true ? (
+        <LogoutConfirm
+          LogoutUser={props.LogoutUser}
+          handleLogoutUser={props.handleLogoutUser}
         />
       ) : null}
     </div>

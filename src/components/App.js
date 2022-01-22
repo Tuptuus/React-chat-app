@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../styles/App.css";
 import { db, auth, storage } from "./firebase-config";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  uploadBytes,
-} from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -17,13 +12,7 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
 } from "firebase/auth";
-import {
-  collection,
-  doc,
-  addDoc,
-  setDoc,
-  onSnapshot,
-} from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
@@ -48,7 +37,13 @@ function App() {
   const [LoginError, setLoginError] = useState("");
   const [currentLoggedUser, setCurrentLoggedUser] = useState({});
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [uploadPrevPicAnimation, setUploadPrevPicAnimation] = useState(false);
+  const [uploadNewProfPicAnimation, setUploadNewProfPicAnimation] =
+    useState(false);
+  const [newPreviewProfilePic, setNewPreviewProfilePic] = useState(null);
   const [newProfilePic, setNewProfilePic] = useState(null);
+  const [isConfirmRejectOpen, setIsConfirmRejectOpen] = useState(false);
+  const [confirmLogoutPanel, setConfirmLogoutPanel] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -254,9 +249,19 @@ function App() {
     }
   };
 
-  // LOGOUT USER
+  // LOGOUT USER & CONFIRM LOGOUT
+
+  const handleLogoutUser = (type) => {
+    if (type === "openPanel") {
+      setConfirmLogoutPanel(true);
+    } else if (type === "closePanel") {
+      setConfirmLogoutPanel(false);
+    }
+  };
   const LogoutUser = async () => {
     signOut(auth);
+    setConfirmLogoutPanel(false);
+    setNewPreviewProfilePic(null);
     setSignMode("login");
     navigate("/");
   };
@@ -288,7 +293,7 @@ function App() {
     }
   };
 
-  // CHANGE PROFILE PICTURE SYSTEM
+  // CHANGE PROFILE PICTURE SYSTEM & CONFIRM REJECT CHANGES IN PROFILE PICTURE
   const inputFile = useRef(null);
 
   const handleOpenUploadFilesPanel = async () => {
@@ -297,20 +302,30 @@ function App() {
   };
 
   const handleSetPreviewProfilePic = async (e) => {
+    setUploadPrevPicAnimation(true);
     const fileRef = ref(
       storage,
-      "ProfilePictures/" + currentLoggedUser.uid + ".png"
+      "previewProfilePictures/" + currentLoggedUser.uid + ".png"
     );
     if (e.target.files[0]) {
-      const snapshot = await uploadBytes(fileRef, e.target.files[0]);
+      await uploadBytes(fileRef, e.target.files[0]);
       const photoURL = await getDownloadURL(fileRef);
-      setNewProfilePic(photoURL);
+      setNewProfilePic(e.target.files[0]);
+      setNewPreviewProfilePic(photoURL);
+      setUploadPrevPicAnimation(false);
     }
   };
 
   const handleSetNewProfilePic = async () => {
+    setUploadNewProfPicAnimation(true);
+    const fileRef = ref(
+      storage,
+      "ProfilePictures/" + currentLoggedUser.uid + ".png"
+    );
+    await uploadBytes(fileRef, newProfilePic);
+    const photoURL = await getDownloadURL(fileRef);
     await updateProfile(currentLoggedUser, {
-      photoURL: newProfilePic,
+      photoURL: photoURL,
     });
     const registerUserCollRef = doc(db, "Users", auth.currentUser.uid);
     const registerUserPayload = {
@@ -322,20 +337,26 @@ function App() {
     await setDoc(registerUserCollRef, registerUserPayload);
     setNewProfilePic(null);
     setIsUploadOpen(false);
+    setUploadNewProfPicAnimation(false);
   };
 
   const handleCloseUploadWindow = async () => {
-    const fileRef = ref(
-      storage,
-      "ProfilePictures/" + currentLoggedUser.uid + ".png"
-    );
-    setNewProfilePic(null);
+    setNewPreviewProfilePic(null);
     setIsUploadOpen(false);
-    deleteObject(fileRef);
+    setIsConfirmRejectOpen(false);
   };
   const handleOpenUploadWindow = () => {
     setIsUploadOpen(true);
   };
+
+  const handleConfirmReject = (type) => {
+    if (type === "open") {
+      setIsConfirmRejectOpen(true);
+    } else if (type === "close") {
+      setIsConfirmRejectOpen(false);
+    }
+  };
+
   return (
     <div className="App">
       <Routes>
@@ -380,8 +401,14 @@ function App() {
               handleOpenUploadWindow={handleOpenUploadWindow}
               isUploadOpen={isUploadOpen}
               handleSetPreviewProfilePic={handleSetPreviewProfilePic}
-              newProfilePic={newProfilePic}
+              newPreviewProfilePic={newPreviewProfilePic}
               handleSetNewProfilePic={handleSetNewProfilePic}
+              isConfirmRejectOpen={isConfirmRejectOpen}
+              handleConfirmReject={handleConfirmReject}
+              uploadPrevPicAnimation={uploadPrevPicAnimation}
+              uploadNewProfPicAnimation={uploadNewProfPicAnimation}
+              handleLogoutUser={handleLogoutUser}
+              confirmLogoutPanel={confirmLogoutPanel}
             />
           }
         >

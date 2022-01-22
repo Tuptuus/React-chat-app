@@ -29,8 +29,8 @@ function AddFriends(props) {
     colRef,
     orderBy("name"),
     limit(10),
-    startAt(userValue),
-    endAt(userValue + "\uf8ff")
+    startAt(userValue.toLowerCase()),
+    endAt(userValue.toLowerCase() + "\uf8ff")
   );
   let foundUsersArray = [];
   useEffect(() => {
