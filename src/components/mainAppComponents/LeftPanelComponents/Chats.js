@@ -1,19 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../../styles/Chats.css";
 import pic from "../../../Images/profilePicture.png";
 
 function Chats() {
   let mess = "napisałem wiadomość kurwa kurwa kurwa kurwa kurwa";
   let mess2 = mess.slice(0, 28) + "...";
+  const [currMode, setCurrMode] = useState("");
+
+  const handleCurrentChatsMode = (e) => {
+    setCurrMode(e.target.value);
+  };
   return (
     <div className="Chats_container">
       <div className="Chats_Top">
         <div className="Top_title">Chats</div>
         <div className="Top_chatSelect">
-          <select className="Top_searchType" name="" id="">
-            <option selected="selected" value="All">
-              All Chats
-            </option>
+          <select
+            onChange={handleCurrentChatsMode}
+            className="Top_searchType"
+            value={currMode}
+          >
+            <option value="All">All Chats</option>
             <option value="Groups">Groups</option>
             <option value="Priv">Priv</option>
           </select>

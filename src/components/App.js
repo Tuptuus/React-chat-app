@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "../styles/App.css";
-import { db, auth } from "./firebase-config";
+import { db, auth, storage } from "./firebase-config";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -28,7 +34,6 @@ import defaultProfilePic from "../Images/defaultProfilePic.png";
 import { useRef } from "react";
 
 function App() {
-  // console.log(auth.currentUser);
   const [signMode, setSignMode] = useState("login");
 
   const [RegisterName, setRegisterName] = useState("");
@@ -42,6 +47,8 @@ function App() {
   const [LoginLoadingAnimation, setLoginLoadingAnimation] = useState(false);
   const [LoginError, setLoginError] = useState("");
   const [currentLoggedUser, setCurrentLoggedUser] = useState({});
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [newProfilePic, setNewProfilePic] = useState(null);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -283,8 +290,51 @@ function App() {
 
   // CHANGE PROFILE PICTURE SYSTEM
   const inputFile = useRef(null);
-  const handleUploadProfilePicture = () => {
-    inputFile.current.click();
+
+  const handleOpenUploadFilesPanel = async () => {
+    await inputFile.current.click();
+    handleSetPreviewProfilePic();
+  };
+
+  const handleSetPreviewProfilePic = async (e) => {
+    const fileRef = ref(
+      storage,
+      "ProfilePictures/" + currentLoggedUser.uid + ".png"
+    );
+    if (e.target.files[0]) {
+      const snapshot = await uploadBytes(fileRef, e.target.files[0]);
+      const photoURL = await getDownloadURL(fileRef);
+      setNewProfilePic(photoURL);
+    }
+  };
+
+  const handleSetNewProfilePic = async () => {
+    await updateProfile(currentLoggedUser, {
+      photoURL: newProfilePic,
+    });
+    const registerUserCollRef = doc(db, "Users", auth.currentUser.uid);
+    const registerUserPayload = {
+      UID: auth.currentUser.uid,
+      name: auth.currentUser.displayName.toLowerCase(),
+      email: auth.currentUser.email,
+      profilePhoto: auth.currentUser.photoURL,
+    };
+    await setDoc(registerUserCollRef, registerUserPayload);
+    setNewProfilePic(null);
+    setIsUploadOpen(false);
+  };
+
+  const handleCloseUploadWindow = async () => {
+    const fileRef = ref(
+      storage,
+      "ProfilePictures/" + currentLoggedUser.uid + ".png"
+    );
+    setNewProfilePic(null);
+    setIsUploadOpen(false);
+    deleteObject(fileRef);
+  };
+  const handleOpenUploadWindow = () => {
+    setIsUploadOpen(true);
   };
   return (
     <div className="App">
@@ -324,8 +374,14 @@ function App() {
             <MainApp
               currentLoggedUser={currentLoggedUser}
               LogoutUser={LogoutUser}
-              handleUploadProfilePicture={handleUploadProfilePicture}
+              handleOpenUploadFilesPanel={handleOpenUploadFilesPanel}
               inputFileDialogRef={inputFile}
+              handleCloseUploadWindow={handleCloseUploadWindow}
+              handleOpenUploadWindow={handleOpenUploadWindow}
+              isUploadOpen={isUploadOpen}
+              handleSetPreviewProfilePic={handleSetPreviewProfilePic}
+              newProfilePic={newProfilePic}
+              handleSetNewProfilePic={handleSetNewProfilePic}
             />
           }
         >

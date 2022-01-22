@@ -5,6 +5,7 @@ import { faCamera } from "@fortawesome/free-solid-svg-icons";
 
 function Profile(props) {
   const changeProfilePic = <FontAwesomeIcon icon={faCamera} />;
+
   return (
     <div className="Profile_container">
       <div className="Profile_Top">
@@ -15,16 +16,16 @@ function Profile(props) {
       </div>
       <div className="Profile_contentContainer">
         <div className="Profile_profilePanel">
-          <div
-            onClick={props.handleUploadProfilePicture}
-            className="Profile_profilePanelPic"
-          >
+          <div className="Profile_profilePanelPic">
             <img
               src={props.currentLoggedUser.photoURL}
               alt=""
               className="Profile_profileImg"
             />
-            <div className="Profile_backgroundPic">
+            <div
+              onClick={props.handleOpenUploadWindow}
+              className="Profile_backgroundPic"
+            >
               <div className="Profile_profilePanelPicChange">
                 {changeProfilePic}
               </div>
@@ -33,12 +34,6 @@ function Profile(props) {
           <div className="Profile_profilePanelName">
             {props.currentLoggedUser.displayName}
           </div>
-          <input
-            type="file"
-            className="Profile_profilePanelInput"
-            id="file"
-            ref={props.inputFileDialogRef}
-          />
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ function LeftPanel(props) {
               handleUploadProfilePicture={props.handleUploadProfilePicture}
               currentLoggedUser={props.currentLoggedUser}
               inputFileDialogRef={props.inputFileDialogRef}
+              handleOpenUploadWindow={props.handleOpenUploadWindow}
             />
           }
         />

@@ -4,7 +4,6 @@ import { db, auth } from "../../firebase-config";
 import {
   collection,
   query,
-  where,
   onSnapshot,
   startAt,
   endAt,
@@ -35,12 +34,16 @@ function AddFriends(props) {
   );
   let foundUsersArray = [];
   useEffect(() => {
-    onSnapshot(q, (snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        foundUsersArray.push({ ...doc.data() });
+    if (userValue !== "") {
+      onSnapshot(q, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          foundUsersArray.push({ ...doc.data() });
+        });
+        setFoundUsers(foundUsersArray);
       });
-      setFoundUsers(foundUsersArray);
-    });
+    } else {
+      setFoundUsers([]);
+    }
   }, [userValue]);
 
   const handleCurrentActiveFriend = (user) => {
