@@ -1,0 +1,156 @@
+.ProfileCardContainer {
+  background-color: #323333;
+  width: 1470px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ProfileCard_profileBlock {
+  width: 80%;
+  height: 250px;
+  background-color: #383f44;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ProfileBlock_profilePicContainer {
+  width: 150px;
+  margin-top: 20px;
+}
+
+.profileBlock_pic {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
+
+.profileBlock_name {
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+.profileBlock_actions {
+  display: flex;
+  min-width: 150px;
+  max-width: 150px;
+  min-height: 80px;
+  max-height: 80px;
+}
+
+.addUser {
+  font-size: 40px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 50%;
+}
+
+.addUser:hover {
+  font-size: 45px;
+  color: #fd4517;
+}
+.message {
+  font-size: 40px;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.message:hover {
+  font-size: 45px;
+  color: #fd4517;
+}
+
+.searchUserTitle {
+  color: white;
+  font-size: 50px;
+  margin-top: 470px;
+}
+
+.ProfileCard_informationsContainer {
+  /* background-color: red; */
+  width: 80%;
+  margin-top: 50px;
+}
+
+.information_panel {
+  border: 1px solid #2b2b2f;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: #383f44;
+}
+
+.information_panel:nth-child(1) {
+  border-top: 1px solid #2b2b2f;
+}
+
+.information_left {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.information_title {
+  font-size: 15px;
+}
+
+.information_content {
+  font-size: 20px;
+}
+
+.information_right {
+  width: 5%;
+}
+
+.information_icon {
+  font-size: 26px;
+}
+
+.socials_panel {
+  border: 1px solid #2b2b2f;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: #383f44;
+}
+
+.socials_panel:nth-child(6) {
+  margin-top: 30px;
+  border-top: 1px solid #2b2b2f;
+}
+
+.socials_left {
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  text-align: left;
+  margin-left: 20px;
+}
+
+.socials_title {
+  font-size: 15px;
+}
+
+.socials_content {
+  font-size: 20px;
+}
+
+.socials_content > a {
+  text-decoration: none;
+}
+
+.socials_right {
+  width: 5%;
+}
+
+.socials_icon {
+  font-size: 26px;
+}

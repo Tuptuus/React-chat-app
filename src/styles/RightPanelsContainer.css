@@ -1,0 +1,12 @@
+.rightContainer {
+  right: 0;
+  background-color: #323333;
+  width: 1470px;
+  min-height: 100vh;
+  max-height: 100vh;
+  overflow: scroll;
+}
+
+.rightContainer::-webkit-scrollbar {
+  display: none;
+}

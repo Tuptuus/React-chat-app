@@ -12,7 +12,17 @@ import {
   signInWithPopup,
   FacebookAuthProvider,
 } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  endAt,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  setDoc,
+  startAt,
+} from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
 import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
@@ -44,13 +54,18 @@ function App() {
   const [newProfilePic, setNewProfilePic] = useState(null);
   const [isConfirmRejectOpen, setIsConfirmRejectOpen] = useState(false);
   const [confirmLogoutPanel, setConfirmLogoutPanel] = useState(false);
+  const [userValue, setUserValue] = useState("");
+  const [foundUsers, setFoundUsers] = useState([]);
+  const [clickedUser, setClickedUser] = useState(null);
+  const [currUser, setCurrUser] = useState("");
+  const [mode, setMode] = useState("Friends");
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
-  onAuthStateChanged(auth, (currUser) => {
-    setCurrentLoggedUser(currUser);
+  onAuthStateChanged(auth, (currentLoggedUser) => {
+    setCurrentLoggedUser(currentLoggedUser);
   });
 
   useEffect(() => {
@@ -92,6 +107,14 @@ function App() {
       name: auth.currentUser.displayName.toLowerCase(),
       email: auth.currentUser.email,
       profilePhoto: auth.currentUser.photoURL,
+      birthdate: null,
+      phoneNumber: null,
+      address: null,
+      website: null,
+      facebookNick: null,
+      instagramNick: null,
+      twitterNick: null,
+      linkedinNick: null,
     };
     await setDoc(registerUserCollRef, registerUserPayload);
   };
@@ -293,6 +316,49 @@ function App() {
     }
   };
 
+  // CHANGE FRIENDS MODE BETWEEN FRIENDS OR ADD FRIENDS
+  const handleCurrentModeFriends = () => {
+    if (mode === "Friends") {
+      setMode("AddFriends");
+      setClickedUser(null);
+      setCurrUser("");
+      setFoundUsers([]);
+      setUserValue("");
+    } else if (mode === "AddFriends") {
+      setMode("Friends");
+      setClickedUser(null);
+      setCurrUser("");
+      setFoundUsers([]);
+      setUserValue("");
+    }
+  };
+
+  // NAVIGATE TO CHAT FRIENDS OR PROFILE
+  const navigateToOtherComponents = (to) => {
+    if (to === "Chats") {
+      navigate("/ChatApp/Chats");
+      setClickedUser(null);
+      setCurrUser("");
+      setFoundUsers([]);
+      setUserValue("");
+      setMode("Friends");
+    } else if (to === "Friends") {
+      navigate("/ChatApp/Friends");
+      setClickedUser(null);
+      setCurrUser("");
+      setFoundUsers([]);
+      setUserValue("");
+      setMode("Friends");
+    } else if (to === "Profile") {
+      navigate("/ChatApp/Profile");
+      setClickedUser(null);
+      setCurrUser("");
+      setFoundUsers([]);
+      setUserValue("");
+      setMode("Friends");
+    }
+  };
+
   // CHANGE PROFILE PICTURE SYSTEM & CONFIRM REJECT CHANGES IN PROFILE PICTURE
   const inputFile = useRef(null);
 
@@ -302,12 +368,12 @@ function App() {
   };
 
   const handleSetPreviewProfilePic = async (e) => {
-    setUploadPrevPicAnimation(true);
     const fileRef = ref(
       storage,
       "previewProfilePictures/" + currentLoggedUser.uid + ".png"
     );
     if (e.target.files[0]) {
+      setUploadPrevPicAnimation(true);
       await uploadBytes(fileRef, e.target.files[0]);
       const photoURL = await getDownloadURL(fileRef);
       setNewProfilePic(e.target.files[0]);
@@ -355,6 +421,43 @@ function App() {
     } else if (type === "close") {
       setIsConfirmRejectOpen(false);
     }
+  };
+
+  //SEARCH USERS SYSTEM
+  const handleSearchUserInFriends = (e) => {
+    setUserValue(e.target.value);
+    setCurrUser("");
+    setClickedUser(null);
+  };
+  const colRefSearchUsers = collection(db, "Users");
+  const querySearchUsers = query(
+    colRefSearchUsers,
+    orderBy("name"),
+    limit(10),
+    startAt(userValue.toLowerCase()),
+    endAt(userValue.toLowerCase() + "\uf8ff")
+  );
+  let foundUsersArray = [];
+  useEffect(() => {
+    if (userValue !== "") {
+      onSnapshot(querySearchUsers, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          foundUsersArray.push({ ...doc.data() });
+        });
+        setFoundUsers(foundUsersArray);
+      });
+    } else {
+      setFoundUsers([]);
+    }
+  }, [userValue]);
+
+  const handleCurrentActiveFriend = (user) => {
+    setCurrUser(user);
+  };
+
+  //ADD FRIENDS SYSTEM
+  const showClickedUser = (user) => {
+    setClickedUser(user);
   };
 
   return (
@@ -409,6 +512,15 @@ function App() {
               uploadNewProfPicAnimation={uploadNewProfPicAnimation}
               handleLogoutUser={handleLogoutUser}
               confirmLogoutPanel={confirmLogoutPanel}
+              showClickedUser={showClickedUser}
+              clickedUser={clickedUser}
+              foundUsers={foundUsers}
+              currUser={currUser}
+              handleCurrentModeFriends={handleCurrentModeFriends}
+              mode={mode}
+              handleSearchUserInFriends={handleSearchUserInFriends}
+              handleCurrentActiveFriend={handleCurrentActiveFriend}
+              navigateToOtherComponents={navigateToOtherComponents}
             />
           }
         >

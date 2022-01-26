@@ -5,7 +5,7 @@ import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
 import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const SignOut = <FontAwesomeIcon icon={faSignOutAlt} />;
 const User = <FontAwesomeIcon icon={faUser} />;
 const UserFriends = <FontAwesomeIcon icon={faUserFriends} />;
@@ -13,7 +13,6 @@ const UserChats = <FontAwesomeIcon icon={faCommentAlt} />;
 
 function MenuPanel(props) {
   const location = useLocation();
-  const navigate = useNavigate();
   return (
     <div className="MenuPanelContainer">
       <div className="MenuPanel_userProfilePhoto">
@@ -25,9 +24,7 @@ function MenuPanel(props) {
       </div>
       <div className="MenuPanel_Icons">
         <span
-          onClick={() => {
-            navigate("/ChatApp/Chats");
-          }}
+          onClick={() => props.navigateToOtherComponents("Chats")}
           title="Chats"
           className={`MenuPanel_UserChatsIcon ${
             location.pathname === "/ChatApp/Chats" ? "currActive" : ""
@@ -36,9 +33,7 @@ function MenuPanel(props) {
           {UserChats}
         </span>
         <span
-          onClick={() => {
-            navigate("/ChatApp/Friends");
-          }}
+          onClick={() => props.navigateToOtherComponents("Friends")}
           title="Friends"
           className={`MenuPanel_UserFriendsIcon ${
             location.pathname === "/ChatApp/Friends" ? "currActive" : ""
@@ -47,9 +42,7 @@ function MenuPanel(props) {
           {UserFriends}
         </span>
         <span
-          onClick={() => {
-            navigate("/ChatApp/Profile");
-          }}
+          onClick={() => props.navigateToOtherComponents("Profile")}
           title="Profile"
           className={`MenuPanel_UserIcon ${
             location.pathname === "/ChatApp/Profile" ? "currActive" : ""

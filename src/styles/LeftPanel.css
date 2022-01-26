@@ -1,6 +1,5 @@
 .LeftPanel_container {
-  background-color: red;
-  width: 380px;
+  min-width: 380px;
   user-select: none;
 }
 

@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import React from "react";
 import "../../styles/LeftPanel.css";
 import Chats from "./LeftPanelComponents/Chats";
-import FriendsContainer from "./LeftPanelComponents/FriendsContainer";
+import LeftPanelFriendsContainer from "./LeftPanelComponents/LeftPanelFriendsContainer";
 import Profile from "./LeftPanelComponents/Profile";
 
 function LeftPanel(props) {
@@ -10,7 +10,20 @@ function LeftPanel(props) {
     <div className="LeftPanel_container">
       <Routes>
         <Route path="/Chats" element={<Chats />} />
-        <Route path="/Friends" element={<FriendsContainer />} />
+        <Route
+          path="/Friends"
+          element={
+            <LeftPanelFriendsContainer
+              foundUsers={props.foundUsers}
+              showClickedUser={props.showClickedUser}
+              currUser={props.currUser}
+              handleSearchUserInFriends={props.handleSearchUserInFriends}
+              handleCurrentActiveFriend={props.handleCurrentActiveFriend}
+              handleCurrentModeFriends={props.handleCurrentModeFriends}
+              mode={props.mode}
+            />
+          }
+        />
         <Route
           path="/Profile"
           element={
