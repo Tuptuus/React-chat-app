@@ -8,7 +8,8 @@ const back = <FontAwesomeIcon icon={faArrowLeft} />;
 let foundUsersElement = [];
 
 function AddFriends(props) {
-  if (props.currUser !== null) {
+  console.log(props.currentClickedUser);
+  if (props.currentClickedUser !== null) {
     foundUsersElement = props.foundUsers.map((user) => {
       const firstName =
         user.name[0].toUpperCase() + user.name.slice(1, user.name.indexOf(" "));
@@ -19,11 +20,13 @@ function AddFriends(props) {
         return (
           <div
             onClick={() => {
-              props.handleCurrentActiveFriend(user);
-              props.showClickedUser(user);
+              props.handleCurrentActiveUser(user);
+              // props.showClickedUser(user);
             }}
             className={`Friend_block ${
-              props.currUser.UID === user.UID ? "Friend_currActive" : null
+              props.currentClickedUser.UID === user.UID
+                ? "Friend_currActive"
+                : null
             }`}
             key={user.UID}
           >

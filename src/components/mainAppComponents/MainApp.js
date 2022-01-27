@@ -19,11 +19,12 @@ function MainApp(props) {
         handleOpenUploadWindow={props.handleOpenUploadWindow}
         showClickedUser={props.showClickedUser}
         foundUsers={props.foundUsers}
-        currUser={props.currUser}
+        currentClickedUser={props.currentClickedUser}
         handleSearchUserInFriends={props.handleSearchUserInFriends}
-        handleCurrentActiveFriend={props.handleCurrentActiveFriend}
+        handleCurrentActiveUser={props.handleCurrentActiveUser}
         handleCurrentModeFriends={props.handleCurrentModeFriends}
         mode={props.mode}
+        currentLoggedUserDatabase={props.currentLoggedUserDatabase}
       />
       {props.isUploadOpen === true ? (
         <UpdateProfilePhoto
@@ -47,7 +48,7 @@ function MainApp(props) {
         />
       ) : null}
       <RightPanelsContainer
-        clickedUser={props.clickedUser}
+        currentClickedUser={props.currentClickedUser}
         currentLoggedUser={props.currentLoggedUser}
         mode={props.mode}
       />

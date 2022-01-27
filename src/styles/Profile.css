@@ -80,3 +80,88 @@
   margin-top: 15px;
   font-size: 22px;
 }
+
+.ProfileInformation_container {
+  color: white;
+  width: 350px;
+  margin-top: 20px;
+}
+
+.ProfileInformation_panel {
+  border: 1px solid #2b2b2f;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: #383f44;
+}
+
+.ProfileInformation_panel:nth-child(1) {
+  border-top: 1px solid #2b2b2f;
+}
+
+.ProfileInformation_left {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  text-align: left;
+  margin-left: 5px;
+}
+
+.ProfileInformation_title {
+  font-size: 15px;
+}
+
+.ProfileInformation_content {
+  font-size: 20px;
+}
+
+.ProfileInformation_right {
+  width: 5%;
+}
+
+.ProfileInformation_icon {
+  font-size: 26px;
+}
+
+.ProfileSocials_panel {
+  border: 1px solid #2b2b2f;
+  border-top: none;
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background-color: #383f44;
+}
+
+.ProfileSocials_panel:nth-child(6) {
+  margin-top: 30px;
+  border-top: 1px solid #2b2b2f;
+}
+
+.ProfileSocials_left {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  text-align: left;
+  margin-left: 5px;
+}
+
+.ProfileSocials_title {
+  font-size: 15px;
+}
+
+.ProfileSocials_content {
+  font-size: 20px;
+}
+
+.ProfileSocials_content > a {
+  text-decoration: none;
+}
+
+.ProfileSocials_right {
+  width: 10%;
+}
+
+.ProfileSocials_icon {
+  font-size: 26px;
+}

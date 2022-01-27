@@ -12,9 +12,9 @@ function LeftPanelFriendsContainer(props) {
           handleCurrentMode={props.handleCurrentModeFriends}
           showClickedUser={props.showClickedUser}
           foundUsers={props.foundUsers}
-          currUser={props.currUser}
+          currentClickedUser={props.currentClickedUser}
           handleSearchUserInFriends={props.handleSearchUserInFriends}
-          handleCurrentActiveFriend={props.handleCurrentActiveFriend}
+          handleCurrentActiveUser={props.handleCurrentActiveUser}
         />
       )}
     </>

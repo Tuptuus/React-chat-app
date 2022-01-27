@@ -32,24 +32,29 @@ const linkedIn = <FontAwesomeIcon icon={faLinkedinIn} />;
 function ProfileCard(props) {
   let firstName = "";
   let lastName = "";
-  if (props.clickedUser !== null) {
+  if (props.currentClickedUser.name) {
     firstName =
-      props.clickedUser.name[0].toUpperCase() +
-      props.clickedUser.name.slice(1, props.clickedUser.name.indexOf(" "));
+      props.currentClickedUser.name[0].toUpperCase() +
+      props.currentClickedUser.name.slice(
+        1,
+        props.currentClickedUser.name.indexOf(" ")
+      );
     lastName =
-      props.clickedUser.name[
-        props.clickedUser.name.indexOf(" ") + 1
+      props.currentClickedUser.name[
+        props.currentClickedUser.name.indexOf(" ") + 1
       ].toUpperCase() +
-      props.clickedUser.name.slice(props.clickedUser.name.indexOf(" ") + 2);
+      props.currentClickedUser.name.slice(
+        props.currentClickedUser.name.indexOf(" ") + 2
+      );
   }
   return (
     <>
-      {props.clickedUser !== null ? (
+      {props.currentClickedUser ? (
         <div className="ProfileCardContainer">
           <div className="ProfileCard_profileBlock">
             <div className="ProfileBlock_profilePicContainer">
               <img
-                src={props.clickedUser.profilePhoto}
+                src={props.currentClickedUser.profilePhoto}
                 alt=""
                 className="profileBlock_pic"
               />
@@ -64,7 +69,11 @@ function ProfileCard(props) {
             <div className="information_panel">
               <div className="information_left">
                 <div className="information_title">Birthdate</div>
-                <div className="information_content">24/04/2004</div>
+                <div className="information_content">
+                  {props.currentClickedUser.birthdate
+                    ? props.currentClickedUser.birthdate
+                    : "---------------"}
+                </div>
               </div>
               <div className="information_right">
                 <div className="information_icon">{calendar}</div>
@@ -73,7 +82,11 @@ function ProfileCard(props) {
             <div className="information_panel">
               <div className="information_left">
                 <div className="information_title">Phone Number</div>
-                <div className="information_content">+48 48848488484</div>
+                <div className="information_content">
+                  {props.currentClickedUser.phoneNumber
+                    ? props.currentClickedUser.phoneNumber
+                    : "---------------"}
+                </div>
               </div>
               <div className="information_right">
                 <div className="information_icon">{phone}</div>
@@ -83,7 +96,9 @@ function ProfileCard(props) {
               <div className="information_left">
                 <div className="information_title">E-mail</div>
                 <div className="information_content">
-                  {props.clickedUser.email}
+                  {props.currentClickedUser.email
+                    ? props.currentClickedUser.email
+                    : "---------------"}
                 </div>
               </div>
               <div className="information_right">
@@ -93,7 +108,11 @@ function ProfileCard(props) {
             <div className="information_panel">
               <div className="information_left">
                 <div className="information_title">Address</div>
-                <div className="information_content">Przeworsk</div>
+                <div className="information_content">
+                  {props.currentClickedUser.address
+                    ? props.currentClickedUser.address
+                    : "---------------"}
+                </div>
               </div>
               <div className="information_right">
                 <div className="information_icon">{address}</div>
@@ -102,7 +121,11 @@ function ProfileCard(props) {
             <div className="information_panel">
               <div className="information_left">
                 <div className="information_title">Website</div>
-                <div className="information_content">-------------</div>
+                <div className="information_content">
+                  {props.currentClickedUser.website
+                    ? props.currentClickedUser.website
+                    : "---------------"}
+                </div>
               </div>
               <div className="information_right">
                 <div className="information_icon">{website}</div>

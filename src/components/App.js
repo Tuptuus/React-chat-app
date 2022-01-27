@@ -16,12 +16,14 @@ import {
   collection,
   doc,
   endAt,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   setDoc,
   startAt,
+  where,
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
@@ -56,8 +58,9 @@ function App() {
   const [confirmLogoutPanel, setConfirmLogoutPanel] = useState(false);
   const [userValue, setUserValue] = useState("");
   const [foundUsers, setFoundUsers] = useState([]);
-  const [clickedUser, setClickedUser] = useState(null);
-  const [currUser, setCurrUser] = useState("");
+  const [currentLoggedUserDatabase, setCurrentLoggedUserDatabase] =
+    useState(null);
+  const [currentClickedUser, setCurrentClickedUser] = useState("");
   const [mode, setMode] = useState("Friends");
 
   const navigate = useNavigate();
@@ -118,6 +121,26 @@ function App() {
     };
     await setDoc(registerUserCollRef, registerUserPayload);
   };
+
+  // GET DATA FROM DATABASE CURRENT LOGGED USER
+  useEffect(() => {
+    try {
+      const dataLoggedUserCollRef = collection(db, "Users");
+      const dataLoggedUserQuery = query(
+        dataLoggedUserCollRef,
+        where("UID", "==", auth.currentUser.uid)
+      );
+      onSnapshot(dataLoggedUserQuery, async (snapshot) => {
+        let user = [];
+        snapshot.docs.forEach((doc) => {
+          user.push({ ...doc.data() });
+        });
+        await setCurrentLoggedUserDatabase(user[0]);
+      });
+    } catch (Err) {
+      console.log(Err);
+    }
+  }, [currentLoggedUser]);
 
   // REGISTER USER WITH EMAIL AND PASSWORD
   const RegisterUser = async () => {
@@ -287,6 +310,7 @@ function App() {
     setNewPreviewProfilePic(null);
     setSignMode("login");
     navigate("/");
+    setCurrentLoggedUserDatabase(null);
   };
 
   // HANDLE ALL INPUTS ON REGISTER AND LOGIN PAGES
@@ -320,14 +344,12 @@ function App() {
   const handleCurrentModeFriends = () => {
     if (mode === "Friends") {
       setMode("AddFriends");
-      setClickedUser(null);
-      setCurrUser("");
+      setCurrentClickedUser("");
       setFoundUsers([]);
       setUserValue("");
     } else if (mode === "AddFriends") {
       setMode("Friends");
-      setClickedUser(null);
-      setCurrUser("");
+      setCurrentClickedUser("");
       setFoundUsers([]);
       setUserValue("");
     }
@@ -337,22 +359,19 @@ function App() {
   const navigateToOtherComponents = (to) => {
     if (to === "Chats") {
       navigate("/ChatApp/Chats");
-      setClickedUser(null);
-      setCurrUser("");
+      setCurrentClickedUser("");
       setFoundUsers([]);
       setUserValue("");
       setMode("Friends");
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
-      setClickedUser(null);
-      setCurrUser("");
+      setCurrentClickedUser("");
       setFoundUsers([]);
       setUserValue("");
       setMode("Friends");
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
-      setClickedUser(null);
-      setCurrUser("");
+      setCurrentClickedUser("");
       setFoundUsers([]);
       setUserValue("");
       setMode("Friends");
@@ -426,8 +445,7 @@ function App() {
   //SEARCH USERS SYSTEM
   const handleSearchUserInFriends = (e) => {
     setUserValue(e.target.value);
-    setCurrUser("");
-    setClickedUser(null);
+    setCurrentClickedUser("");
   };
   const colRefSearchUsers = collection(db, "Users");
   const querySearchUsers = query(
@@ -451,13 +469,8 @@ function App() {
     }
   }, [userValue]);
 
-  const handleCurrentActiveFriend = (user) => {
-    setCurrUser(user);
-  };
-
-  //ADD FRIENDS SYSTEM
-  const showClickedUser = (user) => {
-    setClickedUser(user);
+  const handleCurrentActiveUser = (user) => {
+    setCurrentClickedUser(user);
   };
 
   return (
@@ -512,15 +525,14 @@ function App() {
               uploadNewProfPicAnimation={uploadNewProfPicAnimation}
               handleLogoutUser={handleLogoutUser}
               confirmLogoutPanel={confirmLogoutPanel}
-              showClickedUser={showClickedUser}
-              clickedUser={clickedUser}
               foundUsers={foundUsers}
-              currUser={currUser}
+              currentClickedUser={currentClickedUser}
               handleCurrentModeFriends={handleCurrentModeFriends}
               mode={mode}
               handleSearchUserInFriends={handleSearchUserInFriends}
-              handleCurrentActiveFriend={handleCurrentActiveFriend}
+              handleCurrentActiveUser={handleCurrentActiveUser}
               navigateToOtherComponents={navigateToOtherComponents}
+              currentLoggedUserDatabase={currentLoggedUserDatabase}
             />
           }
         >

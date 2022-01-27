@@ -6,7 +6,7 @@ function FriendsContainer(props) {
     <>
       {props.mode === "AddFriends" ? (
         <SearchedUserProfileCard
-          clickedUser={props.clickedUser}
+          currentClickedUser={props.currentClickedUser}
           currentLoggedUser={props.currentLoggedUser}
         />
       ) : null}

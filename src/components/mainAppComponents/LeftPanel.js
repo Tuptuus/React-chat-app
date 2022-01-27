@@ -16,9 +16,9 @@ function LeftPanel(props) {
             <LeftPanelFriendsContainer
               foundUsers={props.foundUsers}
               showClickedUser={props.showClickedUser}
-              currUser={props.currUser}
+              currentClickedUser={props.currentClickedUser}
               handleSearchUserInFriends={props.handleSearchUserInFriends}
-              handleCurrentActiveFriend={props.handleCurrentActiveFriend}
+              handleCurrentActiveUser={props.handleCurrentActiveUser}
               handleCurrentModeFriends={props.handleCurrentModeFriends}
               mode={props.mode}
             />
@@ -32,6 +32,7 @@ function LeftPanel(props) {
               currentLoggedUser={props.currentLoggedUser}
               inputFileDialogRef={props.inputFileDialogRef}
               handleOpenUploadWindow={props.handleOpenUploadWindow}
+              currentLoggedUserDatabase={props.currentLoggedUserDatabase}
             />
           }
         />
