@@ -128,13 +128,17 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Facebook</div>
               <div className="ProfileSocials_content">
-                <a
-                  href="https://facebook.com/Tuptuus"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Tuptuus
-                </a>
+                {props.currentLoggedUserDatabase.facebookNick ? (
+                  <a
+                    href="https://facebook.com/Tuptuus"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {props.currentLoggedUserDatabase.facebookNick}
+                  </a>
+                ) : (
+                  "---------------"
+                )}
               </div>
             </div>
             <div className="ProfileSocials_right">
@@ -145,13 +149,17 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Twitter</div>
               <div className="ProfileSocials_content">
-                <a
-                  href="https://facebook.com/Tuptuus"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Tuptuus
-                </a>
+                {props.currentLoggedUserDatabase.twitterNick ? (
+                  <a
+                    href="https://facebook.com/Tuptuus"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {props.currentLoggedUserDatabase.twitterNick}
+                  </a>
+                ) : (
+                  "---------------"
+                )}
               </div>
             </div>
             <div className="ProfileSocials_right">
@@ -162,13 +170,17 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Instagram</div>
               <div className="ProfileSocials_content">
-                <a
-                  href="https://facebook.com/Tuptuus"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Tuptuus
-                </a>
+                {props.currentLoggedUserDatabase.instagramNick ? (
+                  <a
+                    href="https://facebook.com/Tuptuus"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {props.currentLoggedUserDatabase.instagramNick}
+                  </a>
+                ) : (
+                  "---------------"
+                )}
               </div>
             </div>
             <div className="ProfileSocials_right">
@@ -179,13 +191,17 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">LinkedIn</div>
               <div className="ProfileSocials_content">
-                <a
-                  href="https://facebook.com/Tuptuus"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Tuptuus
-                </a>
+                {props.currentLoggedUserDatabase.linkedinNick ? (
+                  <a
+                    href="https://facebook.com/Tuptuus"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {props.currentLoggedUserDatabase.linkedinNick}
+                  </a>
+                ) : (
+                  "---------------"
+                )}
               </div>
             </div>
             <div className="ProfileSocials_right">

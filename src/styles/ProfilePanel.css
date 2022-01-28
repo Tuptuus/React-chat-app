@@ -1,0 +1,124 @@
+.ProfilePanel_MainContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ProfilePanel_MainContainer {
+  margin-bottom: 50px;
+}
+
+.ProfileAccInfo_container {
+  width: 90%;
+  margin-top: 123px;
+  color: white;
+  border-radius: 6px;
+}
+
+.AccInfo_top {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #2a2a2a;
+  text-align: left;
+}
+
+.AccInfo_topTitle {
+  font-size: 18px;
+  margin-left: 15px;
+  padding-top: 10px;
+}
+.AccInfo_topContent {
+  font-size: 15px;
+  margin-left: 15px;
+  margin-top: 5px;
+  padding-bottom: 10px;
+}
+
+.AccInfo_content {
+  background-color: #383f44;
+  padding-bottom: 40px;
+}
+
+/* .AccInfo_contentRow {
+  background-color: red;
+} */
+
+.Row_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 20px;
+}
+
+.Row_left {
+  text-align: left;
+  margin-right: 100px;
+}
+
+.Input_title {
+  font-size: 15px;
+  padding-bottom: 10px;
+}
+
+.AccInfo_input {
+  background-color: #2a2a2a;
+  outline: none;
+  border: none;
+  width: 550px;
+  height: 40px;
+  padding-left: 10px;
+  color: white;
+  border-radius: 5px;
+}
+.AccInfo_inputAddress {
+  background-color: #2a2a2a;
+  outline: none;
+  border: none;
+  width: 1200px;
+  height: 40px;
+  padding-left: 10px;
+  color: white;
+  border-radius: 5px;
+}
+
+.Row_right {
+  text-align: left;
+}
+
+.AccInfo_bottom {
+  height: 60px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: #2a2a2a;
+  text-align: right;
+}
+
+.AccInfo_saveButton {
+  outline: none;
+  border: none;
+  background-color: #fd4517;
+  border-radius: 7px;
+  font-size: 20px;
+  width: 150px;
+  height: 40px;
+  transition: 0.3s;
+  margin-right: 60px;
+  margin-top: 10px;
+}
+
+.AccInfo_saveButton:hover {
+  background-color: #ff714e;
+}
+
+.ProfileSocialsInfo_container {
+  width: 90%;
+  margin-top: 40px;
+  color: white;
+  border-radius: 6px;
+}
+
+.Row_rightPassword {
+  visibility: hidden;
+}
