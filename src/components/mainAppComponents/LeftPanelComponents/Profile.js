@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../../../styles/Profile.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,6 +16,7 @@ import {
   faLinkedinIn,
 } from "@fortawesome/free-brands-svg-icons";
 
+const changeProfilePic = <FontAwesomeIcon icon={faCamera} />;
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} />;
 const phone = <FontAwesomeIcon icon={faPhone} />;
 const mail = <FontAwesomeIcon icon={faEnvelope} />;
@@ -27,7 +28,30 @@ const twitter = <FontAwesomeIcon icon={faTwitter} />;
 const linkedIn = <FontAwesomeIcon icon={faLinkedinIn} />;
 
 function Profile(props) {
-  const changeProfilePic = <FontAwesomeIcon icon={faCamera} />;
+  const [profilePhotoInfo, setProfilePhotoInfo] = useState(null);
+  const [birthdateInfo, setBirthdateInfo] = useState(null);
+  const [phoneNumberInfo, setPhoneNumberInfo] = useState(null);
+  const [emailInfo, setEmailInfo] = useState(null);
+  const [addressInfo, setAddressInfo] = useState(null);
+  const [websiteInfo, setWebsiteInfo] = useState(null);
+  const [facebookNickInfo, setFacebookNickInfo] = useState(null);
+  const [twitterNickInfo, setTwitterNickInfo] = useState(null);
+  const [instagramNickInfo, setInstagramNickInfo] = useState(null);
+  const [LinkedinNickInfo, setLinkedinNickInfo] = useState(null);
+  useEffect(() => {
+    if (props.currentLoggedUserDatabase) {
+      setProfilePhotoInfo(props.currentLoggedUserDatabase.profilePhoto);
+      setBirthdateInfo(props.currentLoggedUserDatabase.birthdate);
+      setPhoneNumberInfo(props.currentLoggedUserDatabase.phoneNumber);
+      setEmailInfo(props.currentLoggedUserDatabase.email);
+      setAddressInfo(props.currentLoggedUserDatabase.address);
+      setWebsiteInfo(props.currentLoggedUserDatabase.website);
+      setFacebookNickInfo(props.currentLoggedUserDatabase.facebookNick);
+      setTwitterNickInfo(props.currentLoggedUserDatabase.twitterNick);
+      setInstagramNickInfo(props.currentLoggedUserDatabase.instagramNick);
+      setLinkedinNickInfo(props.currentLoggedUserDatabase.linkedinNick);
+    }
+  }, [props.currentLoggedUserDatabase]);
 
   return (
     <div className="Profile_container">
@@ -41,7 +65,7 @@ function Profile(props) {
         <div className="Profile_profilePanel">
           <div className="Profile_profilePanelPic">
             <img
-              src={props.currentLoggedUserDatabase.profilePhoto}
+              src={profilePhotoInfo ? profilePhotoInfo : null}
               alt=""
               className="Profile_profileImg"
             />
@@ -63,9 +87,7 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">Birthdate</div>
               <div className="ProfileInformation_content">
-                {props.currentLoggedUserDatabase.birthdate
-                  ? props.currentLoggedUserDatabase.birthdate
-                  : "---------------"}
+                {birthdateInfo ? birthdateInfo : "---------------"}
               </div>
             </div>
             <div className="ProfileInformation_right">
@@ -76,9 +98,7 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">Phone Number</div>
               <div className="ProfileInformation_content">
-                {props.currentLoggedUserDatabase.phoneNumber
-                  ? props.currentLoggedUserDatabase.phoneNumber
-                  : "---------------"}
+                {phoneNumberInfo ? phoneNumberInfo : "---------------"}
               </div>
             </div>
             <div className="ProfileInformation_right">
@@ -89,9 +109,7 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">E-mail</div>
               <div className="ProfileInformation_content">
-                {props.currentLoggedUserDatabase.email
-                  ? props.currentLoggedUserDatabase.email
-                  : "---------------"}
+                {emailInfo ? emailInfo : "---------------"}
               </div>
             </div>
             <div className="ProfileInformation_right">
@@ -102,9 +120,7 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">Address</div>
               <div className="ProfileInformation_content">
-                {props.currentLoggedUserDatabase.address
-                  ? props.currentLoggedUserDatabase.address
-                  : "---------------"}
+                {addressInfo ? addressInfo : "---------------"}
               </div>
             </div>
             <div className="ProfileInformation_right">
@@ -115,9 +131,7 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">Website</div>
               <div className="ProfileInformation_content">
-                {props.currentLoggedUserDatabase.website
-                  ? props.currentLoggedUserDatabase.website
-                  : "---------------"}
+                {websiteInfo ? websiteInfo : "---------------"}
               </div>
             </div>
             <div className="ProfileInformation_right">
@@ -128,13 +142,13 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Facebook</div>
               <div className="ProfileSocials_content">
-                {props.currentLoggedUserDatabase.facebookNick ? (
+                {facebookNickInfo ? (
                   <a
-                    href="https://facebook.com/Tuptuus"
+                    href={`https://facebook.com/${facebookNickInfo}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {props.currentLoggedUserDatabase.facebookNick}
+                    {facebookNickInfo}
                   </a>
                 ) : (
                   "---------------"
@@ -149,13 +163,13 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Twitter</div>
               <div className="ProfileSocials_content">
-                {props.currentLoggedUserDatabase.twitterNick ? (
+                {twitterNickInfo ? (
                   <a
-                    href="https://facebook.com/Tuptuus"
+                    href={`https://twitter.com/${twitterNickInfo}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {props.currentLoggedUserDatabase.twitterNick}
+                    {twitterNickInfo}
                   </a>
                 ) : (
                   "---------------"
@@ -170,13 +184,13 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">Instagram</div>
               <div className="ProfileSocials_content">
-                {props.currentLoggedUserDatabase.instagramNick ? (
+                {instagramNickInfo ? (
                   <a
-                    href="https://facebook.com/Tuptuus"
+                    href={`https://www.instagram.com/${instagramNickInfo}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {props.currentLoggedUserDatabase.instagramNick}
+                    {instagramNickInfo}
                   </a>
                 ) : (
                   "---------------"
@@ -191,13 +205,13 @@ function Profile(props) {
             <div className="ProfileSocials_left">
               <div className="ProfileSocials_title">LinkedIn</div>
               <div className="ProfileSocials_content">
-                {props.currentLoggedUserDatabase.linkedinNick ? (
+                {LinkedinNickInfo ? (
                   <a
-                    href="https://facebook.com/Tuptuus"
+                    href={`https://facebook.com/${LinkedinNickInfo}`}
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {props.currentLoggedUserDatabase.linkedinNick}
+                    {LinkedinNickInfo}
                   </a>
                 ) : (
                   "---------------"

@@ -15,7 +15,15 @@ function RightPanelsContainer(props) {
           mode={props.mode}
         />
       ) : null}
-      {location.pathname === "/ChatApp/Profile" ? <ProfilePanel /> : null}
+      {location.pathname === "/ChatApp/Profile" ? (
+        <ProfilePanel
+          handleProfileUpdateInformationsInputs={
+            props.handleProfileUpdateInformationsInputs
+          }
+          updateProfileInformations={props.updateProfileInformations}
+          updateSocialsInformations={props.updateSocialsInformations}
+        />
+      ) : null}
     </div>
   );
 }

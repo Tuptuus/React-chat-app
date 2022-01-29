@@ -8,7 +8,7 @@ const back = <FontAwesomeIcon icon={faArrowLeft} />;
 let foundUsersElement = [];
 
 function AddFriends(props) {
-  console.log(props.currentClickedUser);
+  // console.log(props.currentClickedUser);
   if (props.currentClickedUser !== null) {
     foundUsersElement = props.foundUsers.map((user) => {
       const firstName =

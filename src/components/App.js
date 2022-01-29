@@ -36,37 +36,14 @@ import { useRef } from "react";
 
 function App() {
   const [signMode, setSignMode] = useState("login");
-
-  const [RegisterName, setRegisterName] = useState("");
-  const [RegisterEmail, setRegisterEmail] = useState("");
-  const [RegisterPassword, setRegisterPassword] = useState("");
-  const [RegisterError, setRegisterError] = useState("");
-  const [RegisterloadingAnimation, setRegisterLoadingAnimation] =
-    useState(false);
-  const [LoginEmail, setLoginEmail] = useState("");
-  const [LoginPassword, setLoginPassword] = useState("");
-  const [LoginLoadingAnimation, setLoginLoadingAnimation] = useState(false);
-  const [LoginError, setLoginError] = useState("");
-  const [currentLoggedUser, setCurrentLoggedUser] = useState({});
-  const [isUploadOpen, setIsUploadOpen] = useState(false);
-  const [uploadPrevPicAnimation, setUploadPrevPicAnimation] = useState(false);
-  const [uploadNewProfPicAnimation, setUploadNewProfPicAnimation] =
-    useState(false);
-  const [newPreviewProfilePic, setNewPreviewProfilePic] = useState(null);
-  const [newProfilePic, setNewProfilePic] = useState(null);
-  const [isConfirmRejectOpen, setIsConfirmRejectOpen] = useState(false);
-  const [confirmLogoutPanel, setConfirmLogoutPanel] = useState(false);
-  const [userValue, setUserValue] = useState("");
-  const [foundUsers, setFoundUsers] = useState([]);
-  const [currentLoggedUserDatabase, setCurrentLoggedUserDatabase] =
-    useState(null);
   const [currentClickedUser, setCurrentClickedUser] = useState("");
-  const [mode, setMode] = useState("Friends");
 
   const navigate = useNavigate();
   const location = useLocation();
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
+  const [currentLoggedUser, setCurrentLoggedUser] = useState({});
+
   onAuthStateChanged(auth, (currentLoggedUser) => {
     setCurrentLoggedUser(currentLoggedUser);
   });
@@ -122,27 +99,14 @@ function App() {
     await setDoc(registerUserCollRef, registerUserPayload);
   };
 
-  // GET DATA FROM DATABASE CURRENT LOGGED USER
-  useEffect(() => {
-    try {
-      const dataLoggedUserCollRef = collection(db, "Users");
-      const dataLoggedUserQuery = query(
-        dataLoggedUserCollRef,
-        where("UID", "==", auth.currentUser.uid)
-      );
-      onSnapshot(dataLoggedUserQuery, async (snapshot) => {
-        let user = [];
-        snapshot.docs.forEach((doc) => {
-          user.push({ ...doc.data() });
-        });
-        await setCurrentLoggedUserDatabase(user[0]);
-      });
-    } catch (Err) {
-      console.log(Err);
-    }
-  }, [currentLoggedUser]);
-
   // REGISTER USER WITH EMAIL AND PASSWORD
+  const [RegisterName, setRegisterName] = useState("");
+  const [RegisterEmail, setRegisterEmail] = useState("");
+  const [RegisterPassword, setRegisterPassword] = useState("");
+  const [RegisterError, setRegisterError] = useState("");
+  const [RegisterloadingAnimation, setRegisterLoadingAnimation] =
+    useState(false);
+
   const RegisterUser = async () => {
     if (
       RegisterName !== "" &&
@@ -213,6 +177,11 @@ function App() {
   };
 
   // LOGIN USER WITH EMAIL AND PASSWORD
+  const [LoginEmail, setLoginEmail] = useState("");
+  const [LoginPassword, setLoginPassword] = useState("");
+  const [LoginLoadingAnimation, setLoginLoadingAnimation] = useState(false);
+  const [LoginError, setLoginError] = useState("");
+
   const LoginUser = async () => {
     if (LoginEmail !== "" && LoginPassword !== "") {
       try {
@@ -296,6 +265,7 @@ function App() {
   };
 
   // LOGOUT USER & CONFIRM LOGOUT
+  const [confirmLogoutPanel, setConfirmLogoutPanel] = useState(false);
 
   const handleLogoutUser = (type) => {
     if (type === "openPanel") {
@@ -310,7 +280,7 @@ function App() {
     setNewPreviewProfilePic(null);
     setSignMode("login");
     navigate("/");
-    setCurrentLoggedUserDatabase(null);
+    // setCurrentLoggedUserDatabase(null);
   };
 
   // HANDLE ALL INPUTS ON REGISTER AND LOGIN PAGES
@@ -341,44 +311,95 @@ function App() {
   };
 
   // CHANGE FRIENDS MODE BETWEEN FRIENDS OR ADD FRIENDS
+  const [mode, setMode] = useState("Friends");
+
   const handleCurrentModeFriends = () => {
     if (mode === "Friends") {
       setMode("AddFriends");
       setCurrentClickedUser("");
       setFoundUsers([]);
-      setUserValue("");
+      setSearchUserValue("");
     } else if (mode === "AddFriends") {
       setMode("Friends");
       setCurrentClickedUser("");
       setFoundUsers([]);
-      setUserValue("");
+      setSearchUserValue("");
     }
   };
 
-  // NAVIGATE TO CHAT FRIENDS OR PROFILE
+  // NAVIGATE TO CHAT, FRIENDS OR PROFILE
   const navigateToOtherComponents = (to) => {
     if (to === "Chats") {
       navigate("/ChatApp/Chats");
       setCurrentClickedUser("");
       setFoundUsers([]);
-      setUserValue("");
+      setSearchUserValue("");
       setMode("Friends");
+      setAccInfoFirstName("");
+      setAccInfoLastName("");
+      setAccInfoMobileNumber("");
+      setAccInfoBirthDate("");
+      setAccInfoEmail("");
+      setAccInfoWebsite("");
+      setAccInfoAddress("");
+      setFacebookUsername("");
+      setTwitterUsername("");
+      setInstagramUsername("");
+      setLinkedinUsername("");
+      setCurrentPasswordValue("");
+      setNewPasswordValue("");
+      setNewRepeatPasswordValue("");
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
       setFoundUsers([]);
-      setUserValue("");
+      setSearchUserValue("");
       setMode("Friends");
+      setAccInfoFirstName("");
+      setAccInfoLastName("");
+      setAccInfoMobileNumber("");
+      setAccInfoBirthDate("");
+      setAccInfoEmail("");
+      setAccInfoWebsite("");
+      setAccInfoAddress("");
+      setFacebookUsername("");
+      setTwitterUsername("");
+      setInstagramUsername("");
+      setLinkedinUsername("");
+      setCurrentPasswordValue("");
+      setNewPasswordValue("");
+      setNewRepeatPasswordValue("");
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
       setFoundUsers([]);
-      setUserValue("");
+      setSearchUserValue("");
       setMode("Friends");
+      setAccInfoFirstName("");
+      setAccInfoLastName("");
+      setAccInfoMobileNumber("");
+      setAccInfoBirthDate("");
+      setAccInfoEmail("");
+      setAccInfoWebsite("");
+      setAccInfoAddress("");
+      setFacebookUsername("");
+      setTwitterUsername("");
+      setInstagramUsername("");
+      setLinkedinUsername("");
+      setCurrentPasswordValue("");
+      setNewPasswordValue("");
+      setNewRepeatPasswordValue("");
     }
   };
 
   // CHANGE PROFILE PICTURE SYSTEM & CONFIRM REJECT CHANGES IN PROFILE PICTURE
+  const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [uploadPrevPicAnimation, setUploadPrevPicAnimation] = useState(false);
+  const [uploadNewProfPicAnimation, setUploadNewProfPicAnimation] =
+    useState(false);
+  const [newPreviewProfilePic, setNewPreviewProfilePic] = useState(null);
+  const [newProfilePic, setNewProfilePic] = useState(null);
+  const [isConfirmRejectOpen, setIsConfirmRejectOpen] = useState(false);
   const inputFile = useRef(null);
 
   const handleOpenUploadFilesPanel = async () => {
@@ -443,8 +464,11 @@ function App() {
   };
 
   //SEARCH USERS SYSTEM
+  const [searchUserValue, setSearchUserValue] = useState("");
+  const [foundUsers, setFoundUsers] = useState([]);
+
   const handleSearchUserInFriends = (e) => {
-    setUserValue(e.target.value);
+    setSearchUserValue(e.target.value);
     setCurrentClickedUser("");
   };
   const colRefSearchUsers = collection(db, "Users");
@@ -452,12 +476,12 @@ function App() {
     colRefSearchUsers,
     orderBy("name"),
     limit(10),
-    startAt(userValue.toLowerCase()),
-    endAt(userValue.toLowerCase() + "\uf8ff")
+    startAt(searchUserValue.toLowerCase()),
+    endAt(searchUserValue.toLowerCase() + "\uf8ff")
   );
   let foundUsersArray = [];
   useEffect(() => {
-    if (userValue !== "") {
+    if (searchUserValue !== "") {
       onSnapshot(querySearchUsers, (snapshot) => {
         snapshot.docs.forEach((doc) => {
           foundUsersArray.push({ ...doc.data() });
@@ -467,12 +491,118 @@ function App() {
     } else {
       setFoundUsers([]);
     }
-  }, [userValue]);
+  }, [searchUserValue]);
 
   const handleCurrentActiveUser = (user) => {
     setCurrentClickedUser(user);
   };
 
+  // GET DATA FROM DATABASE CURRENT LOGGED USER
+  const [currentLoggedUserDatabase, setCurrentLoggedUserDatabase] =
+    useState(null);
+
+  useEffect(() => {
+    if (auth.currentUser) {
+      const dataLoggedUserCollRef = collection(db, "Users");
+      const dataLoggedUserQuery = query(
+        dataLoggedUserCollRef,
+        where("UID", "==", auth.currentUser.uid)
+      );
+      onSnapshot(dataLoggedUserQuery, (snapshot) => {
+        let user = [];
+        snapshot.docs.forEach((doc) => {
+          user.push({ ...doc.data() });
+        });
+        setCurrentLoggedUserDatabase(user[0]);
+      });
+    }
+  }, [currentLoggedUser]);
+
+  // UPDATE PROFILE INFORMATIONS
+  const [AccInfoFirstName, setAccInfoFirstName] = useState("");
+  const [AccInfoLastName, setAccInfoLastName] = useState("");
+  const [AccInfoMobileNumber, setAccInfoMobileNumber] = useState("");
+  const [AccInfoBirthDate, setAccInfoBirthDate] = useState("");
+  const [AccInfoEmail, setAccInfoEmail] = useState("");
+  const [AccInfoWebsite, setAccInfoWebsite] = useState("");
+  const [AccInfoAddress, setAccInfoAddress] = useState("");
+  const [FacebookUsername, setFacebookUsername] = useState("");
+  const [TwitterUsername, setTwitterUsername] = useState("");
+  const [InstagramUsername, setInstagramUsername] = useState("");
+  const [LinkedInUsername, setLinkedinUsername] = useState("");
+  const [currentPasswordValue, setCurrentPasswordValue] = useState("");
+  const [newPasswordValue, setNewPasswordValue] = useState("");
+  const [newRepeatPasswordValue, setNewRepeatPasswordValue] = useState("");
+
+  const handleProfileUpdateInformationsInputs = (input, e) => {
+    if (input === "firstName") {
+      setAccInfoFirstName(e.target.value);
+    } else if (input === "lastName") {
+      setAccInfoLastName(e.target.value);
+    } else if (input === "mobileNumber") {
+      setAccInfoMobileNumber(e.target.value);
+    } else if (input === "birthdate") {
+      setAccInfoBirthDate(e.target.value);
+    } else if (input === "email") {
+      setAccInfoEmail(e.target.value);
+    } else if (input === "website") {
+      setAccInfoWebsite(e.target.value);
+    } else if (input === "address") {
+      setAccInfoAddress(e.target.value);
+    } else if (input === "facebookUsername") {
+      setFacebookUsername(e.target.value);
+    } else if (input === "twitterUsername") {
+      setTwitterUsername(e.target.value);
+    } else if (input === "instaUsername") {
+      setInstagramUsername(e.target.value);
+    } else if (input === "linkedinUsername") {
+      setLinkedinUsername(e.target.value);
+    } else if (input === "currentPass") {
+      setCurrentPasswordValue(e.target.value);
+    } else if (input === "newPassword") {
+      setNewPasswordValue(e.target.value);
+    } else if (input === "repeatNewPassword") {
+      setNewRepeatPasswordValue(e.target.value);
+    }
+  };
+
+  const updateProfileInformations = async () => {
+    const updateUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
+    const updateUserInfoPayload = {
+      UID: auth.currentUser.uid,
+      name: auth.currentUser.displayName.toLowerCase(),
+      email: auth.currentUser.email,
+      profilePhoto: auth.currentUser.photoURL,
+      birthdate: AccInfoBirthDate,
+      phoneNumber: AccInfoMobileNumber,
+      address: AccInfoAddress,
+      website: AccInfoWebsite,
+      facebookNick: currentLoggedUserDatabase.facebookNick,
+      instagramNick: currentLoggedUserDatabase.instagramNick,
+      twitterNick: currentLoggedUserDatabase.twitterNick,
+      linkedinNick: currentLoggedUserDatabase.linkedinNick,
+    };
+    await setDoc(updateUserInfoCollRef, updateUserInfoPayload);
+  };
+
+  const updateSocialsInformations = async () => {
+    const updateSocialsUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
+    const updateSocialsUserInfoPayload = {
+      UID: auth.currentUser.uid,
+      name: auth.currentUser.displayName.toLowerCase(),
+      email: auth.currentUser.email,
+      profilePhoto: auth.currentUser.photoURL,
+      birthdate: currentLoggedUserDatabase.birthdate,
+      phoneNumber: currentLoggedUserDatabase.phoneNumber,
+      address: currentLoggedUserDatabase.address,
+      website: currentLoggedUserDatabase.website,
+      facebookNick: FacebookUsername,
+      instagramNick: InstagramUsername,
+      twitterNick: TwitterUsername,
+      linkedinNick: LinkedInUsername,
+    };
+    await setDoc(updateSocialsUserInfoCollRef, updateSocialsUserInfoPayload);
+  };
   return (
     <div className="App">
       <Routes>
@@ -533,6 +663,11 @@ function App() {
               handleCurrentActiveUser={handleCurrentActiveUser}
               navigateToOtherComponents={navigateToOtherComponents}
               currentLoggedUserDatabase={currentLoggedUserDatabase}
+              handleProfileUpdateInformationsInputs={
+                handleProfileUpdateInformationsInputs
+              }
+              updateProfileInformations={updateProfileInformations}
+              updateSocialsInformations={updateSocialsInformations}
             />
           }
         >

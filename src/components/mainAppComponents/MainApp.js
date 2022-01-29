@@ -51,6 +51,11 @@ function MainApp(props) {
         currentClickedUser={props.currentClickedUser}
         currentLoggedUser={props.currentLoggedUser}
         mode={props.mode}
+        handleProfileUpdateInformationsInputs={
+          props.handleProfileUpdateInformationsInputs
+        }
+        updateProfileInformations={props.updateProfileInformations}
+        updateSocialsInformations={props.updateSocialsInformations}
       />
     </div>
   );
