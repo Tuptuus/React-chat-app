@@ -11,6 +11,10 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   FacebookAuthProvider,
+  updateEmail,
+  reauthenticateWithCredential,
+  EmailAuthProvider,
+  updatePassword,
 } from "firebase/auth";
 import {
   collection,
@@ -27,12 +31,19 @@ import {
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
-import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
+import {
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
 import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 import defaultProfilePic from "../Images/defaultProfilePic.png";
 import { useRef } from "react";
+import { stringify } from "@firebase/util";
 
 function App() {
   const [signMode, setSignMode] = useState("login");
@@ -335,17 +346,6 @@ function App() {
       setFoundUsers([]);
       setSearchUserValue("");
       setMode("Friends");
-      setAccInfoFirstName("");
-      setAccInfoLastName("");
-      setAccInfoMobileNumber("");
-      setAccInfoBirthDate("");
-      setAccInfoEmail("");
-      setAccInfoWebsite("");
-      setAccInfoAddress("");
-      setFacebookUsername("");
-      setTwitterUsername("");
-      setInstagramUsername("");
-      setLinkedinUsername("");
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
@@ -355,17 +355,6 @@ function App() {
       setFoundUsers([]);
       setSearchUserValue("");
       setMode("Friends");
-      setAccInfoFirstName("");
-      setAccInfoLastName("");
-      setAccInfoMobileNumber("");
-      setAccInfoBirthDate("");
-      setAccInfoEmail("");
-      setAccInfoWebsite("");
-      setAccInfoAddress("");
-      setFacebookUsername("");
-      setTwitterUsername("");
-      setInstagramUsername("");
-      setLinkedinUsername("");
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
@@ -375,17 +364,6 @@ function App() {
       setFoundUsers([]);
       setSearchUserValue("");
       setMode("Friends");
-      setAccInfoFirstName("");
-      setAccInfoLastName("");
-      setAccInfoMobileNumber("");
-      setAccInfoBirthDate("");
-      setAccInfoEmail("");
-      setAccInfoWebsite("");
-      setAccInfoAddress("");
-      setFacebookUsername("");
-      setTwitterUsername("");
-      setInstagramUsername("");
-      setLinkedinUsername("");
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
@@ -500,6 +478,20 @@ function App() {
   // GET DATA FROM DATABASE CURRENT LOGGED USER
   const [currentLoggedUserDatabase, setCurrentLoggedUserDatabase] =
     useState(null);
+  const [AccInfoFirstName, setAccInfoFirstName] = useState("");
+  const [AccInfoLastName, setAccInfoLastName] = useState("");
+  const [AccInfoMobileNumber, setAccInfoMobileNumber] = useState("");
+  const [AccInfoBirthDate, setAccInfoBirthDate] = useState("");
+  const [AccInfoEmail, setAccInfoEmail] = useState("");
+  const [AccInfoWebsite, setAccInfoWebsite] = useState("");
+  const [AccInfoAddress, setAccInfoAddress] = useState("");
+  const [FacebookUsername, setFacebookUsername] = useState("");
+  const [TwitterUsername, setTwitterUsername] = useState("");
+  const [InstagramUsername, setInstagramUsername] = useState("");
+  const [LinkedInUsername, setLinkedinUsername] = useState("");
+  const [currentPasswordValue, setCurrentPasswordValue] = useState("");
+  const [newPasswordValue, setNewPasswordValue] = useState("");
+  const [newRepeatPasswordValue, setNewRepeatPasswordValue] = useState("");
 
   useEffect(() => {
     if (auth.currentUser) {
@@ -518,21 +510,44 @@ function App() {
     }
   }, [currentLoggedUser]);
 
+  useEffect(() => {
+    let firstName = "";
+    let lastName = "";
+    if (currentLoggedUserDatabase) {
+      if (currentLoggedUserDatabase.name) {
+        firstName =
+          currentLoggedUserDatabase.name[0].toUpperCase() +
+          currentLoggedUserDatabase.name.slice(
+            1,
+            currentLoggedUserDatabase.name.indexOf(" ")
+          );
+        lastName =
+          currentLoggedUserDatabase.name[
+            currentLoggedUserDatabase.name.indexOf(" ") + 1
+          ].toUpperCase() +
+          currentLoggedUserDatabase.name.slice(
+            currentLoggedUserDatabase.name.indexOf(" ") + 2
+          );
+      }
+      setAccInfoMobileNumber(currentLoggedUserDatabase.phoneNumber);
+      setAccInfoBirthDate(currentLoggedUserDatabase.birthdate);
+      setAccInfoEmail(currentLoggedUserDatabase.email);
+      setAccInfoWebsite(currentLoggedUserDatabase.website);
+      setAccInfoAddress(currentLoggedUserDatabase.address);
+      setFacebookUsername(currentLoggedUserDatabase.facebookNick);
+      setTwitterUsername(currentLoggedUserDatabase.twitterNick);
+      setInstagramUsername(currentLoggedUserDatabase.instagramNick);
+      setLinkedinUsername(currentLoggedUserDatabase.linkedinNick);
+      setAccInfoFirstName(firstName);
+      setAccInfoLastName(lastName);
+    }
+  }, [currentLoggedUserDatabase]);
+
   // UPDATE PROFILE INFORMATIONS
-  const [AccInfoFirstName, setAccInfoFirstName] = useState("");
-  const [AccInfoLastName, setAccInfoLastName] = useState("");
-  const [AccInfoMobileNumber, setAccInfoMobileNumber] = useState("");
-  const [AccInfoBirthDate, setAccInfoBirthDate] = useState("");
-  const [AccInfoEmail, setAccInfoEmail] = useState("");
-  const [AccInfoWebsite, setAccInfoWebsite] = useState("");
-  const [AccInfoAddress, setAccInfoAddress] = useState("");
-  const [FacebookUsername, setFacebookUsername] = useState("");
-  const [TwitterUsername, setTwitterUsername] = useState("");
-  const [InstagramUsername, setInstagramUsername] = useState("");
-  const [LinkedInUsername, setLinkedinUsername] = useState("");
-  const [currentPasswordValue, setCurrentPasswordValue] = useState("");
-  const [newPasswordValue, setNewPasswordValue] = useState("");
-  const [newRepeatPasswordValue, setNewRepeatPasswordValue] = useState("");
+  const [updateProfileError, setUpdateProfileError] = useState(null);
+  const [saveUpdateAnimation, setSaveUpdateAnimation] = useState(false);
+  const [updatePasswordError, setUpdatePasswordError] = useState(null);
+  const [updatePasswordAnimation, setUpdatePasswordAnimation] = useState(false);
 
   const handleProfileUpdateInformationsInputs = (input, e) => {
     if (input === "firstName") {
@@ -540,7 +555,9 @@ function App() {
     } else if (input === "lastName") {
       setAccInfoLastName(e.target.value);
     } else if (input === "mobileNumber") {
-      setAccInfoMobileNumber(e.target.value);
+      if (e.target.value.length >= 0 && e.target.value.length <= 9) {
+        setAccInfoMobileNumber(e.target.value);
+      }
     } else if (input === "birthdate") {
       setAccInfoBirthDate(e.target.value);
     } else if (input === "email") {
@@ -567,11 +584,24 @@ function App() {
   };
 
   const updateProfileInformations = async () => {
+    setSaveUpdateAnimation(true);
+    let firstName = "";
+    let lastName = "";
+    if (AccInfoFirstName) {
+      firstName =
+        AccInfoFirstName[0].toLowerCase() +
+        AccInfoFirstName.slice(1, AccInfoFirstName.indexOf(" ") + 50);
+    }
+    if (AccInfoLastName) {
+      lastName =
+        AccInfoLastName[AccInfoLastName.indexOf(" ") + 1].toLowerCase() +
+        AccInfoLastName.slice(AccInfoLastName.indexOf(" ") + 2);
+    }
     const updateUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
     const updateUserInfoPayload = {
       UID: auth.currentUser.uid,
-      name: auth.currentUser.displayName.toLowerCase(),
-      email: auth.currentUser.email,
+      name: firstName + " " + lastName,
+      email: AccInfoEmail,
       profilePhoto: auth.currentUser.photoURL,
       birthdate: AccInfoBirthDate,
       phoneNumber: AccInfoMobileNumber,
@@ -582,8 +612,137 @@ function App() {
       twitterNick: currentLoggedUserDatabase.twitterNick,
       linkedinNick: currentLoggedUserDatabase.linkedinNick,
     };
-    await setDoc(updateUserInfoCollRef, updateUserInfoPayload);
+    if (AccInfoEmail === "") {
+      setSaveUpdateAnimation(false);
+      setUpdateProfileError("Email field is required");
+      setTimeout(() => {
+        setUpdateProfileError("");
+      }, 3000);
+    } else if (AccInfoFirstName === "" || AccInfoLastName === "") {
+      setSaveUpdateAnimation(false);
+      setUpdateProfileError("Your first name and last name are required");
+      setTimeout(() => {
+        setUpdateProfileError("");
+      }, 3000);
+    } else if (AccInfoEmail !== "") {
+      updateEmail(auth.currentUser, AccInfoEmail)
+        .then(async () => {
+          await setDoc(updateUserInfoCollRef, updateUserInfoPayload);
+          console.log("udano");
+          setSaveUpdateAnimation(false);
+        })
+        .catch((error) => {
+          console.log(error.code);
+          if (error.code === "auth/invalid-email") {
+            setSaveUpdateAnimation(false);
+            setUpdateProfileError("Invalid Email");
+            setTimeout(() => {
+              setUpdateProfileError("");
+            }, 3000);
+          } else if (error.code === "auth/email-already-in-use") {
+            setSaveUpdateAnimation(false);
+            setUpdateProfileError("This email is alredy in use");
+            setTimeout(() => {
+              setUpdateProfileError("");
+            }, 3000);
+          } else if (error.code === "auth/requires-recent-login") {
+            setSaveUpdateAnimation(false);
+            setUpdateProfileError("To update email you need to relogin");
+          }
+        });
+    }
   };
+
+  const updateProfilePassword = () => {
+    setUpdatePasswordAnimation(true);
+    if (currentPasswordValue !== "") {
+      const credential = EmailAuthProvider.credential(
+        "tup@gmail.com",
+        currentPasswordValue
+      );
+      reauthenticateWithCredential(auth.currentUser, credential)
+        .then(() => {
+          if (
+            newPasswordValue === newRepeatPasswordValue &&
+            newPasswordValue !== "" &&
+            newRepeatPasswordValue !== ""
+          ) {
+            updatePassword(auth.currentUser, newPasswordValue)
+              .then(() => {
+                setUpdatePasswordAnimation(false);
+                setCurrentPasswordValue("");
+                setNewPasswordValue("");
+                setNewRepeatPasswordValue("");
+                setUpdatePasswordError("Correctly changed password");
+                setTimeout(() => {
+                  setUpdatePasswordError("");
+                }, 3000);
+              })
+              .catch((error) => {
+                console.log(error);
+                if (error.code === "auth/weak-password") {
+                  setUpdatePasswordAnimation(false);
+                  setUpdatePasswordError("To weak password");
+                  setTimeout(() => {
+                    setUpdatePasswordError("");
+                  }, 3000);
+                }
+              });
+          } else if (newPasswordValue !== newRepeatPasswordValue) {
+            setUpdatePasswordAnimation(false);
+            setUpdatePasswordError("Passwords are not the same");
+            setTimeout(() => {
+              setUpdatePasswordError("");
+            }, 3000);
+          } else if (
+            currentPasswordValue !== "" ||
+            newPasswordValue !== "" ||
+            newRepeatPasswordValue !== ""
+          ) {
+            setUpdatePasswordAnimation(false);
+            setUpdatePasswordError("You need to refill all fields");
+            setTimeout(() => {
+              setUpdatePasswordError("");
+            }, 3000);
+          }
+        })
+        .catch((error) => {
+          if (error.code === "auth/wrong-password") {
+            setUpdatePasswordAnimation(false);
+            setUpdatePasswordError("Wrong password");
+            setTimeout(() => {
+              setUpdatePasswordError("");
+            }, 3000);
+          } else if (error.code === "auth/too-many-requests") {
+            setUpdatePasswordAnimation(false);
+            setUpdatePasswordError("To many attempts, please try again later");
+            setTimeout(() => {
+              setUpdatePasswordError("");
+            }, 3000);
+          }
+          console.log(error);
+        });
+    } else if (
+      currentPasswordValue === "" ||
+      newPasswordValue === "" ||
+      newRepeatPasswordValue === ""
+    ) {
+      setUpdatePasswordAnimation(false);
+      setUpdatePasswordError("You need to refill all fields");
+      setTimeout(() => {
+        setUpdatePasswordError("");
+      }, 3000);
+    }
+    // console.log(credential);
+  };
+
+  // if (auth.currentUser) {
+  //   console.log(auth.currentUser.email);
+  // }
+
+  // if (auth.currentUser) {
+  //   console.log(auth.currentUser.email);
+  // }
 
   const updateSocialsInformations = async () => {
     const updateSocialsUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
@@ -668,6 +827,25 @@ function App() {
               }
               updateProfileInformations={updateProfileInformations}
               updateSocialsInformations={updateSocialsInformations}
+              AccInfoMobileNumber={AccInfoMobileNumber}
+              AccInfoBirthDate={AccInfoBirthDate}
+              AccInfoEmail={AccInfoEmail}
+              AccInfoWebsite={AccInfoWebsite}
+              AccInfoAddress={AccInfoAddress}
+              FacebookUsername={FacebookUsername}
+              TwitterUsername={TwitterUsername}
+              InstagramUsername={InstagramUsername}
+              LinkedInUsername={LinkedInUsername}
+              AccInfoFirstName={AccInfoFirstName}
+              AccInfoLastName={AccInfoLastName}
+              updateProfileError={updateProfileError}
+              saveUpdateAnimation={saveUpdateAnimation}
+              updateProfilePassword={updateProfilePassword}
+              updatePasswordAnimation={updatePasswordAnimation}
+              updatePasswordError={updatePasswordError}
+              currentPasswordValue={currentPasswordValue}
+              newPasswordValue={newPasswordValue}
+              newRepeatPasswordValue={newRepeatPasswordValue}
             />
           }
         >

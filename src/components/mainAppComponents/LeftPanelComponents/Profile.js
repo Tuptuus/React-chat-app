@@ -28,6 +28,7 @@ const twitter = <FontAwesomeIcon icon={faTwitter} />;
 const linkedIn = <FontAwesomeIcon icon={faLinkedinIn} />;
 
 function Profile(props) {
+  const [name, setName] = useState(null);
   const [profilePhotoInfo, setProfilePhotoInfo] = useState(null);
   const [birthdateInfo, setBirthdateInfo] = useState(null);
   const [phoneNumberInfo, setPhoneNumberInfo] = useState(null);
@@ -40,6 +41,20 @@ function Profile(props) {
   const [LinkedinNickInfo, setLinkedinNickInfo] = useState(null);
   useEffect(() => {
     if (props.currentLoggedUserDatabase) {
+      const firstName =
+        props.currentLoggedUserDatabase.name[0].toUpperCase() +
+        props.currentLoggedUserDatabase.name.slice(
+          1,
+          props.currentLoggedUserDatabase.name.indexOf(" ")
+        );
+      const lastName =
+        props.currentLoggedUserDatabase.name[
+          props.currentLoggedUserDatabase.name.indexOf(" ") + 1
+        ].toUpperCase() +
+        props.currentLoggedUserDatabase.name.slice(
+          props.currentLoggedUserDatabase.name.indexOf(" ") + 2
+        );
+      setName(firstName + " " + lastName);
       setProfilePhotoInfo(props.currentLoggedUserDatabase.profilePhoto);
       setBirthdateInfo(props.currentLoggedUserDatabase.birthdate);
       setPhoneNumberInfo(props.currentLoggedUserDatabase.phoneNumber);
@@ -78,9 +93,7 @@ function Profile(props) {
               </div>
             </div>
           </div>
-          <div className="Profile_profilePanelName">
-            {props.currentLoggedUser.displayName}
-          </div>
+          <div className="Profile_profilePanelName">{name ? name : null}</div>
         </div>
         <div className="ProfileInformation_container">
           <div className="ProfileInformation_panel">

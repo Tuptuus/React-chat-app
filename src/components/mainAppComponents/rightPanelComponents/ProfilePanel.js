@@ -1,5 +1,9 @@
 import React from "react";
 import "../../../styles/ProfilePanel.css";
+import { Spinner } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/free-solid-svg-icons";
+const questionMark = <FontAwesomeIcon icon={faQuestionCircle} />;
 
 function ProfilePanel(props) {
   return (
@@ -21,6 +25,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your first name"
+                  value={props.AccInfoFirstName ? props.AccInfoFirstName : null}
                 />
               </div>
               <div className="Row_right">
@@ -32,6 +37,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your last name"
+                  value={props.AccInfoLastName ? props.AccInfoLastName : null}
                 />
               </div>
             </div>
@@ -47,6 +53,9 @@ function ProfilePanel(props) {
                       e
                     )
                   }
+                  value={
+                    props.AccInfoMobileNumber ? props.AccInfoMobileNumber : null
+                  }
                   className="AccInfo_input"
                   type="number"
                   placeholder="Type your mobile number"
@@ -55,7 +64,8 @@ function ProfilePanel(props) {
               <div className="Row_right">
                 <div className="Input_title">Birth date</div>
                 <input
-                  className="AccInfo_input"
+                  value={props.AccInfoBirthDate ? props.AccInfoBirthDate : null}
+                  className="AccInfo_input birthdateInput"
                   type="date"
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs("birthdate", e)
@@ -67,11 +77,20 @@ function ProfilePanel(props) {
           <div className="AccInfo_contentRow">
             <div className="Row_container">
               <div className="Row_left">
-                <div className="Input_title">Email address</div>
+                <div className="Input_title">
+                  Email address{" "}
+                  <span
+                    title="You are using this email to login"
+                    className="emailQuestionMark"
+                  >
+                    {questionMark}
+                  </span>
+                </div>
                 <input
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs("email", e)
                   }
+                  value={props.AccInfoEmail ? props.AccInfoEmail : null}
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your email address"
@@ -86,6 +105,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your website"
+                  value={props.AccInfoWebsite ? props.AccInfoWebsite : null}
                 />
               </div>
             </div>
@@ -101,12 +121,24 @@ function ProfilePanel(props) {
                   className="AccInfo_inputAddress"
                   type="text"
                   placeholder="Type your address"
+                  value={props.AccInfoAddress ? props.AccInfoAddress : null}
                 />
               </div>
             </div>
           </div>
         </div>
         <div className="AccInfo_bottom">
+          {props.updateProfileError ? (
+            <div className="AccInfo_errors">{props.updateProfileError}</div>
+          ) : null}
+          {props.saveUpdateAnimation ? (
+            <Spinner
+              animation="border"
+              variant="danger"
+              className="saveUpdatesProfileChanges"
+            />
+          ) : null}
+
           <button
             onClick={props.updateProfileInformations}
             className="AccInfo_saveButton"
@@ -137,6 +169,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your Username"
+                  value={props.FacebookUsername ? props.FacebookUsername : null}
                 />
               </div>
               <div className="Row_right">
@@ -151,6 +184,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your Username"
+                  value={props.TwitterUsername ? props.TwitterUsername : null}
                 />
               </div>
             </div>
@@ -169,6 +203,9 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your Username"
+                  value={
+                    props.InstagramUsername ? props.InstagramUsername : null
+                  }
                 />
               </div>
               <div className="Row_right">
@@ -183,6 +220,7 @@ function ProfilePanel(props) {
                   className="AccInfo_input"
                   type="text"
                   placeholder="Type your Username"
+                  value={props.LinkedInUsername ? props.LinkedInUsername : null}
                 />
               </div>
             </div>
@@ -208,6 +246,7 @@ function ProfilePanel(props) {
               <div className="Row_leftPassword">
                 <div className="Input_title">Current Password</div>
                 <input
+                  value={props.currentPasswordValue}
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs(
                       "currentPass",
@@ -234,6 +273,7 @@ function ProfilePanel(props) {
               <div className="Row_left">
                 <div className="Input_title">New Password</div>
                 <input
+                  value={props.newPasswordValue}
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs(
                       "newPassword",
@@ -248,6 +288,7 @@ function ProfilePanel(props) {
               <div className="Row_right">
                 <div className="Input_title">Repeat Password</div>
                 <input
+                  value={props.newRepeatPasswordValue}
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs(
                       "repeatNewPassword",
@@ -263,7 +304,29 @@ function ProfilePanel(props) {
           </div>
         </div>
         <div className="AccInfo_bottom">
-          <button className="AccInfo_saveButton">Save Changes</button>
+          {props.updatePasswordAnimation ? (
+            <Spinner
+              animation="border"
+              variant="danger"
+              className="saveUpdatesProfileChanges"
+            />
+          ) : null}
+          {props.updatePasswordError !== "Correctly changed password" ? (
+            <div className="changePassword_errors">
+              {props.updatePasswordError}
+            </div>
+          ) : null}
+          {props.updatePasswordError === "Correctly changed password" ? (
+            <div className="changePassword_correct">
+              {props.updatePasswordError}
+            </div>
+          ) : null}
+          <button
+            onClick={props.updateProfilePassword}
+            className="AccInfo_saveButton"
+          >
+            Save Changes
+          </button>
         </div>
       </div>
     </div>

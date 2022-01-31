@@ -79,8 +79,14 @@
   color: white;
   border-radius: 5px;
 }
-.AccInfo_input::placeholder {
-  color: #757575;
+.birthdateInput::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+.AccInfo_input::-webkit-outer-spin-button,
+.AccInfo_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 .AccInfo_inputAddress {
   background-color: #2a2a2a;
@@ -103,11 +109,19 @@
 }
 
 .AccInfo_bottom {
+  display: flex;
+  align-items: center;
+  justify-content: right;
   height: 60px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   background-color: #2a2a2a;
   text-align: right;
+}
+
+.AccInfo_errors {
+  color: red;
+  margin-right: 50px;
 }
 
 .AccInfo_saveButton {
@@ -120,7 +134,10 @@
   height: 40px;
   transition: 0.3s;
   margin-right: 60px;
-  margin-top: 10px;
+}
+
+.saveUpdatesProfileChanges {
+  margin-right: 20px;
 }
 
 .AccInfo_saveButton:hover {
@@ -137,4 +154,19 @@
 .Row_rightPassword {
   width: 41.5%;
   visibility: hidden;
+}
+
+.emailQuestionMark {
+  color: #fd4517;
+  font-size: 17px;
+}
+
+.changePassword_errors {
+  color: red;
+  margin-right: 50px;
+}
+
+.changePassword_correct {
+  color: #fd4517;
+  margin-right: 50px;
 }
