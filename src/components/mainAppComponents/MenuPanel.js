@@ -9,6 +9,7 @@ import {
   faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
+import RequestPanel from "./RequestPanel";
 const SignOut = <FontAwesomeIcon icon={faSignOutAlt} />;
 const User = <FontAwesomeIcon icon={faUser} />;
 const UserFriends = <FontAwesomeIcon icon={faUserFriends} />;
@@ -35,7 +36,10 @@ function MenuPanel(props) {
         </div>
       ) : null}
       {props.friendsRequestPanel ? (
-        <div className="requestPanel">es</div>
+        <RequestPanel
+          rejectFriendsRequest={props.rejectFriendsRequest}
+          usersRequests={props.usersRequests}
+        />
       ) : null}
 
       <div className="MenuPanel_Icons">

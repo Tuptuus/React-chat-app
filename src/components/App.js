@@ -19,6 +19,7 @@ import {
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   endAt,
   getDocs,
@@ -292,6 +293,7 @@ function App() {
     setNewPreviewProfilePic(null);
     setSignMode("login");
     navigate("/");
+    setFriendsRequestPanel(false);
     // setCurrentLoggedUserDatabase(null);
   };
 
@@ -350,6 +352,7 @@ function App() {
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
+      setFriendsRequestPanel(false);
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
@@ -359,6 +362,7 @@ function App() {
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
+      setFriendsRequestPanel(false);
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
@@ -368,6 +372,7 @@ function App() {
       setCurrentPasswordValue("");
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
+      setFriendsRequestPanel(false);
     }
   };
 
@@ -757,6 +762,7 @@ function App() {
   const [notificationFriendRequest, setNotificationFriendRequest] =
     useState(false);
   const [friendsRequestPanel, setFriendsRequestPanel] = useState(false);
+  const [usersRequests, setUsersRequests] = useState([]);
 
   useEffect(() => {
     let request = "";
@@ -853,11 +859,86 @@ function App() {
     }
   };
 
+  let userRequest = [];
   useEffect(() => {
     if (friendRequestFrom) {
-      console.log(friendRequestFrom.map((item) => console.log(item)));
+      console.log("właśnie pobrano requesty z bazy");
+      for (let i = 0; i < friendRequestFrom.length; i++) {
+        const currRequestUserRef = collection(db, "Users");
+        const currRequestUserQuery = query(
+          currRequestUserRef,
+          where("UID", "==", friendRequestFrom[i])
+        );
+        onSnapshot(currRequestUserQuery, (snapshot) => {
+          snapshot.docs.forEach(async (doc) => {
+            await userRequest.push({ ...doc.data() });
+            setUsersRequests(userRequest);
+          });
+        });
+      }
     }
-  });
+  }, [friendRequestFrom]);
+  // console.log(usersRequests);
+
+  const rejectFriendsRequest = async (user) => {
+    const getIdDocCurrRef = collection(
+      db,
+      "Users",
+      auth.currentUser.uid,
+      "friendsRequests"
+    );
+    const getIdDocUserRef = collection(
+      db,
+      "Users",
+      user.UID,
+      "friendsRequests"
+    );
+    const queryDelFrom = query(
+      getIdDocCurrRef,
+      where("from", "==", user.UID),
+      where("to", "==", auth.currentUser.uid)
+    );
+    const queryDelTo = query(
+      getIdDocUserRef,
+      where("from", "==", user.UID),
+      where("to", "==", auth.currentUser.uid)
+    );
+    onSnapshot(queryDelFrom, (snapshot) => {
+      snapshot.docs.forEach((docu) => {
+        const requestDeleteRef = doc(
+          db,
+          "Users",
+          auth.currentUser.uid,
+          "friendsRequests",
+          docu.id
+        );
+        deleteDoc(requestDeleteRef);
+      });
+    });
+    onSnapshot(queryDelTo, (snapshot) => {
+      snapshot.docs.forEach((docu) => {
+        const requestDeleteRef2 = doc(
+          db,
+          "Users",
+          user.UID,
+          "friendsRequests",
+          docu.id
+        );
+        deleteDoc(requestDeleteRef2);
+      });
+    });
+    const divToDelete = usersRequests
+      .map(function (e) {
+        return e.UID;
+      })
+      .indexOf(user.UID);
+    const currArrayUsersRequests = [...usersRequests];
+    currArrayUsersRequests.splice(divToDelete, 1);
+    await setUsersRequests(currArrayUsersRequests);
+    setNotificationFriendRequest(false);
+    setFriendsRequestPanel(false);
+  };
+
   return (
     <div className="App">
       <Routes>
@@ -947,6 +1028,8 @@ function App() {
               notificationFriendRequest={notificationFriendRequest}
               handleFriendsRequestPanel={handleFriendsRequestPanel}
               friendsRequestPanel={friendsRequestPanel}
+              usersRequests={usersRequests}
+              rejectFriendsRequest={rejectFriendsRequest}
             />
           }
         >

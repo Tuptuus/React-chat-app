@@ -76,17 +76,3 @@
   position: absolute;
   cursor: pointer;
 }
-
-.requestPanel {
-  background-color: #323333;
-  border: 2px solid #fd4517;
-  width: 400px;
-  height: 250px;
-  position: absolute;
-  top: 0;
-  margin-top: 70px;
-  margin-left: 475px;
-  border-radius: 10px;
-  transition: 0.3s;
-  color: white;
-}

@@ -16,6 +16,8 @@ function MainApp(props) {
         notificationFriendRequest={props.notificationFriendRequest}
         handleFriendsRequestPanel={props.handleFriendsRequestPanel}
         friendsRequestPanel={props.friendsRequestPanel}
+        usersRequests={props.usersRequests}
+        rejectFriendsRequest={props.rejectFriendsRequest}
       />
       <LeftPanel
         currentLoggedUser={props.currentLoggedUser}
