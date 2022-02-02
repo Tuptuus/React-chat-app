@@ -9,6 +9,8 @@ import {
   faEnvelope,
   faHome,
   faGlobe,
+  faUserClock,
+  faUserCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookF,
@@ -18,6 +20,8 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 const addUser = <FontAwesomeIcon icon={faUserPlus} />;
+const waitUser = <FontAwesomeIcon icon={faUserClock} />;
+const requestSend = <FontAwesomeIcon icon={faUserCheck} />;
 const message = <FontAwesomeIcon icon={faComment} />;
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} />;
 const phone = <FontAwesomeIcon icon={faPhone} />;
@@ -61,7 +65,22 @@ function ProfileCard(props) {
               <div className="profileBlock_name">{`${firstName} ${lastName}`}</div>
             </div>
             <div className="profileBlock_actions">
-              <div className="addUser">{addUser}</div>
+              {props.friendActionMode === "Add" ? (
+                <div
+                  onClick={() =>
+                    props.addToFriendsSystem(props.currentClickedUser.UID)
+                  }
+                  className="addUser"
+                >
+                  {addUser}
+                </div>
+              ) : null}
+              {props.friendActionMode === "Waiting" ? (
+                <div className="waitUser">{waitUser}</div>
+              ) : null}
+              {props.friendActionMode === "requestSend" ? (
+                <div className="waitUser">{requestSend}</div>
+              ) : null}
               <div className="message">{message}</div>
             </div>
           </div>

@@ -1,15 +1,19 @@
 import React from "react";
 import "../../styles/MenuPanel.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-import { faUserFriends } from "@fortawesome/free-solid-svg-icons";
-import { faCommentAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faSignOutAlt,
+  faUser,
+  faUserFriends,
+  faCommentAlt,
+  faBell,
+} from "@fortawesome/free-solid-svg-icons";
 import { useLocation } from "react-router-dom";
 const SignOut = <FontAwesomeIcon icon={faSignOutAlt} />;
 const User = <FontAwesomeIcon icon={faUser} />;
 const UserFriends = <FontAwesomeIcon icon={faUserFriends} />;
 const UserChats = <FontAwesomeIcon icon={faCommentAlt} />;
+const Bell = <FontAwesomeIcon icon={faBell} />;
 
 function MenuPanel(props) {
   const location = useLocation();
@@ -22,6 +26,18 @@ function MenuPanel(props) {
           className="profilePhoto_pic"
         />
       </div>
+      {props.notificationFriendRequest ? (
+        <div
+          onClick={props.handleFriendsRequestPanel}
+          className="Notification_dot"
+        >
+          {Bell}
+        </div>
+      ) : null}
+      {props.friendsRequestPanel ? (
+        <div className="requestPanel">es</div>
+      ) : null}
+
       <div className="MenuPanel_Icons">
         <span
           onClick={() => props.navigateToOtherComponents("Chats")}

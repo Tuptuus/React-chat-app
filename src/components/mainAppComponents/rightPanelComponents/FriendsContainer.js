@@ -8,6 +8,8 @@ function FriendsContainer(props) {
         <SearchedUserProfileCard
           currentClickedUser={props.currentClickedUser}
           currentLoggedUser={props.currentLoggedUser}
+          addToFriendsSystem={props.addToFriendsSystem}
+          friendActionMode={props.friendActionMode}
         />
       ) : null}
     </>

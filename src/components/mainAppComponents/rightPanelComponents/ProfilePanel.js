@@ -97,7 +97,15 @@ function ProfilePanel(props) {
                 />
               </div>
               <div className="Row_right">
-                <div className="Input_title">Website</div>
+                <div className="Input_title">
+                  Website{" "}
+                  <span
+                    title="Only https, type website address after slashes"
+                    className="emailQuestionMark"
+                  >
+                    {questionMark}
+                  </span>
+                </div>
                 <input
                   onChange={(e) =>
                     props.handleProfileUpdateInformationsInputs("website", e)

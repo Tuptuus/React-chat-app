@@ -48,6 +48,12 @@
   width: 50%;
 }
 
+.waitUser {
+  font-size: 40px;
+  transition: 0.3s;
+  width: 50%;
+}
+
 .addUser:hover {
   font-size: 45px;
   color: #fd4517;

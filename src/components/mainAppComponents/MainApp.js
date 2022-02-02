@@ -13,6 +13,9 @@ function MainApp(props) {
         currentLoggedUser={props.currentLoggedUser}
         handleLogoutUser={props.handleLogoutUser}
         navigateToOtherComponents={props.navigateToOtherComponents}
+        notificationFriendRequest={props.notificationFriendRequest}
+        handleFriendsRequestPanel={props.handleFriendsRequestPanel}
+        friendsRequestPanel={props.friendsRequestPanel}
       />
       <LeftPanel
         currentLoggedUser={props.currentLoggedUser}
@@ -76,6 +79,8 @@ function MainApp(props) {
         currentPasswordValue={props.currentPasswordValue}
         newPasswordValue={props.newPasswordValue}
         newRepeatPasswordValue={props.newRepeatPasswordValue}
+        addToFriendsSystem={props.addToFriendsSystem}
+        friendActionMode={props.friendActionMode}
       />
     </div>
   );

@@ -144,7 +144,17 @@ function Profile(props) {
             <div className="ProfileInformation_left">
               <div className="ProfileInformation_title">Website</div>
               <div className="ProfileInformation_content">
-                {websiteInfo ? websiteInfo : "---------------"}
+                {websiteInfo ? (
+                  <a
+                    rel="noreferrer"
+                    target="_blank"
+                    href={`https://${websiteInfo}`}
+                  >
+                    {websiteInfo}
+                  </a>
+                ) : (
+                  "---------------"
+                )}
               </div>
             </div>
             <div className="ProfileInformation_right">

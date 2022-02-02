@@ -117,6 +117,10 @@
   font-size: 20px;
 }
 
+.ProfileInformation_content a {
+  color: #ff714e;
+}
+
 .ProfileInformation_right {
   width: 5%;
 }

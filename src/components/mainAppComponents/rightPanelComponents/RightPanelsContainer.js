@@ -13,6 +13,8 @@ function RightPanelsContainer(props) {
           currentClickedUser={props.currentClickedUser}
           currentLoggedUser={props.currentLoggedUser}
           mode={props.mode}
+          addToFriendsSystem={props.addToFriendsSystem}
+          friendActionMode={props.friendActionMode}
         />
       ) : null}
       {location.pathname === "/ChatApp/Profile" ? (

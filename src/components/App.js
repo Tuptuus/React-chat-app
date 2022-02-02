@@ -17,6 +17,7 @@ import {
   updatePassword,
 } from "firebase/auth";
 import {
+  addDoc,
   collection,
   doc,
   endAt,
@@ -628,11 +629,9 @@ function App() {
       updateEmail(auth.currentUser, AccInfoEmail)
         .then(async () => {
           await setDoc(updateUserInfoCollRef, updateUserInfoPayload);
-          console.log("udano");
           setSaveUpdateAnimation(false);
         })
         .catch((error) => {
-          console.log(error.code);
           if (error.code === "auth/invalid-email") {
             setSaveUpdateAnimation(false);
             setUpdateProfileError("Invalid Email");
@@ -679,7 +678,6 @@ function App() {
                 }, 3000);
               })
               .catch((error) => {
-                console.log(error);
                 if (error.code === "auth/weak-password") {
                   setUpdatePasswordAnimation(false);
                   setUpdatePasswordError("To weak password");
@@ -720,7 +718,6 @@ function App() {
               setUpdatePasswordError("");
             }, 3000);
           }
-          console.log(error);
         });
     } else if (
       currentPasswordValue === "" ||
@@ -733,16 +730,7 @@ function App() {
         setUpdatePasswordError("");
       }, 3000);
     }
-    // console.log(credential);
   };
-
-  // if (auth.currentUser) {
-  //   console.log(auth.currentUser.email);
-  // }
-
-  // if (auth.currentUser) {
-  //   console.log(auth.currentUser.email);
-  // }
 
   const updateSocialsInformations = async () => {
     const updateSocialsUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
@@ -762,6 +750,114 @@ function App() {
     };
     await setDoc(updateSocialsUserInfoCollRef, updateSocialsUserInfoPayload);
   };
+
+  // ADD FRIENDS AND FRIENDS REQUESTS SYSTEM
+  const [friendRequestFrom, setFriendRequestFrom] = useState([]);
+  const [friendActionMode, setFriendActionMode] = useState("Add");
+  const [notificationFriendRequest, setNotificationFriendRequest] =
+    useState(false);
+  const [friendsRequestPanel, setFriendsRequestPanel] = useState(false);
+
+  useEffect(() => {
+    let request = "";
+    let friendRequests = [];
+    if (auth.currentUser) {
+      const getRequestRef = collection(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "friendsRequests"
+      );
+      const getRequestsQuery = query(
+        getRequestRef,
+        where("to", "==", auth.currentUser.uid)
+      );
+      onSnapshot(getRequestsQuery, (snapshot) => {
+        snapshot.docs.forEach(async (doc) => {
+          request = { ...doc.data() };
+          if (request.to === auth.currentUser.uid) {
+            setNotificationFriendRequest(true);
+            await friendRequests.push(request.from);
+            if (friendRequests.length !== 0) {
+              await setFriendRequestFrom(friendRequests);
+            }
+          }
+        });
+      });
+    }
+  }, [currentLoggedUser]);
+
+  // console.log(friendRequestFrom);
+
+  useEffect(() => {
+    if (currentClickedUser) {
+      setFriendActionMode("Add");
+      const getRequestRef = collection(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "friendsRequests"
+      );
+      const getRequestsQuery = query(
+        getRequestRef,
+        where("to", "==", currentClickedUser.UID)
+      );
+      const getRequestsQuery2 = query(
+        getRequestRef,
+        where("from", "==", currentClickedUser.UID)
+      );
+      onSnapshot(getRequestsQuery, (snapshot) => {
+        let request = "";
+        snapshot.docs.forEach((doc) => {
+          request = { ...doc.data() };
+          if (request.to === currentClickedUser.UID) {
+            setFriendActionMode("requestSend");
+          }
+        });
+      });
+      onSnapshot(getRequestsQuery2, (snapshot) => {
+        let request = "";
+        snapshot.docs.forEach((doc) => {
+          request = { ...doc.data() };
+          if (request.from === currentClickedUser.UID) {
+            setFriendActionMode("Waiting");
+          }
+        });
+      });
+    }
+  }, [currentClickedUser]);
+
+  const addToFriendsSystem = async (id) => {
+    const collectionRef = collection(
+      db,
+      "Users",
+      auth.currentUser.uid,
+      "friendsRequests"
+    );
+    const collectionRef2 = collection(
+      db,
+      "Users",
+      currentClickedUser.UID,
+      "friendsRequests"
+    );
+    const payload = { from: auth.currentUser.uid, to: id };
+    await addDoc(collectionRef, payload);
+    await addDoc(collectionRef2, payload);
+  };
+
+  const handleFriendsRequestPanel = () => {
+    if (friendsRequestPanel === false) {
+      setFriendsRequestPanel(true);
+    } else if (friendsRequestPanel === true) {
+      setFriendsRequestPanel(false);
+    }
+  };
+
+  useEffect(() => {
+    if (friendRequestFrom) {
+      console.log(friendRequestFrom.map((item) => console.log(item)));
+    }
+  });
   return (
     <div className="App">
       <Routes>
@@ -846,6 +942,11 @@ function App() {
               currentPasswordValue={currentPasswordValue}
               newPasswordValue={newPasswordValue}
               newRepeatPasswordValue={newRepeatPasswordValue}
+              addToFriendsSystem={addToFriendsSystem}
+              friendActionMode={friendActionMode}
+              notificationFriendRequest={notificationFriendRequest}
+              handleFriendsRequestPanel={handleFriendsRequestPanel}
+              friendsRequestPanel={friendsRequestPanel}
             />
           }
         >
