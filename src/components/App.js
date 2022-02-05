@@ -29,6 +29,7 @@ import {
   query,
   setDoc,
   startAt,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
@@ -45,7 +46,6 @@ import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
 import defaultProfilePic from "../Images/defaultProfilePic.png";
 import { useRef } from "react";
-import { stringify } from "@firebase/util";
 
 function App() {
   const [signMode, setSignMode] = useState("login");
@@ -53,6 +53,54 @@ function App() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // CLEAR ALL STATES
+  const clearStates = () => {
+    setSignMode("login");
+    setCurrentClickedUser("");
+    setRegisterName("");
+    setRegisterEmail("");
+    setRegisterPassword("");
+    setRegisterError("");
+    setRegisterLoadingAnimation(false);
+    setLoginEmail("");
+    setLoginPassword("");
+    setLoginLoadingAnimation(false);
+    setLoginError("");
+    setConfirmLogoutPanel(false);
+    setIsUploadOpen(false);
+    setUploadPrevPicAnimation(false);
+    setUploadNewProfPicAnimation(false);
+    setNewPreviewProfilePic(null);
+    setNewPreviewProfilePic(null);
+    setIsConfirmRejectOpen(false);
+    setSearchUserValue("");
+    setFoundUsers([]);
+    setCurrentLoggedUserDatabase(null);
+    setAccInfoFirstName("");
+    setAccInfoLastName("");
+    setAccInfoMobileNumber("");
+    setAccInfoBirthDate("");
+    setAccInfoEmail("");
+    setAccInfoWebsite("");
+    setAccInfoAddress("");
+    setFacebookUsername("");
+    setTwitterUsername("");
+    setInstagramUsername("");
+    setLinkedinUsername("");
+    setCurrentPasswordValue("");
+    setNewPasswordValue("");
+    setNewRepeatPasswordValue("");
+    setUpdateProfileError(null);
+    setSaveUpdateAnimation(false);
+    setUpdatePasswordError(null);
+    setUpdatePasswordAnimation(false);
+    setFriendRequestFrom([]);
+    setFriendActionMode("Add");
+    setNotificationFriendRequest(false);
+    setFriendsRequestPanel(false);
+    setUsersRequests([]);
+  };
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
   const [currentLoggedUser, setCurrentLoggedUser] = useState({});
@@ -287,14 +335,11 @@ function App() {
       setConfirmLogoutPanel(false);
     }
   };
+
   const LogoutUser = async () => {
     signOut(auth);
-    setConfirmLogoutPanel(false);
-    setNewPreviewProfilePic(null);
-    setSignMode("login");
     navigate("/");
-    setFriendsRequestPanel(false);
-    // setCurrentLoggedUserDatabase(null);
+    clearStates();
   };
 
   // HANDLE ALL INPUTS ON REGISTER AND LOGIN PAGES
@@ -353,6 +398,7 @@ function App() {
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
+      setSaveUpdateAnimation(false);
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
@@ -363,6 +409,7 @@ function App() {
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
+      setSaveUpdateAnimation(false);
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
@@ -373,6 +420,7 @@ function App() {
       setNewPasswordValue("");
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
+      setSaveUpdateAnimation(false);
     }
   };
 
@@ -419,12 +467,9 @@ function App() {
     });
     const registerUserCollRef = doc(db, "Users", auth.currentUser.uid);
     const registerUserPayload = {
-      UID: auth.currentUser.uid,
-      name: auth.currentUser.displayName.toLowerCase(),
-      email: auth.currentUser.email,
       profilePhoto: auth.currentUser.photoURL,
     };
-    await setDoc(registerUserCollRef, registerUserPayload);
+    await updateDoc(registerUserCollRef, registerUserPayload);
     setNewProfilePic(null);
     setIsUploadOpen(false);
     setUploadNewProfPicAnimation(false);
@@ -605,7 +650,6 @@ function App() {
     }
     const updateUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
     const updateUserInfoPayload = {
-      UID: auth.currentUser.uid,
       name: firstName + " " + lastName,
       email: AccInfoEmail,
       profilePhoto: auth.currentUser.photoURL,
@@ -613,10 +657,6 @@ function App() {
       phoneNumber: AccInfoMobileNumber,
       address: AccInfoAddress,
       website: AccInfoWebsite,
-      facebookNick: currentLoggedUserDatabase.facebookNick,
-      instagramNick: currentLoggedUserDatabase.instagramNick,
-      twitterNick: currentLoggedUserDatabase.twitterNick,
-      linkedinNick: currentLoggedUserDatabase.linkedinNick,
     };
     if (AccInfoEmail === "") {
       setSaveUpdateAnimation(false);
@@ -633,7 +673,7 @@ function App() {
     } else if (AccInfoEmail !== "") {
       updateEmail(auth.currentUser, AccInfoEmail)
         .then(async () => {
-          await setDoc(updateUserInfoCollRef, updateUserInfoPayload);
+          await updateDoc(updateUserInfoCollRef, updateUserInfoPayload);
           setSaveUpdateAnimation(false);
         })
         .catch((error) => {
@@ -740,20 +780,12 @@ function App() {
   const updateSocialsInformations = async () => {
     const updateSocialsUserInfoCollRef = doc(db, "Users", auth.currentUser.uid);
     const updateSocialsUserInfoPayload = {
-      UID: auth.currentUser.uid,
-      name: auth.currentUser.displayName.toLowerCase(),
-      email: auth.currentUser.email,
-      profilePhoto: auth.currentUser.photoURL,
-      birthdate: currentLoggedUserDatabase.birthdate,
-      phoneNumber: currentLoggedUserDatabase.phoneNumber,
-      address: currentLoggedUserDatabase.address,
-      website: currentLoggedUserDatabase.website,
       facebookNick: FacebookUsername,
       instagramNick: InstagramUsername,
       twitterNick: TwitterUsername,
       linkedinNick: LinkedInUsername,
     };
-    await setDoc(updateSocialsUserInfoCollRef, updateSocialsUserInfoPayload);
+    await updateDoc(updateSocialsUserInfoCollRef, updateSocialsUserInfoPayload);
   };
 
   // ADD FRIENDS AND FRIENDS REQUESTS SYSTEM
@@ -785,15 +817,15 @@ function App() {
             setNotificationFriendRequest(true);
             await friendRequests.push(request.from);
             if (friendRequests.length !== 0) {
-              await setFriendRequestFrom(friendRequests);
+              let friendRequest = friendRequests;
+              let uniqueFriendRequests = [...new Set(friendRequest)];
+              await setFriendRequestFrom(uniqueFriendRequests);
             }
           }
         });
       });
     }
   }, [currentLoggedUser]);
-
-  // console.log(friendRequestFrom);
 
   useEffect(() => {
     if (currentClickedUser) {
@@ -862,7 +894,6 @@ function App() {
   let userRequest = [];
   useEffect(() => {
     if (friendRequestFrom) {
-      console.log("właśnie pobrano requesty z bazy");
       for (let i = 0; i < friendRequestFrom.length; i++) {
         const currRequestUserRef = collection(db, "Users");
         const currRequestUserQuery = query(
@@ -878,7 +909,6 @@ function App() {
       }
     }
   }, [friendRequestFrom]);
-  // console.log(usersRequests);
 
   const rejectFriendsRequest = async (user) => {
     const getIdDocCurrRef = collection(
@@ -935,8 +965,23 @@ function App() {
     const currArrayUsersRequests = [...usersRequests];
     currArrayUsersRequests.splice(divToDelete, 1);
     await setUsersRequests(currArrayUsersRequests);
-    setNotificationFriendRequest(false);
-    setFriendsRequestPanel(false);
+    const currArrayFriendRequestFrom = [...friendRequestFrom];
+    currArrayFriendRequestFrom.splice(friendRequestFrom.indexOf(user.UID), 1);
+    await setFriendRequestFrom(currArrayFriendRequestFrom);
+  };
+
+  useEffect(() => {
+    if (friendRequestFrom.length === 0) {
+      setFriendsRequestPanel(false);
+      setNotificationFriendRequest(false);
+    } else if (friendRequestFrom.length > 0) {
+      setNotificationFriendRequest(true);
+    }
+    console.log("wywołano");
+  }, [friendRequestFrom]);
+
+  const acceptFriendsRequest = async (user) => {
+    console.log(`witam ${user.name}`);
   };
 
   return (
@@ -1030,6 +1075,7 @@ function App() {
               friendsRequestPanel={friendsRequestPanel}
               usersRequests={usersRequests}
               rejectFriendsRequest={rejectFriendsRequest}
+              acceptFriendsRequest={acceptFriendsRequest}
             />
           }
         >

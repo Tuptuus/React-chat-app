@@ -18,6 +18,7 @@ function MainApp(props) {
         friendsRequestPanel={props.friendsRequestPanel}
         usersRequests={props.usersRequests}
         rejectFriendsRequest={props.rejectFriendsRequest}
+        acceptFriendsRequest={props.acceptFriendsRequest}
       />
       <LeftPanel
         currentLoggedUser={props.currentLoggedUser}

@@ -35,12 +35,12 @@ function MenuPanel(props) {
           {Bell}
         </div>
       ) : null}
-      {props.friendsRequestPanel ? (
-        <RequestPanel
-          rejectFriendsRequest={props.rejectFriendsRequest}
-          usersRequests={props.usersRequests}
-        />
-      ) : null}
+      <RequestPanel
+        rejectFriendsRequest={props.rejectFriendsRequest}
+        usersRequests={props.usersRequests}
+        friendsRequestPanel={props.friendsRequestPanel}
+        acceptFriendsRequest={props.acceptFriendsRequest}
+      />
 
       <div className="MenuPanel_Icons">
         <span

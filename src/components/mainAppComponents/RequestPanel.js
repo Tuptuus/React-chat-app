@@ -5,8 +5,6 @@ import "../../styles/RequestPanel.css";
 let friendsRequests = [];
 function RequestPanel(props) {
   if (props.usersRequests !== null) {
-    console.log("właśnie na nowo zmapowano");
-    console.log(props.usersRequests);
     friendsRequests = props.usersRequests.map((request) => (
       <div key={request.UID} className="User_container">
         <div className="container_left">
@@ -22,7 +20,12 @@ function RequestPanel(props) {
           </div>
           <div className="right_bottom">
             <div className="bottom_buttons">
-              <button className="acceptRequest">Accept</button>
+              <button
+                onClick={() => props.acceptFriendsRequest(request)}
+                className="acceptRequest"
+              >
+                Accept
+              </button>
               <button
                 onClick={() => props.rejectFriendsRequest(request)}
                 className="deleteRequest"
@@ -35,7 +38,15 @@ function RequestPanel(props) {
       </div>
     ));
   }
-  return <div className="requestPanel">{friendsRequests}</div>;
+  return (
+    <div
+      className={`requestPanel ${
+        props.friendsRequestPanel === true ? "Active" : "Disable"
+      }`}
+    >
+      {friendsRequests}
+    </div>
+  );
 }
 
 export default RequestPanel;
