@@ -26,14 +26,12 @@
 
 @keyframes show {
   0% {
-    opacity: 0;
-    transform: scale(0.1, 0.1);
+    transform: scale(0, 0);
     margin-left: 30px;
     margin-top: -70px;
     visibility: hidden;
   }
   100% {
-    opacity: 1;
     transform: scale(1, 1);
     margin-top: 70px;
     margin-left: 475px;
@@ -46,8 +44,7 @@
     margin-left: 475px;
   }
   100% {
-    opacity: 0;
-    transform: scale(0.1, 0.1);
+    transform: scale(0, 0);
     margin-left: 30px;
     margin-top: -70px;
     visibility: hidden;

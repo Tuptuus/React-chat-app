@@ -50,14 +50,20 @@ import { useRef } from "react";
 function App() {
   const [signMode, setSignMode] = useState("login");
   const [currentClickedUser, setCurrentClickedUser] = useState("");
+  const [preloadClass, setPreloadClass] = useState("App preload");
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  setTimeout(() => {
+    setPreloadClass("App");
+  }, 500);
 
   // CLEAR ALL STATES
   const clearStates = () => {
     setSignMode("login");
     setCurrentClickedUser("");
+    setPreloadClass("App preload");
     setRegisterName("");
     setRegisterEmail("");
     setRegisterPassword("");
@@ -977,7 +983,6 @@ function App() {
     } else if (friendRequestFrom.length > 0) {
       setNotificationFriendRequest(true);
     }
-    console.log("wywołano");
   }, [friendRequestFrom]);
 
   const acceptFriendsRequest = async (user) => {
@@ -985,7 +990,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className={preloadClass}>
       <Routes>
         <Route
           path="/"

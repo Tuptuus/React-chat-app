@@ -15,7 +15,12 @@ function RequestPanel(props) {
         <div className="container_right">
           <div className="right_top">
             <div className="top_title">
-              {request.name} wysłał/a Ci zaproszenie do grona znajomych
+              {request.name[0].toUpperCase() +
+                request.name.slice(1, request.name.indexOf(" ")) +
+                " " +
+                request.name[request.name.indexOf(" ") + 1].toUpperCase() +
+                request.name.slice(request.name.indexOf(" ") + 2)}{" "}
+              wysłał/a Ci zaproszenie do grona znajomych
             </div>
           </div>
           <div className="right_bottom">
