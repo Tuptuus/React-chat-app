@@ -22,6 +22,7 @@ import {
   deleteDoc,
   doc,
   endAt,
+  getDoc,
   getDocs,
   limit,
   onSnapshot,
@@ -842,6 +843,12 @@ function App() {
         auth.currentUser.uid,
         "friendsRequests"
       );
+      // const getRequestRef2 = collection(
+      //   db,
+      //   "Users",
+      //   currentClickedUser.UID,
+      //   "Friends"
+      // );
       const getRequestsQuery = query(
         getRequestRef,
         where("to", "==", currentClickedUser.UID)
@@ -850,6 +857,10 @@ function App() {
         getRequestRef,
         where("from", "==", currentClickedUser.UID)
       );
+      // const getRequestsQuery3 = query(
+      //   getRequestRef2,
+      //   where("userUID", "==", auth.currentUser.uid)
+      // );
       onSnapshot(getRequestsQuery, (snapshot) => {
         let request = "";
         snapshot.docs.forEach((doc) => {
@@ -868,6 +879,15 @@ function App() {
           }
         });
       });
+      // onSnapshot(getRequestsQuery3, (snapshot) => {
+      //   let request = "";
+      //   snapshot.docs.forEach((doc) => {
+      //     request = { ...doc.data() };
+      //     if (request.userUID === auth.currentUser.uid) {
+      //       setFriendActionMode("DeleteFriend");
+      //     }
+      //   });
+      // });
     }
   }, [currentClickedUser]);
 
@@ -897,7 +917,6 @@ function App() {
     }
   };
 
-  let userRequest = [];
   useEffect(() => {
     if (friendRequestFrom) {
       for (let i = 0; i < friendRequestFrom.length; i++) {
@@ -907,14 +926,18 @@ function App() {
           where("UID", "==", friendRequestFrom[i])
         );
         onSnapshot(currRequestUserQuery, (snapshot) => {
-          snapshot.docs.forEach(async (doc) => {
-            await userRequest.push({ ...doc.data() });
+          snapshot.docs.forEach((doc) => {
+            let userRequest = [];
+            userRequest.push({ ...doc.data() });
             setUsersRequests(userRequest);
+            console.log(friendRequestFrom);
           });
         });
       }
     }
   }, [friendRequestFrom]);
+
+  // console.log(usersRequests);
 
   const rejectFriendsRequest = async (user) => {
     const getIdDocCurrRef = collection(
@@ -985,9 +1008,105 @@ function App() {
     }
   }, [friendRequestFrom]);
 
-  const acceptFriendsRequest = async (user) => {
-    console.log(`witam ${user.name}`);
-  };
+  // const acceptFriendsRequest = async (user) => {
+  //   const friendsCollectionRef = collection(
+  //     db,
+  //     "Users",
+  //     auth.currentUser.uid,
+  //     "Friends"
+  //   );
+  //   const friendsPayload = { userUID: user.UID, name: user.name };
+  //   const friendsCollectionRef2 = collection(db, "Users", user.UID, "Friends");
+  //   const friendsPayload2 = {
+  //     userUID: auth.currentUser.uid,
+  //     name: auth.currentUser.displayName,
+  //   };
+  //   await addDoc(friendsCollectionRef, friendsPayload);
+  //   await addDoc(friendsCollectionRef2, friendsPayload2);
+  //   const getIdDocCurrRef = collection(
+  //     db,
+  //     "Users",
+  //     auth.currentUser.uid,
+  //     "friendsRequests"
+  //   );
+  //   const getIdDocUserRef = collection(
+  //     db,
+  //     "Users",
+  //     user.UID,
+  //     "friendsRequests"
+  //   );
+  //   const queryDelFrom = query(
+  //     getIdDocCurrRef,
+  //     where("from", "==", user.UID),
+  //     where("to", "==", auth.currentUser.uid)
+  //   );
+  //   const queryDelTo = query(
+  //     getIdDocUserRef,
+  //     where("from", "==", user.UID),
+  //     where("to", "==", auth.currentUser.uid)
+  //   );
+  //   onSnapshot(queryDelFrom, (snapshot) => {
+  //     snapshot.docs.forEach((docu) => {
+  //       const requestDeleteRef = doc(
+  //         db,
+  //         "Users",
+  //         auth.currentUser.uid,
+  //         "friendsRequests",
+  //         docu.id
+  //       );
+  //       deleteDoc(requestDeleteRef);
+  //     });
+  //   });
+  //   onSnapshot(queryDelTo, (snapshot) => {
+  //     snapshot.docs.forEach((docu) => {
+  //       const requestDeleteRef2 = doc(
+  //         db,
+  //         "Users",
+  //         user.UID,
+  //         "friendsRequests",
+  //         docu.id
+  //       );
+  //       deleteDoc(requestDeleteRef2);
+  //     });
+  //   });
+  //   const divToDelete = usersRequests
+  //     .map(function (e) {
+  //       return e.UID;
+  //     })
+  //     .indexOf(user.UID);
+  //   const currArrayUsersRequests = [...usersRequests];
+  //   currArrayUsersRequests.splice(divToDelete, 1);
+  //   await setUsersRequests(currArrayUsersRequests);
+  //   const currArrayFriendRequestFrom = [...friendRequestFrom];
+  //   currArrayFriendRequestFrom.splice(friendRequestFrom.indexOf(user.UID), 1);
+  //   await setFriendRequestFrom(currArrayFriendRequestFrom);
+  // };
+
+  // const [friendsUID, setFriendsUID] = useState([]);
+
+  // useEffect(() => {
+  //   for (let i = 0; i < friendRequestFrom.length; i++) {
+  //     const currRequestUserRef = collection(db, "Users");
+  //     const currRequestUserQuery = query(
+  //       currRequestUserRef,
+  //       where("UID", "==", friendRequestFrom[i])
+  //     );
+  //     onSnapshot(currRequestUserQuery, (snapshot) => {
+  //       snapshot.docs.forEach(async (doc) => {
+  //         let userRequest = [];
+  //         await userRequest.push({ ...doc.data() });
+  //         setUsersRequests(userRequest);
+  //         console.log(userRequest);
+  //       });
+  //     });
+  //   }
+  // });
+
+  // SHOW YOUR FRIENDS
+
+  // useEffect(() => {
+  //   console.log("wykonano");
+  // });
 
   return (
     <div className={preloadClass}>
@@ -1080,7 +1199,7 @@ function App() {
               friendsRequestPanel={friendsRequestPanel}
               usersRequests={usersRequests}
               rejectFriendsRequest={rejectFriendsRequest}
-              acceptFriendsRequest={acceptFriendsRequest}
+              // acceptFriendsRequest={acceptFriendsRequest}
             />
           }
         >

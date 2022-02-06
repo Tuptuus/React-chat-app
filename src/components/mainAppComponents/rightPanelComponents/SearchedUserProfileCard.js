@@ -11,6 +11,7 @@ import {
   faGlobe,
   faUserClock,
   faUserCheck,
+  faUserTimes,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   faFacebookF,
@@ -21,6 +22,7 @@ import {
 
 const addUser = <FontAwesomeIcon icon={faUserPlus} />;
 const waitUser = <FontAwesomeIcon icon={faUserClock} />;
+const deleteFriend = <FontAwesomeIcon icon={faUserTimes} />;
 const requestSend = <FontAwesomeIcon icon={faUserCheck} />;
 const message = <FontAwesomeIcon icon={faComment} />;
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} />;
@@ -34,6 +36,7 @@ const twitter = <FontAwesomeIcon icon={faTwitter} />;
 const linkedIn = <FontAwesomeIcon icon={faLinkedinIn} />;
 
 function ProfileCard(props) {
+  console.log(props.friendActionMode);
   let firstName = "";
   let lastName = "";
   if (props.currentClickedUser.name) {
@@ -80,6 +83,9 @@ function ProfileCard(props) {
               ) : null}
               {props.friendActionMode === "requestSend" ? (
                 <div className="waitUser">{requestSend}</div>
+              ) : null}
+              {props.friendActionMode === "DeleteFriend" ? (
+                <div className="waitUser">{deleteFriend}</div>
               ) : null}
               <div className="message">{message}</div>
             </div>
