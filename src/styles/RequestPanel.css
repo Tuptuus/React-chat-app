@@ -15,13 +15,13 @@
 .Active {
   animation-fill-mode: both;
   animation-name: show;
-  animation-duration: 0.4s;
+  animation-duration: 0.2s;
 }
 
 .Disable {
   animation-fill-mode: both;
   animation-name: hide;
-  animation-duration: 0.4s;
+  animation-duration: 0.2s;
 }
 
 @keyframes show {
