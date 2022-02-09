@@ -4,7 +4,7 @@ import SearchedUserProfileCard from "./SearchedUserProfileCard";
 function FriendsContainer(props) {
   return (
     <>
-      {props.mode === "AddFriends" ? (
+      {props.currentClickedUser ? (
         <SearchedUserProfileCard
           currentClickedUser={props.currentClickedUser}
           currentLoggedUser={props.currentLoggedUser}

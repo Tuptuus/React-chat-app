@@ -36,7 +36,6 @@ const twitter = <FontAwesomeIcon icon={faTwitter} />;
 const linkedIn = <FontAwesomeIcon icon={faLinkedinIn} />;
 
 function ProfileCard(props) {
-  console.log(props.friendActionMode);
   let firstName = "";
   let lastName = "";
   if (props.currentClickedUser.name) {

@@ -21,24 +21,20 @@ function AddFriends(props) {
             onClick={() => {
               props.handleCurrentActiveUser(user);
             }}
-            className={`Friend_block ${
+            className={`User_block ${
               props.currentClickedUser.UID === user.UID
-                ? "Friend_currActive"
+                ? "User_currActive"
                 : null
             }`}
             key={user.UID}
           >
-            <div className="Friend_left">
-              <div className="Friend_icon">
-                <img
-                  src={user.profilePhoto}
-                  alt=""
-                  className="Friend_icon_pic"
-                />
+            <div className="User_left">
+              <div className="User_icon">
+                <img src={user.profilePhoto} alt="" className="User_icon_pic" />
               </div>
             </div>
-            <div className="Friend_right">
-              <div className="Friend_title">{`${firstName} ${lastName}`}</div>
+            <div className="User_right">
+              <div className="User_title">{`${firstName} ${lastName}`}</div>
             </div>
           </div>
         );

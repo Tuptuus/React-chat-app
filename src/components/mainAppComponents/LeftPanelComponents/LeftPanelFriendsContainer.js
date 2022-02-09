@@ -6,7 +6,11 @@ function LeftPanelFriendsContainer(props) {
   return (
     <>
       {props.mode === "Friends" ? (
-        <Friends handleCurrentMode={props.handleCurrentModeFriends} />
+        <Friends
+          handleCurrentMode={props.handleCurrentModeFriends}
+          friendsDocs={props.friendsDocs}
+          handleCurrentActiveUser={props.handleCurrentActiveUser}
+        />
       ) : (
         <AddFriends
           handleCurrentMode={props.handleCurrentModeFriends}

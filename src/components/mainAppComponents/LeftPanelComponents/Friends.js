@@ -2,6 +2,7 @@ import React from "react";
 import "../../../styles/Friends.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import FriendsList from "./FriendsList";
 
 const addUser = <FontAwesomeIcon icon={faUserPlus} />;
 function Friends(props) {
@@ -26,10 +27,19 @@ function Friends(props) {
         </div>
       </div>
       <div className="Friends_contentContainer">
-        <div className="Friends_dontHaveFriendsSadge">
-          You don't have any friends yet <br />
-          Just click this icon above
-        </div>
+        {props.friendsDocs.length !== 0 ? (
+          <FriendsList
+            handleCurrentActiveUser={props.handleCurrentActiveUser}
+            friendsDocs={props.friendsDocs}
+          />
+        ) : (
+          <div className="Friends_dontHaveFriendsSadge">
+            <span>
+              You don't have any friends yet <br />
+              Just click this icon above
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

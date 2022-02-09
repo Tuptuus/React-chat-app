@@ -21,6 +21,7 @@ function LeftPanel(props) {
               handleCurrentActiveUser={props.handleCurrentActiveUser}
               handleCurrentModeFriends={props.handleCurrentModeFriends}
               mode={props.mode}
+              friendsDocs={props.friendsDocs}
             />
           }
         />

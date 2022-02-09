@@ -31,6 +31,7 @@ function MainApp(props) {
         handleCurrentModeFriends={props.handleCurrentModeFriends}
         mode={props.mode}
         currentLoggedUserDatabase={props.currentLoggedUserDatabase}
+        friendsDocs={props.friendsDocs}
       />
       {props.isUploadOpen === true ? (
         <UpdateProfilePhoto
