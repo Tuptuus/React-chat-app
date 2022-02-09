@@ -31,6 +31,7 @@ function Friends(props) {
           <FriendsList
             handleCurrentActiveUser={props.handleCurrentActiveUser}
             friendsDocs={props.friendsDocs}
+            currentClickedUser={props.currentClickedUser}
           />
         ) : (
           <div className="Friends_dontHaveFriendsSadge">

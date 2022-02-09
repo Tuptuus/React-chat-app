@@ -15,8 +15,10 @@ function FriendsList(props) {
           onClick={() => {
             props.handleCurrentActiveUser(item);
           }}
-          className={`Friend_block`}
-          key={item.userUID}
+          className={`Friend_block ${
+            props.currentClickedUser.UID === item.UID ? "User_currActive" : null
+          }`}
+          key={item.UID}
         >
           <div className="Friend_left">
             <div className="Friend_icon">

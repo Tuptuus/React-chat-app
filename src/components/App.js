@@ -108,6 +108,7 @@ function App() {
     setNotificationFriendRequest(false);
     setFriendsRequestPanel(false);
     setUsersRequests([]);
+    setFriendsDocs([]);
   };
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
@@ -202,6 +203,7 @@ function App() {
         setRegisterError("");
         setRegisterLoadingAnimation(false);
         navigate("/ChatApp");
+        clearStates();
       } catch (error) {
         if (error.code === "auth/invalid-email") {
           setRegisterError("Invalid Email");
@@ -260,6 +262,7 @@ function App() {
         setLoginPassword("");
         setLoginLoadingAnimation(false);
         navigate("/ChatApp");
+        clearStates();
       } catch (error) {
         if (error.code === "auth/wrong-password") {
           setLoginError("Invalid Password");
@@ -302,6 +305,7 @@ function App() {
       await signInWithPopup(auth, GoogleProvider);
       AddUserToDatabase();
       navigate("/ChatApp");
+      clearStates();
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         setLoginError("account exists with different credential");
@@ -321,6 +325,7 @@ function App() {
       await signInWithPopup(auth, facebookProvider);
       AddUserToDatabase();
       navigate("/ChatApp");
+      clearStates();
     } catch (error) {
       if (error.code === "auth/account-exists-with-different-credential") {
         setLoginError("account exists with different credential");
@@ -837,6 +842,7 @@ function App() {
 
   useEffect(() => {
     if (currentClickedUser) {
+      console.log(currentClickedUser.UID);
       setFriendActionMode("Add");
       const getRequestRef = collection(
         db,
@@ -860,7 +866,7 @@ function App() {
       );
       const getRequestsQuery3 = query(
         getRequestRef2,
-        where("userUID", "==", auth.currentUser.uid)
+        where("UID", "==", auth.currentUser.uid)
       );
       onSnapshot(getRequestsQuery, (snapshot) => {
         let request = "";
@@ -884,7 +890,7 @@ function App() {
         let request = "";
         snapshot.docs.forEach((doc) => {
           request = { ...doc.data() };
-          if (request.userUID === auth.currentUser.uid) {
+          if (request.UID === auth.currentUser.uid) {
             setFriendActionMode("DeleteFriend");
           }
         });
@@ -1078,12 +1084,30 @@ function App() {
       UID: user.UID,
       name: user.name,
       profilePhoto: user.profilePhoto,
+      birthdate: user.birthdate,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      address: user.address,
+      website: user.website,
+      facebookNick: user.facebookNick,
+      instagramNick: user.instagramNick,
+      twitterNick: user.twitterNick,
+      linkedinNick: user.linkedinNick,
     };
     const friendsCollectionRef2 = collection(db, "Users", user.UID, "Friends");
     const friendsPayload2 = {
       UID: auth.currentUser.uid,
       name: auth.currentUser.displayName,
       profilePhoto: currentLoggedUserDatabase.profilePhoto,
+      birthdate: currentLoggedUserDatabase.birthdate,
+      phoneNumber: currentLoggedUserDatabase.phoneNumber,
+      email: currentLoggedUserDatabase.email,
+      address: currentLoggedUserDatabase.address,
+      website: currentLoggedUserDatabase.website,
+      facebookNick: currentLoggedUserDatabase.facebookNick,
+      instagramNick: currentLoggedUserDatabase.instagramNick,
+      twitterNick: currentLoggedUserDatabase.twitterNick,
+      linkedinNick: currentLoggedUserDatabase.linkedinNick,
     };
     await addDoc(friendsCollectionRef, friendsPayload);
     await addDoc(friendsCollectionRef2, friendsPayload2);
@@ -1172,28 +1196,35 @@ function App() {
         setFriendsDocs(filteredArr);
       }
     }
-    getIDdocs();
+    setTimeout(() => {
+      getIDdocs();
+    }, 1000);
   }, []);
-
-  // const [IDdocs, setIDdocs] = useState([]);
-  // useEffect(() => {
-  //   let IDdocsArray = [];
-  //   async function getID() {
-  //     const friendsCollectionRef = collection(
-  //       db,
-  //       "Users",
-  //       auth.currentUser.uid,
-  //       "Friends"
-  //     );
-  //     const querySnapshot = await getDocs(friendsCollectionRef);
-  //     querySnapshot.forEach((doc) => {
-  //       const tempArr = [doc.id];
-  //       IDdocsArray.push(tempArr);
-  //       setIDdocs(IDdocsArray);
-  //     });
-  //   }
-  //   getID();
-  // }, []);
+  useEffect(() => {
+    let tempArray = [];
+    const seen = new Set();
+    async function getIDdocs() {
+      const friendsCollectionRef = collection(
+        db,
+        "Users",
+        auth.currentUser.uid,
+        "Friends"
+      );
+      const querySnapshot = await getDocs(friendsCollectionRef);
+      querySnapshot.forEach((doc) => {
+        tempArray.push(doc.data());
+      });
+      if (tempArray.length !== 0) {
+        const filteredArr = tempArray.filter((el) => {
+          const duplicate = seen.has(el.UID);
+          seen.add(el.UID);
+          return !duplicate;
+        });
+        setFriendsDocs(filteredArr);
+      }
+    }
+    getIDdocs();
+  }, [friendRequestFrom]);
 
   return (
     <div className={preloadClass}>

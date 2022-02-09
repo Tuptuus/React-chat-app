@@ -10,6 +10,7 @@ function LeftPanelFriendsContainer(props) {
           handleCurrentMode={props.handleCurrentModeFriends}
           friendsDocs={props.friendsDocs}
           handleCurrentActiveUser={props.handleCurrentActiveUser}
+          currentClickedUser={props.currentClickedUser}
         />
       ) : (
         <AddFriends

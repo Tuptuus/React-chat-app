@@ -159,13 +159,17 @@ function ProfileCard(props) {
               <div className="socials_left">
                 <div className="socials_title">Facebook</div>
                 <div className="socials_content">
-                  <a
-                    href="https://facebook.com/Tuptuus"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Tuptuus
-                  </a>
+                  {props.currentClickedUser.facebookNick ? (
+                    <a
+                      href={`https://www.facebook.com/${props.currentClickedUser.facebookNick}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {props.currentClickedUser.facebookNick}
+                    </a>
+                  ) : (
+                    "---------------"
+                  )}
                 </div>
               </div>
               <div className="socials_right">
@@ -176,13 +180,17 @@ function ProfileCard(props) {
               <div className="socials_left">
                 <div className="socials_title">Instagram</div>
                 <div className="socials_content">
-                  <a
-                    href="https://facebook.com/Tuptuus"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Tuptuus
-                  </a>
+                  {props.currentClickedUser.instagramNick ? (
+                    <a
+                      href={`https://www.instagram.com/${props.currentClickedUser.instagramNick}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {props.currentClickedUser.instagramNick}
+                    </a>
+                  ) : (
+                    "---------------"
+                  )}
                 </div>
               </div>
               <div className="socials_right">
@@ -193,13 +201,17 @@ function ProfileCard(props) {
               <div className="socials_left">
                 <div className="socials_title">Twitter</div>
                 <div className="socials_content">
-                  <a
-                    href="https://facebook.com/Tuptuus"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Tuptuus
-                  </a>
+                  {props.currentClickedUser.twitterNick ? (
+                    <a
+                      href={`https://twitter.com/${props.currentClickedUser.twitterNick}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {props.currentClickedUser.twitterNick}
+                    </a>
+                  ) : (
+                    "---------------"
+                  )}
                 </div>
               </div>
               <div className="socials_right">
@@ -210,13 +222,17 @@ function ProfileCard(props) {
               <div className="socials_left">
                 <div className="socials_title">LinkedIn</div>
                 <div className="socials_content">
-                  <a
-                    href="https://facebook.com/Tuptuus"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Tuptuus
-                  </a>
+                  {props.currentClickedUser.linkedinNick ? (
+                    <a
+                      href={`https://www.linkedin.com/in/${props.currentClickedUser.linkedinNick}/`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {props.currentClickedUser.linkedinNick}
+                    </a>
+                  ) : (
+                    "---------------"
+                  )}
                 </div>
               </div>
               <div className="socials_right">
