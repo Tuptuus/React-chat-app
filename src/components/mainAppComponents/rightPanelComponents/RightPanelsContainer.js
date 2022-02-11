@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import "../../../styles/RightPanelsContainer.css";
+import ChatsContainer from "./ChatsContainer";
 import FriendsContainer from "./FriendsContainer";
 import ProfilePanel from "./ProfilePanel";
 
@@ -47,6 +48,7 @@ function RightPanelsContainer(props) {
           newRepeatPasswordValue={props.newRepeatPasswordValue}
         />
       ) : null}
+      {location.pathname === "/ChatApp/Chats" ? <ChatsContainer /> : null}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../../styles/Chats.css";
-import pic from "../../../Images/profilePicture.png";
+import pic from "../../../Images/defaultProfilePic.png";
 
 function Chats() {
   let mess = "napisałem wiadomość kurwa kurwa kurwa kurwa kurwa";
