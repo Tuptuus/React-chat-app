@@ -85,6 +85,7 @@ function MainApp(props) {
         newRepeatPasswordValue={props.newRepeatPasswordValue}
         addToFriendsSystem={props.addToFriendsSystem}
         friendActionMode={props.friendActionMode}
+        deleteFriend={props.deleteFriend}
       />
     </div>
   );

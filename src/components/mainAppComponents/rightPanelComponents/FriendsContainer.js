@@ -10,7 +10,11 @@ function FriendsContainer(props) {
           currentLoggedUser={props.currentLoggedUser}
           addToFriendsSystem={props.addToFriendsSystem}
           friendActionMode={props.friendActionMode}
+          deleteFriend={props.deleteFriend}
         />
+      ) : null}
+      {props.mode === "AddFriends" ? (
+        <div className="searchUserTitle">Search And Pick User You Want</div>
       ) : null}
     </>
   );

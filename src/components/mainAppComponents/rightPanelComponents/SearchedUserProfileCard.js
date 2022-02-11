@@ -84,7 +84,14 @@ function ProfileCard(props) {
                 <div className="waitUser">{requestSend}</div>
               ) : null}
               {props.friendActionMode === "DeleteFriend" ? (
-                <div className="waitUser">{deleteFriend}</div>
+                <div
+                  onClick={() =>
+                    props.deleteFriend(props.currentClickedUser.UID)
+                  }
+                  className="deleteUser"
+                >
+                  {deleteFriend}
+                </div>
               ) : null}
               <div className="message">{message}</div>
             </div>
@@ -241,9 +248,7 @@ function ProfileCard(props) {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="searchUserTitle">Search And Pick User You Want</div>
-      )}
+      ) : null}
     </>
   );
 }

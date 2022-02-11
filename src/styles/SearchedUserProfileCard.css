@@ -48,7 +48,8 @@
   width: 50%;
 }
 
-.waitUser {
+.waitUser,
+.deleteUser {
   font-size: 40px;
   transition: 0.3s;
   width: 50%;
@@ -61,13 +62,14 @@
 .message {
   font-size: 40px;
   margin-left: 20px;
-  cursor: pointer;
   transition: 0.3s;
 }
 
-.message:hover {
+.message:hover,
+.deleteUser:hover {
   font-size: 45px;
   color: #fd4517;
+  cursor: pointer;
 }
 
 .searchUserTitle {

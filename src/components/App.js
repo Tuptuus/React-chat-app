@@ -22,13 +22,11 @@ import {
   deleteDoc,
   doc,
   endAt,
-  getDoc,
   getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
-  QuerySnapshot,
   setDoc,
   startAt,
   updateDoc,
@@ -36,13 +34,7 @@ import {
 } from "firebase/firestore";
 import SignIn from "./SignInComponents/SignIn";
 import MainApp from "./mainAppComponents/MainApp";
-import {
-  Route,
-  Routes,
-  useNavigate,
-  useLocation,
-  Navigate,
-} from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import Chats from "./mainAppComponents/LeftPanelComponents/Chats";
 import Friends from "./mainAppComponents/LeftPanelComponents/Friends";
 import Profile from "./mainAppComponents/LeftPanelComponents/Profile";
@@ -59,7 +51,7 @@ function App() {
 
   setTimeout(() => {
     setPreloadClass("App");
-  }, 500);
+  }, 1000);
 
   // CLEAR ALL STATES
   const clearStates = () => {
@@ -521,8 +513,8 @@ function App() {
     startAt(searchUserValue.toLowerCase()),
     endAt(searchUserValue.toLowerCase() + "\uf8ff")
   );
-  let foundUsersArray = [];
   useEffect(() => {
+    let foundUsersArray = [];
     if (searchUserValue !== "") {
       onSnapshot(querySearchUsers, (snapshot) => {
         snapshot.docs.forEach((doc) => {
@@ -801,7 +793,7 @@ function App() {
     await updateDoc(updateSocialsUserInfoCollRef, updateSocialsUserInfoPayload);
   };
 
-  // ADD FRIENDS AND FRIENDS REQUESTS SYSTEM
+  // ADD/REMOVE FRIENDS AND FRIENDS REQUESTS SYSTEM
   const [friendRequestFrom, setFriendRequestFrom] = useState([]);
   const [friendActionMode, setFriendActionMode] = useState("Add");
   const [notificationFriendRequest, setNotificationFriendRequest] =
@@ -842,7 +834,6 @@ function App() {
 
   useEffect(() => {
     if (currentClickedUser) {
-      console.log(currentClickedUser.UID);
       setFriendActionMode("Add");
       const getRequestRef = collection(
         db,
@@ -1170,6 +1161,48 @@ function App() {
     await setFriendRequestFrom(currArrayFriendRequestFrom);
   };
 
+  const deleteFriend = async (user) => {
+    const delFriendRef = collection(
+      db,
+      "Users",
+      auth.currentUser.uid,
+      "Friends"
+    );
+    const delFriendQuery = query(delFriendRef, where("UID", "==", user));
+    onSnapshot(delFriendQuery, (snapshot) => {
+      snapshot.docs.forEach(async (docu) => {
+        const delFriendRef = doc(
+          db,
+          "Users",
+          auth.currentUser.uid,
+          "Friends",
+          docu.id
+        );
+        await deleteDoc(delFriendRef);
+      });
+    });
+    const delFriendRef2 = collection(db, "Users", user, "Friends");
+    const delFriendQuery2 = query(
+      delFriendRef2,
+      where("UID", "==", auth.currentUser.uid)
+    );
+    onSnapshot(delFriendQuery2, (snapshot) => {
+      snapshot.docs.forEach(async (docu) => {
+        const delFriendRef = doc(db, "Users", user, "Friends", docu.id);
+        await deleteDoc(delFriendRef);
+      });
+    });
+    const divToDelete = friendsDocs
+      .map(function (e) {
+        return e.UID;
+      })
+      .indexOf(user);
+    const currArrayOfFriends = [...friendsDocs];
+    currArrayOfFriends.splice(divToDelete, 1);
+    setCurrentClickedUser("");
+    await setFriendsDocs(currArrayOfFriends);
+  };
+
   // SHOW YOUR FRIENDS
 
   const [friendsDocs, setFriendsDocs] = useState([]);
@@ -1319,6 +1352,7 @@ function App() {
               rejectFriendsRequest={rejectFriendsRequest}
               acceptFriendsRequest={acceptFriendsRequest}
               friendsDocs={friendsDocs}
+              deleteFriend={deleteFriend}
             />
           }
         >

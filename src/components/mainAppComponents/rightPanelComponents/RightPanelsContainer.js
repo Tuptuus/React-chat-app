@@ -15,6 +15,7 @@ function RightPanelsContainer(props) {
           mode={props.mode}
           addToFriendsSystem={props.addToFriendsSystem}
           friendActionMode={props.friendActionMode}
+          deleteFriend={props.deleteFriend}
         />
       ) : null}
       {location.pathname === "/ChatApp/Profile" ? (
