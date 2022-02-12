@@ -86,6 +86,11 @@ function MainApp(props) {
         addToFriendsSystem={props.addToFriendsSystem}
         friendActionMode={props.friendActionMode}
         deleteFriend={props.deleteFriend}
+        displayEmojiPicker={props.displayEmojiPicker}
+        showEmojiPicker={props.showEmojiPicker}
+        handleChosenEmoji={props.handleChosenEmoji}
+        handleInputValue={props.handleInputValue}
+        chatInputValue={props.chatInputValue}
       />
     </div>
   );

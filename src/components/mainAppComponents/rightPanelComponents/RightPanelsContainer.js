@@ -48,7 +48,15 @@ function RightPanelsContainer(props) {
           newRepeatPasswordValue={props.newRepeatPasswordValue}
         />
       ) : null}
-      {location.pathname === "/ChatApp/Chats" ? <ChatsContainer /> : null}
+      {location.pathname === "/ChatApp/Chats" ? (
+        <ChatsContainer
+          displayEmojiPicker={props.displayEmojiPicker}
+          showEmojiPicker={props.showEmojiPicker}
+          handleChosenEmoji={props.handleChosenEmoji}
+          handleInputValue={props.handleInputValue}
+          chatInputValue={props.chatInputValue}
+        />
+      ) : null}
     </div>
   );
 }

@@ -404,6 +404,7 @@ function App() {
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
+      setShowEmojiPicker(false);
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
@@ -415,6 +416,7 @@ function App() {
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
+      setShowEmojiPicker(false);
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
@@ -426,6 +428,7 @@ function App() {
       setNewRepeatPasswordValue("");
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
+      setShowEmojiPicker(false);
     }
   };
 
@@ -1259,6 +1262,27 @@ function App() {
     getIDdocs();
   }, [friendRequestFrom]);
 
+  // HANDLE EMOJI PICKER
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  // const [chosenEmoji, setChosenEmoji] = useState(null);
+  const [chatInputValue, setChatInputValue] = useState("");
+
+  const displayEmojiPicker = () => {
+    if (showEmojiPicker === false) {
+      setShowEmojiPicker(true);
+    } else if (showEmojiPicker === true) {
+      setShowEmojiPicker(false);
+    }
+  };
+
+  const handleInputValue = (e) => {
+    setChatInputValue(e.target.value);
+  };
+
+  const handleChosenEmoji = (event, emojiObject) => {
+    setChatInputValue(chatInputValue + emojiObject.emoji);
+  };
+
   return (
     <div className={preloadClass}>
       <Routes>
@@ -1353,6 +1377,11 @@ function App() {
               acceptFriendsRequest={acceptFriendsRequest}
               friendsDocs={friendsDocs}
               deleteFriend={deleteFriend}
+              displayEmojiPicker={displayEmojiPicker}
+              showEmojiPicker={showEmojiPicker}
+              handleChosenEmoji={handleChosenEmoji}
+              handleInputValue={handleInputValue}
+              chatInputValue={chatInputValue}
             />
           }
         >

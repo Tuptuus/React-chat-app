@@ -1,5 +1,6 @@
 import React from "react";
 import "../../../styles/ChatsContainer.css";
+import EmojiPicker from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -17,15 +18,25 @@ function ChatsContainer(props) {
           <img className="profileImage" src="" alt="" />
         </div>
       </div>
-      <div className="Chats_mainContainer"></div>
+      <div className="Chats_mainContainer">
+        {props.showEmojiPicker ? (
+          <div className="EmojiPicker">
+            <EmojiPicker onEmojiClick={props.handleChosenEmoji} />
+          </div>
+        ) : null}
+      </div>
       <div className="Chats_bottomContainer">
         <div className="bottom_plusIcon">{plusCircle}</div>
         <input
           placeholder="Type your message..."
           className="messages_input"
           type="text"
+          onChange={props.handleInputValue}
+          value={props.chatInputValue}
         />
-        <div className="messages_emotes">{smileEmote}</div>
+        <div onClick={props.displayEmojiPicker} className="messages_emotes">
+          {smileEmote}
+        </div>
         <button className="messages_sendBtn">{rightArrow}</button>
       </div>
     </div>
