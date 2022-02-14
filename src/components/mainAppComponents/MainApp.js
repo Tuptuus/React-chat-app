@@ -91,6 +91,8 @@ function MainApp(props) {
         handleChosenEmoji={props.handleChosenEmoji}
         handleInputValue={props.handleInputValue}
         chatInputValue={props.chatInputValue}
+        goToChat={props.goToChat}
+        enterPressMessages={props.enterPressMessages}
       />
     </div>
   );

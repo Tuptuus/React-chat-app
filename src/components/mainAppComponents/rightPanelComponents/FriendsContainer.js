@@ -11,6 +11,7 @@ function FriendsContainer(props) {
           addToFriendsSystem={props.addToFriendsSystem}
           friendActionMode={props.friendActionMode}
           deleteFriend={props.deleteFriend}
+          goToChat={props.goToChat}
         />
       ) : null}
       {props.mode === "AddFriends" ? (

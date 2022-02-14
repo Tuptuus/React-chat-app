@@ -93,7 +93,9 @@ function ProfileCard(props) {
                   {deleteFriend}
                 </div>
               ) : null}
-              <div className="message">{message}</div>
+              <div onClick={props.goToChat} className="message">
+                {message}
+              </div>
             </div>
           </div>
           <div className="ProfileCard_informationsContainer">

@@ -17,6 +17,7 @@ function RightPanelsContainer(props) {
           addToFriendsSystem={props.addToFriendsSystem}
           friendActionMode={props.friendActionMode}
           deleteFriend={props.deleteFriend}
+          goToChat={props.goToChat}
         />
       ) : null}
       {location.pathname === "/ChatApp/Profile" ? (
@@ -55,6 +56,8 @@ function RightPanelsContainer(props) {
           handleChosenEmoji={props.handleChosenEmoji}
           handleInputValue={props.handleInputValue}
           chatInputValue={props.chatInputValue}
+          currentClickedUser={props.currentClickedUser}
+          enterPressMessages={props.enterPressMessages}
         />
       ) : null}
     </div>

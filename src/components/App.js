@@ -23,7 +23,6 @@ import {
   doc,
   endAt,
   getDocs,
-  limit,
   onSnapshot,
   orderBy,
   query,
@@ -405,6 +404,7 @@ function App() {
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
+      setIsChatInDatabase(false);
     } else if (to === "Friends") {
       navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
@@ -417,6 +417,7 @@ function App() {
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
+      setIsChatInDatabase(false);
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
@@ -429,6 +430,7 @@ function App() {
       setFriendsRequestPanel(false);
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
+      setIsChatInDatabase(false);
     }
   };
 
@@ -512,7 +514,6 @@ function App() {
   const querySearchUsers = query(
     colRefSearchUsers,
     orderBy("name"),
-    limit(10),
     startAt(searchUserValue.toLowerCase()),
     endAt(searchUserValue.toLowerCase() + "\uf8ff")
   );
@@ -531,6 +532,7 @@ function App() {
   }, [searchUserValue]);
 
   const handleCurrentActiveUser = (user) => {
+    setIsChatInDatabase(false);
     setCurrentClickedUser(user);
   };
 
@@ -1262,10 +1264,11 @@ function App() {
     getIDdocs();
   }, [friendRequestFrom]);
 
-  // HANDLE EMOJI PICKER
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-  // const [chosenEmoji, setChosenEmoji] = useState(null);
   const [chatInputValue, setChatInputValue] = useState("");
+  const [isChatInDatabase, setIsChatInDatabase] = useState(false);
+  const [currentChat, setCurrentChat] = useState(null);
+  // HANDLE EMOJI PICKER
 
   const displayEmojiPicker = () => {
     if (showEmojiPicker === false) {
@@ -1275,12 +1278,70 @@ function App() {
     }
   };
 
+  const handleChosenEmoji = (event, emojiObject) => {
+    setChatInputValue(chatInputValue + emojiObject.emoji);
+  };
+
+  // MESSAGES SYSTEM
+
+  const goToChat = () => {
+    navigate("/ChatApp/Chats");
+  };
+
   const handleInputValue = (e) => {
     setChatInputValue(e.target.value);
   };
 
-  const handleChosenEmoji = (event, emojiObject) => {
-    setChatInputValue(chatInputValue + emojiObject.emoji);
+  const enterPressMessages = (e) => {
+    if (e.key === "Enter") {
+      setChatInDatabase();
+      sendMessage();
+      setChatInputValue("");
+    }
+  };
+
+  useEffect(() => {
+    if (auth.currentUser && currentClickedUser) {
+      const membersRef = collection(db, "Chats");
+      const queryMembers = query(
+        membersRef,
+        where("member1", "==", auth.currentUser.uid),
+        where("member2", "==", currentClickedUser.UID)
+      );
+
+      onSnapshot(queryMembers, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          setCurrentChat(doc.id);
+          setIsChatInDatabase(true);
+        });
+      });
+    }
+  });
+
+  const setChatInDatabase = async () => {
+    if (isChatInDatabase === false) {
+      const membersRef = collection(db, "Chats");
+      const messagesPayload = {
+        member1: auth.currentUser.uid,
+        member2: currentClickedUser.UID,
+      };
+      await addDoc(membersRef, messagesPayload);
+    }
+  };
+
+  const sendMessage = async () => {
+    if (chatInputValue !== "") {
+      const date = new Date();
+      const timestamp = date.getTime();
+      const messageRef = collection(db, "Chats", currentChat, "Messages");
+      const messagesPayload = {
+        senderID: auth.currentUser.uid,
+        senderName: auth.currentUser.displayName,
+        sendDate: timestamp,
+        message: chatInputValue,
+      };
+      await addDoc(messageRef, messagesPayload);
+    }
   };
 
   return (
@@ -1382,6 +1443,8 @@ function App() {
               handleChosenEmoji={handleChosenEmoji}
               handleInputValue={handleInputValue}
               chatInputValue={chatInputValue}
+              goToChat={goToChat}
+              enterPressMessages={enterPressMessages}
             />
           }
         >
