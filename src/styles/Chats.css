@@ -84,6 +84,8 @@
 .icon_pic {
   max-width: 100%;
   max-height: 100%;
+  min-width: 100%;
+  min-height: 100%;
   border-radius: 50%;
 }
 
@@ -119,4 +121,9 @@
   padding-left: 5px;
   height: 5px;
   text-align: left;
+}
+
+.currActive {
+  background-color: #fd4517;
+  border-color: #ffbcab;
 }

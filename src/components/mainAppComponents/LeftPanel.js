@@ -9,7 +9,16 @@ function LeftPanel(props) {
   return (
     <div className="LeftPanel_container">
       <Routes>
-        <Route path="/Chats" element={<Chats />} />
+        <Route
+          path="/Chats"
+          element={
+            <Chats
+              chatsToDisplay={props.chatsToDisplay}
+              selectClickedChat={props.selectClickedChat}
+              currentClickedUser={props.currentClickedUser}
+            />
+          }
+        />
         <Route
           path="/Friends"
           element={

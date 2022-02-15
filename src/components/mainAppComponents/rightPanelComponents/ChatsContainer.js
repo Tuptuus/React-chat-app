@@ -28,7 +28,6 @@ function ChatsContainer(props) {
         props.currentClickedUser.name.indexOf(" ") + 2
       );
   }
-  // console.log(props.currentClickedUser);
   return (
     <>
       {props.currentClickedUser ? (

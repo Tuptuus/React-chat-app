@@ -406,8 +406,8 @@ function App() {
       setShowEmojiPicker(false);
       setIsChatInDatabase(false);
     } else if (to === "Friends") {
-      navigate("/ChatApp/Friends");
       setCurrentClickedUser("");
+      navigate("/ChatApp/Friends");
       setFoundUsers([]);
       setSearchUserValue("");
       setMode("Friends");
@@ -1292,11 +1292,11 @@ function App() {
     setChatInputValue(e.target.value);
   };
 
-  const enterPressMessages = (e) => {
+  const enterPressMessages = async (e) => {
     if (e.key === "Enter") {
-      setChatInDatabase();
-      sendMessage();
-      setChatInputValue("");
+      await setChatInDatabase();
+      await sendMessage();
+      await setChatInputValue("");
     }
   };
 
@@ -1305,11 +1305,21 @@ function App() {
       const membersRef = collection(db, "Chats");
       const queryMembers = query(
         membersRef,
-        where("member1", "==", auth.currentUser.uid),
-        where("member2", "==", currentClickedUser.UID)
+        where("member1UID", "==", auth.currentUser.uid),
+        where("member2UID", "==", currentClickedUser.UID)
       );
-
+      const queryMembers2 = query(
+        membersRef,
+        where("member2UID", "==", auth.currentUser.uid),
+        where("member1UID", "==", currentClickedUser.UID)
+      );
       onSnapshot(queryMembers, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          setCurrentChat(doc.id);
+          setIsChatInDatabase(true);
+        });
+      });
+      onSnapshot(queryMembers2, (snapshot) => {
         snapshot.docs.forEach((doc) => {
           setCurrentChat(doc.id);
           setIsChatInDatabase(true);
@@ -1321,9 +1331,17 @@ function App() {
   const setChatInDatabase = async () => {
     if (isChatInDatabase === false) {
       const membersRef = collection(db, "Chats");
+      // const messagesPayload = {
+      //   member1: auth.currentUser.uid,
+      //   member2: currentClickedUser.UID,
+      // };
       const messagesPayload = {
-        member1: auth.currentUser.uid,
-        member2: currentClickedUser.UID,
+        member1UID: auth.currentUser.uid,
+        member1Name: auth.currentUser.displayName,
+        member1Photo: auth.currentUser.photoURL,
+        member2UID: currentClickedUser.UID,
+        member2Name: currentClickedUser.name,
+        member2Photo: currentClickedUser.profilePhoto,
       };
       await addDoc(membersRef, messagesPayload);
     }
@@ -1341,6 +1359,59 @@ function App() {
         message: chatInputValue,
       };
       await addDoc(messageRef, messagesPayload);
+    }
+  };
+
+  // SHOW CHATS
+
+  const [chatsToDisplay, setChatsToDisplay] = useState([]);
+  let tempArray = [];
+  useEffect(() => {
+    async function getChats() {
+      if (auth.currentUser) {
+        const chatsRef = collection(db, "Chats");
+        const chatsQuery = query(
+          chatsRef,
+          where("member1UID", "==", auth.currentUser.uid)
+        );
+        onSnapshot(chatsQuery, (snapshot) => {
+          snapshot.docs.forEach(async (doc) => {
+            await tempArray.push({ ...doc.data() });
+            await setChatsToDisplay(tempArray);
+          });
+        });
+        const chatsQuery2 = query(
+          chatsRef,
+          where("member2UID", "==", auth.currentUser.uid)
+        );
+        onSnapshot(chatsQuery2, (snapshot) => {
+          snapshot.docs.forEach(async (doc) => {
+            tempArray.push({ ...doc.data() });
+            await setChatsToDisplay(tempArray);
+          });
+        });
+      }
+    }
+    getChats();
+  }, [currentLoggedUser]);
+
+  let tempUID = { UID: null, name: null, profilePhoto: null };
+
+  const selectClickedChat = (user) => {
+    if (user.member1UID === auth.currentUser.uid) {
+      tempUID = {
+        UID: user.member2UID,
+        name: user.member2Name,
+        profilePhoto: user.member2Photo,
+      };
+      setCurrentClickedUser(tempUID);
+    } else {
+      tempUID = {
+        UID: user.member1UID,
+        name: user.member1Name,
+        profilePhoto: user.member1Photo,
+      };
+      setCurrentClickedUser(tempUID);
     }
   };
 
@@ -1445,6 +1516,8 @@ function App() {
               chatInputValue={chatInputValue}
               goToChat={goToChat}
               enterPressMessages={enterPressMessages}
+              chatsToDisplay={chatsToDisplay}
+              selectClickedChat={selectClickedChat}
             />
           }
         >
