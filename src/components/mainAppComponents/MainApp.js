@@ -95,6 +95,9 @@ function MainApp(props) {
         chatInputValue={props.chatInputValue}
         goToChat={props.goToChat}
         enterPressMessages={props.enterPressMessages}
+        sortedMessages={props.sortedMessages}
+        // filteredMessages={props.filteredMessages}
+        scrollTo={props.scrollTo}
       />
     </div>
   );

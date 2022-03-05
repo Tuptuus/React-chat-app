@@ -29,6 +29,7 @@ function Chats(props) {
     }
     return (
       <div
+        key={`${chat.member1UID}${chat.member2UID}`}
         onClick={() => props.selectClickedChat(chat)}
         className={`Chat_block ${
           props.currentClickedUser.UID === chat.member2UID ? "currActive" : null

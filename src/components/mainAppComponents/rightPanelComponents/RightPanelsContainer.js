@@ -58,6 +58,9 @@ function RightPanelsContainer(props) {
           chatInputValue={props.chatInputValue}
           currentClickedUser={props.currentClickedUser}
           enterPressMessages={props.enterPressMessages}
+          sortedMessages={props.sortedMessages}
+          // filteredMessages={props.filteredMessages}
+          scrollTo={props.scrollTo}
         />
       ) : null}
     </div>

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { faGrinSquint } from "@fortawesome/free-solid-svg-icons";
+import { auth } from "../../firebase-config";
 
 const rightArrow = <FontAwesomeIcon icon={faArrowRight} />;
 const plusCircle = <FontAwesomeIcon icon={faPlusCircle} />;
@@ -28,6 +29,28 @@ function ChatsContainer(props) {
         props.currentClickedUser.name.indexOf(" ") + 2
       );
   }
+
+  const messagesToDisplay = props.sortedMessages.map((message) => (
+    <div
+      className={
+        message.senderID === auth.currentUser.uid
+          ? "message_myLine"
+          : "message_otherLine"
+      }
+    >
+      <div
+        className={
+          message.senderID === auth.currentUser.uid
+            ? "message_block loggedUserMessage"
+            : "message_block otherUserMessage"
+        }
+        key={message.sendDate}
+      >
+        <div className="message_text">{message.message}</div>
+      </div>
+    </div>
+  ));
+
   return (
     <>
       {props.currentClickedUser ? (
@@ -43,11 +66,13 @@ function ChatsContainer(props) {
             <div className="User_name">{`${firstName} ${lastName}`}</div>
           </div>
           <div className="Chats_mainContainer">
+            {messagesToDisplay}
             {props.showEmojiPicker ? (
               <div className="EmojiPicker">
                 <EmojiPicker onEmojiClick={props.handleChosenEmoji} />
               </div>
             ) : null}
+            <div ref={props.scrollTo} className="divToScroll"></div>
           </div>
           <div className="Chats_bottomContainer">
             <div className="bottom_plusIcon">{plusCircle}</div>

@@ -1331,10 +1331,6 @@ function App() {
   const setChatInDatabase = async () => {
     if (isChatInDatabase === false) {
       const membersRef = collection(db, "Chats");
-      // const messagesPayload = {
-      //   member1: auth.currentUser.uid,
-      //   member2: currentClickedUser.UID,
-      // };
       const messagesPayload = {
         member1UID: auth.currentUser.uid,
         member1Name: auth.currentUser.displayName,
@@ -1344,6 +1340,9 @@ function App() {
         member2Photo: currentClickedUser.profilePhoto,
       };
       await addDoc(membersRef, messagesPayload);
+      setTimeout(async () => {
+        await sendMessage();
+      }, 200);
     }
   };
 
@@ -1397,23 +1396,126 @@ function App() {
 
   let tempUID = { UID: null, name: null, profilePhoto: null };
 
-  const selectClickedChat = (user) => {
+  const selectClickedChat = async (user) => {
     if (user.member1UID === auth.currentUser.uid) {
       tempUID = {
         UID: user.member2UID,
         name: user.member2Name,
         profilePhoto: user.member2Photo,
       };
-      setCurrentClickedUser(tempUID);
+      await setCurrentClickedUser(tempUID);
     } else {
       tempUID = {
         UID: user.member1UID,
         name: user.member1Name,
         profilePhoto: user.member1Photo,
       };
-      setCurrentClickedUser(tempUID);
+      await setCurrentClickedUser(tempUID);
     }
   };
+
+  const [currentMessagesID, setCurrentMessagesID] = useState("");
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    if (currentClickedUser && auth.currentUser) {
+      const clickedChatRef = collection(db, "Chats");
+      const clickedChatQuery1 = query(
+        clickedChatRef,
+        where("member1UID", "==", auth.currentUser.uid),
+        where("member2UID", "==", currentClickedUser.UID)
+      );
+      const clickedChatQuery2 = query(
+        clickedChatRef,
+        where("member1UID", "==", currentClickedUser.UID),
+        where("member2UID", "==", auth.currentUser.uid)
+      );
+
+      onSnapshot(clickedChatQuery1, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          setCurrentMessagesID(doc.id);
+        });
+      });
+      onSnapshot(clickedChatQuery2, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+          setCurrentMessagesID(doc.id);
+        });
+      });
+    }
+  }, [currentClickedUser]);
+
+  let tempArray1 = [];
+  let tempArray2 = [];
+  useEffect(() => {
+    if (currentMessagesID && currentClickedUser) {
+      const messagesRef = collection(
+        db,
+        "Chats",
+        currentMessagesID,
+        "Messages"
+      );
+      const messagesQuery = query(
+        messagesRef,
+        where("senderID", "==", auth.currentUser.uid)
+      );
+      const messagesQuery2 = query(
+        messagesRef,
+        where("senderID", "==", currentClickedUser.UID)
+      );
+      onSnapshot(messagesQuery, (snapshot) => {
+        snapshot.docs.forEach(async (doc) => {
+          if (doc.data()) {
+            await tempArray1.push(doc.data());
+          }
+        });
+      });
+      onSnapshot(messagesQuery2, async (snapshot) => {
+        snapshot.docs.forEach(async (doc) => {
+          if (doc.data()) {
+            await tempArray2.push(doc.data());
+          }
+        });
+        await setMessages(tempArray1.concat(tempArray2));
+      });
+    }
+  }, [currentClickedUser, currentMessagesID]);
+
+  console.log(messages);
+
+  const [filteredMessages, setFilteredMessages] = useState([]);
+  const [sortedMessages, setSortedMessages] = useState([]);
+  // const seen = new Set();
+  // useEffect(() => {
+  //   if (messages.length !== 0) {
+  //     const filtered = messages.filter(
+  //       (value, index, self) =>
+  //         index === self.findIndex((t) => t.sendDate === value.sendDate)
+  //     );
+  //     setFilteredMessages(filtered);
+  //   }
+  // }, [messages]);
+  // console.log(filteredMessages);
+  useEffect(() => {
+    async function sorting() {
+      if (messages) {
+        // console.log(messages);
+        const sortedMessages = messages.sort(
+          (dateA, dateB) => dateA.sendDate - dateB.sendDate
+        );
+        await setSortedMessages(sortedMessages);
+      }
+    }
+    sorting();
+  });
+
+  // console.log(sortedMessages);
+
+  const scrollTo = useRef(null);
+  useEffect(() => {
+    const scrollFunc = () => scrollTo.current.scrollIntoView();
+    setTimeout(() => {
+      scrollFunc();
+    }, 50);
+  });
 
   return (
     <div className={preloadClass}>
@@ -1518,6 +1620,9 @@ function App() {
               enterPressMessages={enterPressMessages}
               chatsToDisplay={chatsToDisplay}
               selectClickedChat={selectClickedChat}
+              // filteredMessages={filteredMessages}
+              sortedMessages={sortedMessages}
+              scrollTo={scrollTo}
             />
           }
         >
