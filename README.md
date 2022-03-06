@@ -8,6 +8,8 @@
 
 ## info
 
+This app is made for Chrome and test on only 1920x1080
+
 #### code in firebase-config.js is below
 
 import { initializeApp } from "firebase/app"; <br/>

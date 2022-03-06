@@ -23,6 +23,7 @@ import {
   doc,
   endAt,
   getDocs,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -1443,9 +1444,9 @@ function App() {
     }
   }, [currentClickedUser]);
 
-  let tempArray1 = [];
-  let tempArray2 = [];
   useEffect(() => {
+    let tempArray1 = [];
+    tempArray1.length = 0;
     if (currentMessagesID && currentClickedUser) {
       const messagesRef = collection(
         db,
@@ -1457,55 +1458,49 @@ function App() {
         messagesRef,
         where("senderID", "==", auth.currentUser.uid)
       );
+      onSnapshot(messagesQuery, (snapshot) => {
+        snapshot.docs.forEach(async (doc) => {
+          await tempArray1.push(doc.data());
+          await setMessages(tempArray1);
+        });
+      });
       const messagesQuery2 = query(
         messagesRef,
         where("senderID", "==", currentClickedUser.UID)
       );
-      onSnapshot(messagesQuery, (snapshot) => {
+      onSnapshot(messagesQuery2, (snapshot) => {
         snapshot.docs.forEach(async (doc) => {
-          if (doc.data()) {
-            await tempArray1.push(doc.data());
-          }
+          await tempArray1.push(doc.data());
+          await setMessages(tempArray1);
         });
-      });
-      onSnapshot(messagesQuery2, async (snapshot) => {
-        snapshot.docs.forEach(async (doc) => {
-          if (doc.data()) {
-            await tempArray2.push(doc.data());
-          }
-        });
-        await setMessages(tempArray1.concat(tempArray2));
       });
     }
   }, [currentClickedUser, currentMessagesID]);
 
-  console.log(messages);
+  // console.log(messages);
 
-  const [filteredMessages, setFilteredMessages] = useState([]);
   const [sortedMessages, setSortedMessages] = useState([]);
-  // const seen = new Set();
-  // useEffect(() => {
-  //   if (messages.length !== 0) {
-  //     const filtered = messages.filter(
-  //       (value, index, self) =>
-  //         index === self.findIndex((t) => t.sendDate === value.sendDate)
-  //     );
-  //     setFilteredMessages(filtered);
-  //   }
-  // }, [messages]);
-  // console.log(filteredMessages);
+  const [filteredMessages, setFilteredMessages] = useState([]);
   useEffect(() => {
-    async function sorting() {
-      if (messages) {
-        // console.log(messages);
-        const sortedMessages = messages.sort(
-          (dateA, dateB) => dateA.sendDate - dateB.sendDate
-        );
-        await setSortedMessages(sortedMessages);
-      }
-    }
-    sorting();
-  });
+    console.log(messages);
+    const filtered = messages.filter(
+      (value, index, self) =>
+        index === self.findIndex((t) => t.sendDate === value.sendDate)
+    );
+    setFilteredMessages(filtered);
+  }, [messages]);
+  // console.log(filteredMessages);
+  // useEffect(() => {
+  //   async function sorting() {
+  //     if (messages) {
+  //       const sortedMessages = messages.sort(
+  //         (dateA, dateB) => dateA.sendDate - dateB.sendDate
+  //       );
+  //       await setSortedMessages(sortedMessages);
+  //     }
+  //   }
+  //   sorting();
+  // });
 
   // console.log(sortedMessages);
 
@@ -1620,8 +1615,9 @@ function App() {
               enterPressMessages={enterPressMessages}
               chatsToDisplay={chatsToDisplay}
               selectClickedChat={selectClickedChat}
-              // filteredMessages={filteredMessages}
-              sortedMessages={sortedMessages}
+              filteredMessages={filteredMessages}
+              // sortedMessages={sortedMessages}
+              // messages={messages}
               scrollTo={scrollTo}
             />
           }

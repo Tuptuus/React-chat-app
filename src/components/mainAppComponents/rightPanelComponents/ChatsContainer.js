@@ -30,7 +30,7 @@ function ChatsContainer(props) {
       );
   }
 
-  const messagesToDisplay = props.sortedMessages.map((message) => (
+  const messagesToDisplay = props.filteredMessages.map((message) => (
     <div
       className={
         message.senderID === auth.currentUser.uid
