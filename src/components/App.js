@@ -23,11 +23,9 @@ import {
   doc,
   endAt,
   getDocs,
-  limit,
   onSnapshot,
   orderBy,
   query,
-  serverTimestamp,
   setDoc,
   startAt,
   updateDoc,
@@ -102,6 +100,14 @@ function App() {
     setFriendsRequestPanel(false);
     setUsersRequests([]);
     setFriendsDocs([]);
+    setLastMsgs([]);
+    setMessages([]);
+    setCurrentMessagesID("");
+    setChatsToDisplay([]);
+    setCurrentChat(null);
+    setIsChatInDatabase(false);
+    setChatInputValue("");
+    setShowEmojiPicker(false);
   };
 
   // STAY LOGIN AFTER REFRESH OR REOPEN PAGE
@@ -123,7 +129,7 @@ function App() {
         navigate("/ChatApp");
       }
     }
-  }, [currentLoggedUser]);
+  }, [currentLoggedUser, location.pathname, navigate]);
 
   // CHANGE PAGE BETWEEN LOGIN OR REGISTER
   const handleChangeSignMode = (e) => {
@@ -344,7 +350,9 @@ function App() {
 
   const LogoutUser = async () => {
     signOut(auth);
-    navigate("/");
+    setTimeout(() => {
+      navigate("/");
+    }, 10);
     clearStates();
   };
 
@@ -933,7 +941,6 @@ function App() {
 
   let userRequest = [];
   useEffect(() => {
-    // setFriendsRequestPanel(false);
     if (friendRequestFrom) {
       for (let i = 0; i < friendRequestFrom.length; i++) {
         const currRequestUserRef = collection(db, "Users");
@@ -1305,8 +1312,10 @@ function App() {
 
   const enterPressMessages = async (e) => {
     if (e.key === "Enter") {
+      let text = chatInputValue;
+      setChatInputValue("");
       await setChatInDatabase();
-      await sendMessage();
+      await sendMessage(text);
       await setChatInputValue("");
     }
   };
@@ -1357,15 +1366,15 @@ function App() {
     }
   };
 
-  const sendMessage = async () => {
-    if (chatInputValue !== "") {
+  const sendMessage = async (text) => {
+    if (text !== "") {
       const messageRef = collection(db, "Chats", currentChat, "Messages");
       const lastMessageRef = doc(db, "lastMsgs", currentChat);
       const messagesPayload = {
         senderID: auth.currentUser.uid,
         senderName: auth.currentUser.displayName,
         sendDate: Date.now(),
-        message: chatInputValue,
+        message: text,
       };
       await addDoc(messageRef, messagesPayload);
       await setDoc(lastMessageRef, messagesPayload);
@@ -1386,7 +1395,7 @@ function App() {
         onSnapshot(chatsQuery, (snapshot) => {
           let tempArray = [];
           snapshot.docs.forEach(async (doc) => {
-            await tempArray.push({ ...doc.data() });
+            await tempArray.push({ ...doc.data(), id: doc.id });
             await setChatsToDisplay(tempArray);
           });
         });
@@ -1397,7 +1406,7 @@ function App() {
         onSnapshot(chatsQuery2, (snapshot) => {
           let tempArray = [];
           snapshot.docs.forEach(async (doc) => {
-            tempArray.push({ ...doc.data() });
+            tempArray.push({ ...doc.data(), id: doc.id });
             await setChatsToDisplay(tempArray);
           });
         });
@@ -1462,7 +1471,7 @@ function App() {
         currentMessagesID,
         "Messages"
       );
-      const messagesQuery = query(messagesRef, orderBy("sendDate", "desc"));
+      const messagesQuery = query(messagesRef);
       onSnapshot(messagesQuery, async (snapshot) => {
         let msgs = [];
         snapshot.forEach(async (doc) => {
@@ -1475,13 +1484,40 @@ function App() {
 
   const scrollTo = useRef(null);
   useEffect(() => {
-    const scrollFunc = () => scrollTo.current.scrollIntoView();
-    setTimeout(() => {
-      scrollFunc();
-    }, 50);
+    console.log("halo");
+    if (location.pathname === "/ChatApp/Chats") {
+      setTimeout(() => {
+        scrollTo.current.scrollIntoView();
+      }, 1);
+    }
   });
 
   // GET LAST MESSAGE
+  useEffect(() => {
+    const lastMessRef = collection(db, "lastMsgs");
+    const lastMessQuery = query(lastMessRef);
+    onSnapshot(lastMessQuery, (snapshot) => {
+      let lastMsgs = [];
+      snapshot.forEach((doc) => {
+        lastMsgs.push({ ...doc.data(), id: doc.id });
+      });
+      setLastMsgs(lastMsgs);
+    });
+  }, [currentLoggedUser]);
+
+  const [lastMsgs, setLastMsgs] = useState([]);
+
+  useEffect(() => {
+    const lastMessRef = collection(db, "lastMsgs");
+    const lastMessQuery = query(lastMessRef);
+    onSnapshot(lastMessQuery, (snapshot) => {
+      let lastMsgs = [];
+      snapshot.forEach((doc) => {
+        lastMsgs.push({ ...doc.data(), id: doc.id });
+      });
+      setLastMsgs(lastMsgs);
+    });
+  }, [setLastMsgs]);
 
   return (
     <div className={preloadClass}>
@@ -1588,6 +1624,8 @@ function App() {
               selectClickedChat={selectClickedChat}
               messages={messages}
               scrollTo={scrollTo}
+              currentChat={currentChat}
+              lastMsgs={lastMsgs}
             />
           }
         >

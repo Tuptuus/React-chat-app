@@ -16,6 +16,8 @@ function LeftPanel(props) {
               chatsToDisplay={props.chatsToDisplay}
               selectClickedChat={props.selectClickedChat}
               currentClickedUser={props.currentClickedUser}
+              currentChat={props.currentChat}
+              lastMsgs={props.lastMsgs}
             />
           }
         />

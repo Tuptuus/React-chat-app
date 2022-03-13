@@ -27,6 +27,21 @@ function Chats(props) {
         chat.member1Name[chat.member1Name.indexOf(" ") + 1].toUpperCase() +
         chat.member1Name.slice(chat.member1Name.indexOf(" ") + 2);
     }
+
+    // eslint-disable-next-line array-callback-return
+    const msgs = props.lastMsgs.map((msg) => {
+      let sliceMsg = "";
+      if (chat.id === msg.id) {
+        if (msg.message.length > 25) {
+          sliceMsg = msg.message.slice(0, 25);
+        }
+        return (
+          <span>
+            {msg.message.length > 25 ? `${sliceMsg}...` : msg.message}
+          </span>
+        );
+      }
+    });
     return (
       <div
         key={`${chat.member1UID}${chat.member2UID}`}
@@ -60,7 +75,7 @@ function Chats(props) {
             </div>
           </div>
           <div className="Chat_bottomDetails">
-            <span className="Chat_lastMess">last mess</span>
+            <span className="Chat_lastMess">{msgs}</span>
           </div>
         </div>
       </div>

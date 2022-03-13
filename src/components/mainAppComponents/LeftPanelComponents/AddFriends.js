@@ -9,6 +9,7 @@ let foundUsersElement = [];
 
 function AddFriends(props) {
   if (props.currentClickedUser !== null) {
+    // eslint-disable-next-line array-callback-return
     foundUsersElement = props.foundUsers.map((user) => {
       const firstName =
         user.name[0].toUpperCase() + user.name.slice(1, user.name.indexOf(" "));

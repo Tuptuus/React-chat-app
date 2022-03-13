@@ -48,7 +48,7 @@ function Login(props) {
         ) : null}
         <p className="Login_switchToRegister">
           If you are new user{" "}
-          <a onClick={props.handleChangeSignMode} href="">
+          <a onClick={props.handleChangeSignMode} href="$">
             Register
           </a>
         </p>

@@ -70,6 +70,7 @@
   height: 40px;
   border-radius: 5px;
   padding-left: 10px;
+  word-break: break-all;
 }
 .messages_input::placeholder {
   color: rgb(155, 155, 155);
@@ -91,8 +92,10 @@
   outline: none;
   border: none;
   margin-left: 20px;
-  width: 40px;
-  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
   border-radius: 50%;
   align-items: center;
   justify-content: center;
@@ -132,8 +135,8 @@
 }
 
 .message_text {
-  /* inline-size: 400px; */
-  word-break: break-all;
+  white-space: pre-wrap;
+  word-break: break-word;
   color: white;
 }
 
@@ -142,7 +145,6 @@
 }
 
 .otherUserMessage {
-  /* background-color: red; */
   background-color: #3e4042;
 }
 
@@ -151,7 +153,6 @@
   justify-content: right;
   margin-top: 20px;
   margin-right: 10px;
-  /* background-color: red; */
 }
 
 .message_otherLine {
@@ -159,5 +160,4 @@
   justify-content: left;
   margin-top: 20px;
   margin-left: 10px;
-  /* background-color: red; */
 }

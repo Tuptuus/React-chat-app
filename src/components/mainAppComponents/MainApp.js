@@ -34,6 +34,8 @@ function MainApp(props) {
         friendsDocs={props.friendsDocs}
         chatsToDisplay={props.chatsToDisplay}
         selectClickedChat={props.selectClickedChat}
+        currentChat={props.currentChat}
+        lastMsgs={props.lastMsgs}
       />
       {props.isUploadOpen === true ? (
         <UpdateProfilePhoto

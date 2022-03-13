@@ -22,7 +22,9 @@ function MenuPanel(props) {
     <div className="MenuPanelContainer">
       <div className="MenuPanel_userProfilePhoto">
         <img
-          src={props.currentLoggedUser.photoURL}
+          src={
+            props.currentLoggedUser ? props.currentLoggedUser.photoURL : null
+          }
           alt=""
           className="profilePhoto_pic"
         />

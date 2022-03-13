@@ -62,7 +62,7 @@ function Register(props) {
         ) : null}
         <p className="Register_switchToLogin">
           You have account?{" "}
-          <a onClick={props.handleChangeSignMode} href="">
+          <a onClick={props.handleChangeSignMode} href="$">
             LogIn
           </a>
         </p>
