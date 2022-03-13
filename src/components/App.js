@@ -27,6 +27,7 @@ import {
   onSnapshot,
   orderBy,
   query,
+  serverTimestamp,
   setDoc,
   startAt,
   updateDoc,
@@ -406,6 +407,9 @@ function App() {
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
       setIsChatInDatabase(false);
+      setMessages([]);
+      setCurrentChat("");
+      setCurrentMessagesID("");
     } else if (to === "Friends") {
       setCurrentClickedUser("");
       navigate("/ChatApp/Friends");
@@ -419,6 +423,9 @@ function App() {
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
       setIsChatInDatabase(false);
+      setMessages([]);
+      setCurrentChat("");
+      setCurrentMessagesID("");
     } else if (to === "Profile") {
       navigate("/ChatApp/Profile");
       setCurrentClickedUser("");
@@ -432,6 +439,9 @@ function App() {
       setSaveUpdateAnimation(false);
       setShowEmojiPicker(false);
       setIsChatInDatabase(false);
+      setMessages([]);
+      setCurrentChat("");
+      setCurrentMessagesID("");
     }
   };
 
@@ -1349,23 +1359,22 @@ function App() {
 
   const sendMessage = async () => {
     if (chatInputValue !== "") {
-      const date = new Date();
-      const timestamp = date.getTime();
       const messageRef = collection(db, "Chats", currentChat, "Messages");
+      const lastMessageRef = doc(db, "lastMsgs", currentChat);
       const messagesPayload = {
         senderID: auth.currentUser.uid,
         senderName: auth.currentUser.displayName,
-        sendDate: timestamp,
+        sendDate: Date.now(),
         message: chatInputValue,
       };
       await addDoc(messageRef, messagesPayload);
+      await setDoc(lastMessageRef, messagesPayload);
     }
   };
 
   // SHOW CHATS
 
   const [chatsToDisplay, setChatsToDisplay] = useState([]);
-  let tempArray = [];
   useEffect(() => {
     async function getChats() {
       if (auth.currentUser) {
@@ -1375,6 +1384,7 @@ function App() {
           where("member1UID", "==", auth.currentUser.uid)
         );
         onSnapshot(chatsQuery, (snapshot) => {
+          let tempArray = [];
           snapshot.docs.forEach(async (doc) => {
             await tempArray.push({ ...doc.data() });
             await setChatsToDisplay(tempArray);
@@ -1385,6 +1395,7 @@ function App() {
           where("member2UID", "==", auth.currentUser.uid)
         );
         onSnapshot(chatsQuery2, (snapshot) => {
+          let tempArray = [];
           snapshot.docs.forEach(async (doc) => {
             tempArray.push({ ...doc.data() });
             await setChatsToDisplay(tempArray);
@@ -1430,7 +1441,6 @@ function App() {
         where("member1UID", "==", currentClickedUser.UID),
         where("member2UID", "==", auth.currentUser.uid)
       );
-
       onSnapshot(clickedChatQuery1, (snapshot) => {
         snapshot.docs.forEach((doc) => {
           setCurrentMessagesID(doc.id);
@@ -1445,8 +1455,6 @@ function App() {
   }, [currentClickedUser]);
 
   useEffect(() => {
-    let tempArray1 = [];
-    tempArray1.length = 0;
     if (currentMessagesID && currentClickedUser) {
       const messagesRef = collection(
         db,
@@ -1454,55 +1462,16 @@ function App() {
         currentMessagesID,
         "Messages"
       );
-      const messagesQuery = query(
-        messagesRef,
-        where("senderID", "==", auth.currentUser.uid)
-      );
-      onSnapshot(messagesQuery, (snapshot) => {
-        snapshot.docs.forEach(async (doc) => {
-          await tempArray1.push(doc.data());
-          await setMessages(tempArray1);
+      const messagesQuery = query(messagesRef, orderBy("sendDate", "desc"));
+      onSnapshot(messagesQuery, async (snapshot) => {
+        let msgs = [];
+        snapshot.forEach(async (doc) => {
+          msgs.push(doc.data());
         });
-      });
-      const messagesQuery2 = query(
-        messagesRef,
-        where("senderID", "==", currentClickedUser.UID)
-      );
-      onSnapshot(messagesQuery2, (snapshot) => {
-        snapshot.docs.forEach(async (doc) => {
-          await tempArray1.push(doc.data());
-          await setMessages(tempArray1);
-        });
+        setMessages(msgs);
       });
     }
   }, [currentClickedUser, currentMessagesID]);
-
-  // console.log(messages);
-
-  const [sortedMessages, setSortedMessages] = useState([]);
-  const [filteredMessages, setFilteredMessages] = useState([]);
-  useEffect(() => {
-    console.log(messages);
-    const filtered = messages.filter(
-      (value, index, self) =>
-        index === self.findIndex((t) => t.sendDate === value.sendDate)
-    );
-    setFilteredMessages(filtered);
-  }, [messages]);
-  // console.log(filteredMessages);
-  // useEffect(() => {
-  //   async function sorting() {
-  //     if (messages) {
-  //       const sortedMessages = messages.sort(
-  //         (dateA, dateB) => dateA.sendDate - dateB.sendDate
-  //       );
-  //       await setSortedMessages(sortedMessages);
-  //     }
-  //   }
-  //   sorting();
-  // });
-
-  // console.log(sortedMessages);
 
   const scrollTo = useRef(null);
   useEffect(() => {
@@ -1511,6 +1480,8 @@ function App() {
       scrollFunc();
     }, 50);
   });
+
+  // GET LAST MESSAGE
 
   return (
     <div className={preloadClass}>
@@ -1615,9 +1586,7 @@ function App() {
               enterPressMessages={enterPressMessages}
               chatsToDisplay={chatsToDisplay}
               selectClickedChat={selectClickedChat}
-              filteredMessages={filteredMessages}
-              // sortedMessages={sortedMessages}
-              // messages={messages}
+              messages={messages}
               scrollTo={scrollTo}
             />
           }

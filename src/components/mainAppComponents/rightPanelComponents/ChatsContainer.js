@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../../styles/ChatsContainer.css";
 import EmojiPicker from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -30,7 +30,20 @@ function ChatsContainer(props) {
       );
   }
 
-  const messagesToDisplay = props.filteredMessages.map((message) => (
+  const [sortedMessages, setSortedMessages] = useState([]);
+  useEffect(() => {
+    async function sorting() {
+      if (props.messages) {
+        const sortedMessages = props.messages.sort(
+          (dateA, dateB) => dateA.sendDate - dateB.sendDate
+        );
+        await setSortedMessages(sortedMessages);
+      }
+    }
+    sorting();
+  }, [props.messages]);
+
+  const messagesToDisplay = sortedMessages.map((message) => (
     <div
       className={
         message.senderID === auth.currentUser.uid

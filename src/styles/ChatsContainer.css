@@ -134,6 +134,7 @@
 .message_text {
   /* inline-size: 400px; */
   word-break: break-all;
+  color: white;
 }
 
 .loggedUserMessage {
@@ -141,7 +142,8 @@
 }
 
 .otherUserMessage {
-  background-color: red;
+  /* background-color: red; */
+  background-color: #3e4042;
 }
 
 .message_myLine {
