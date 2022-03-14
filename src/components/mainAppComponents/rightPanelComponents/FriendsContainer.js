@@ -2,6 +2,10 @@ import React from "react";
 import SearchedUserProfileCard from "./SearchedUserProfileCard";
 
 function FriendsContainer(props) {
+  let show = "";
+  if (props.currentClickedUser === "" && props.mode === "AddFriends") {
+    show = "show";
+  }
   return (
     <>
       {props.currentClickedUser ? (
@@ -14,9 +18,9 @@ function FriendsContainer(props) {
           goToChat={props.goToChat}
         />
       ) : null}
-      {props.mode === "AddFriends" ? (
+      {show !== "show" ? null : (
         <div className="searchUserTitle">Search And Pick User You Want</div>
-      ) : null}
+      )}
     </>
   );
 }

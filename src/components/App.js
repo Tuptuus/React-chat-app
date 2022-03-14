@@ -1252,10 +1252,8 @@ function App() {
         setFriendsDocs(filteredArr);
       }
     }
-    setTimeout(() => {
-      getIDdocs();
-    }, 1000);
-  }, []);
+    getIDdocs();
+  }, [currentLoggedUser]);
   useEffect(() => {
     let tempArray = [];
     const seen = new Set();
@@ -1484,7 +1482,6 @@ function App() {
 
   const scrollTo = useRef(null);
   useEffect(() => {
-    console.log("halo");
     if (location.pathname === "/ChatApp/Chats") {
       setTimeout(() => {
         scrollTo.current.scrollIntoView();
