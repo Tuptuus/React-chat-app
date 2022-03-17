@@ -1,42 +1,82 @@
 import React from "react";
 import MenuPanel from "./MenuPanel";
+import MenuPanelProfile from "./MenuPanelProfile";
 import "../../styles/MainApp.css";
 import LeftPanel from "./LeftPanel";
 import UpdateProfilePhoto from "./LeftPanelComponents/UpdateProfilePhoto";
 import LogoutConfirm from "../SignInComponents/LogoutConfirm";
 import RightPanelsContainer from "./rightPanelComponents/RightPanelsContainer";
+import LeftPanelProfile from "./LeftPanelProfile";
+import { useLocation } from "react-router-dom";
 
 function MainApp(props) {
+  const location = useLocation();
   return (
     <div className="MainAppContainer">
-      <MenuPanel
-        currentLoggedUser={props.currentLoggedUser}
-        handleLogoutUser={props.handleLogoutUser}
-        navigateToOtherComponents={props.navigateToOtherComponents}
-        notificationFriendRequest={props.notificationFriendRequest}
-        handleFriendsRequestPanel={props.handleFriendsRequestPanel}
-        friendsRequestPanel={props.friendsRequestPanel}
-        usersRequests={props.usersRequests}
-        rejectFriendsRequest={props.rejectFriendsRequest}
-        acceptFriendsRequest={props.acceptFriendsRequest}
-      />
-      <LeftPanel
-        currentLoggedUser={props.currentLoggedUser}
-        handleOpenUploadWindow={props.handleOpenUploadWindow}
-        showClickedUser={props.showClickedUser}
-        foundUsers={props.foundUsers}
-        currentClickedUser={props.currentClickedUser}
-        handleSearchUserInFriends={props.handleSearchUserInFriends}
-        handleCurrentActiveUser={props.handleCurrentActiveUser}
-        handleCurrentModeFriends={props.handleCurrentModeFriends}
-        mode={props.mode}
-        currentLoggedUserDatabase={props.currentLoggedUserDatabase}
-        friendsDocs={props.friendsDocs}
-        chatsToDisplay={props.chatsToDisplay}
-        selectClickedChat={props.selectClickedChat}
-        currentChat={props.currentChat}
-        lastMsgs={props.lastMsgs}
-      />
+      {location.pathname === "/ChatApp/Profile" ? (
+        <MenuPanelProfile
+          currentLoggedUser={props.currentLoggedUser}
+          handleLogoutUser={props.handleLogoutUser}
+          navigateToOtherComponents={props.navigateToOtherComponents}
+          notificationFriendRequest={props.notificationFriendRequest}
+          handleFriendsRequestPanel={props.handleFriendsRequestPanel}
+          friendsRequestPanel={props.friendsRequestPanel}
+          usersRequests={props.usersRequests}
+          rejectFriendsRequest={props.rejectFriendsRequest}
+          acceptFriendsRequest={props.acceptFriendsRequest}
+        />
+      ) : (
+        <MenuPanel
+          currentLoggedUser={props.currentLoggedUser}
+          handleLogoutUser={props.handleLogoutUser}
+          navigateToOtherComponents={props.navigateToOtherComponents}
+          notificationFriendRequest={props.notificationFriendRequest}
+          handleFriendsRequestPanel={props.handleFriendsRequestPanel}
+          friendsRequestPanel={props.friendsRequestPanel}
+          usersRequests={props.usersRequests}
+          rejectFriendsRequest={props.rejectFriendsRequest}
+          acceptFriendsRequest={props.acceptFriendsRequest}
+        />
+      )}
+
+      {location.pathname === "/ChatApp/Profile" ? (
+        <LeftPanelProfile
+          currentLoggedUser={props.currentLoggedUser}
+          handleOpenUploadWindow={props.handleOpenUploadWindow}
+          showClickedUser={props.showClickedUser}
+          foundUsers={props.foundUsers}
+          currentClickedUser={props.currentClickedUser}
+          handleSearchUserInFriends={props.handleSearchUserInFriends}
+          handleCurrentActiveUser={props.handleCurrentActiveUser}
+          handleCurrentModeFriends={props.handleCurrentModeFriends}
+          mode={props.mode}
+          currentLoggedUserDatabase={props.currentLoggedUserDatabase}
+          friendsDocs={props.friendsDocs}
+          chatsToDisplay={props.chatsToDisplay}
+          selectClickedChat={props.selectClickedChat}
+          currentChat={props.currentChat}
+          lastMsgs={props.lastMsgs}
+        />
+      ) : (
+        <LeftPanel
+          currentLoggedUser={props.currentLoggedUser}
+          handleOpenUploadWindow={props.handleOpenUploadWindow}
+          showClickedUser={props.showClickedUser}
+          foundUsers={props.foundUsers}
+          currentClickedUser={props.currentClickedUser}
+          handleSearchUserInFriends={props.handleSearchUserInFriends}
+          handleCurrentActiveUser={props.handleCurrentActiveUser}
+          handleCurrentModeFriends={props.handleCurrentModeFriends}
+          mode={props.mode}
+          currentLoggedUserDatabase={props.currentLoggedUserDatabase}
+          friendsDocs={props.friendsDocs}
+          chatsToDisplay={props.chatsToDisplay}
+          selectClickedChat={props.selectClickedChat}
+          currentChat={props.currentChat}
+          lastMsgs={props.lastMsgs}
+        />
+      )}
+
       {props.isUploadOpen === true ? (
         <UpdateProfilePhoto
           handleOpenUploadFilesPanel={props.handleOpenUploadFilesPanel}

@@ -50,3 +50,12 @@
   font-weight: bold;
   width: 75%;
 }
+
+@media only screen and (max-width: 950px) {
+  .Friend_right {
+    display: none;
+  }
+  .Friend_left {
+    width: 100%;
+  }
+}

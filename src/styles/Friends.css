@@ -141,3 +141,29 @@
   font-size: 50px;
   position: absolute;
 }
+
+@media only screen and (max-width: 950px) {
+  .User_right {
+    display: none;
+  }
+  .User_left {
+    width: 100%;
+  }
+  /* .Friends_Top_searchInput {
+    display: none;
+  } */
+  .Friends_Top_title {
+    font-size: 25px;
+  }
+  .Friends_Top_searchInput {
+    width: 90px;
+    font-size: 14px;
+  }
+  .Friends_Top {
+    height: 150px;
+  }
+  .Friends_Top_addIcon {
+    margin-left: -30px;
+    margin-top: 40px;
+  }
+}

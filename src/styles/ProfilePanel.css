@@ -170,3 +170,13 @@
   color: #fd4517;
   margin-right: 50px;
 }
+
+@media only screen and (max-width: 950px) {
+  .ProfileAccInfo_container {
+    margin-top: 200px;
+  }
+  .ProfilePanel_MainContainer {
+    width: 90%;
+    margin-left: 10%;
+  }
+}

@@ -1,4 +1,5 @@
-.LeftPanel_container {
+.LeftPanel_container,
+.LeftPanelProfile_container {
   min-width: 380px;
   user-select: none;
 }
@@ -8,8 +9,12 @@
   height: 10%;
 }
 
-@media only screen and (max-width: 850px) {
+@media only screen and (max-width: 950px) {
   .LeftPanel_container {
     min-width: 110px;
+  }
+  .LeftPanelProfile_container {
+    max-width: 0px;
+    min-width: 0px;
   }
 }

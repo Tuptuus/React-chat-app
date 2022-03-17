@@ -172,3 +172,12 @@
 .ProfileSocials_icon {
   font-size: 26px;
 }
+
+@media only screen and (max-width: 950px) {
+  .Profile_profilePanel {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    margin-top: -100px;
+  }
+}
