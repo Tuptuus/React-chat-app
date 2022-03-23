@@ -3,31 +3,9 @@
 - Clone this repository to your folder
 - Type "npm install" in terminal
 - Type "npm install firebase" in terminal
-- Create "firebase-config" js file in scr/components and put there config from firebase
+- Create ".env" file in root folder and put there env with same name like in the firebase-config.js(REACT_APP_API_KEY, REACT_APP_MSG_ID, REACT_APP_APP_ID)
 - Now you can run this by "npm start" or "yarn start"
 
 ## info
 
 This app is made for Chrome and test on only 1920x1080
-
-#### code in firebase-config.js is below
-
-import { initializeApp } from "firebase/app"; <br/>
-import { getFirestore } from "firebase/firestore";<br/>
-import { getAuth } from "firebase/auth"; <br/>
-import { getStorage } from "firebase/storage";<br/>
-
-const firebaseConfig = { <br/>
-apiKey: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-authDomain: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-projectId: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-storageBucket: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-messagingSenderId: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-appId: "xxxxxxxxxxxxxxxxxxxxxxxx", <br/>
-}; <br/> <br/>
-const app = initializeApp(firebaseConfig);<br/>
-const auth = getAuth(app); <br/>
-const db = getFirestore(); <br/>
-const storage = getStorage(); <br/>
-<br/>
-export { auth, db, storage }; <br/>
