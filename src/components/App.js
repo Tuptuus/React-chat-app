@@ -529,14 +529,14 @@ function App() {
     setSearchUserValue(e.target.value);
     setCurrentClickedUser("");
   };
-  const colRefSearchUsers = collection(db, "Users");
-  const querySearchUsers = query(
-    colRefSearchUsers,
-    orderBy("name"),
-    startAt(searchUserValue.toLowerCase()),
-    endAt(searchUserValue.toLowerCase() + "\uf8ff")
-  );
   useEffect(() => {
+    const colRefSearchUsers = collection(db, "Users");
+    const querySearchUsers = query(
+      colRefSearchUsers,
+      orderBy("name"),
+      startAt(searchUserValue.toLowerCase()),
+      endAt(searchUserValue.toLowerCase() + "\uf8ff")
+    );
     let foundUsersArray = [];
     if (searchUserValue !== "") {
       onSnapshot(querySearchUsers, (snapshot) => {
@@ -939,8 +939,8 @@ function App() {
     }
   };
 
-  let userRequest = [];
   useEffect(() => {
+    let userRequest = [];
     if (friendRequestFrom) {
       for (let i = 0; i < friendRequestFrom.length; i++) {
         const currRequestUserRef = collection(db, "Users");
