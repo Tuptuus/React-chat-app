@@ -1313,8 +1313,7 @@ function App() {
       let text = chatInputValue;
       setChatInputValue("");
       await setChatInDatabase();
-      await sendMessage(text);
-      await setChatInputValue("");
+      sendMessage(text);
     }
   };
 
@@ -1365,9 +1364,9 @@ function App() {
   };
 
   const sendMessage = async (text) => {
+    const messageRef = collection(db, "Chats", currentChat, "Messages");
+    const lastMessageRef = doc(db, "lastMsgs", currentChat);
     if (text !== "") {
-      const messageRef = collection(db, "Chats", currentChat, "Messages");
-      const lastMessageRef = doc(db, "lastMsgs", currentChat);
       const messagesPayload = {
         senderID: auth.currentUser.uid,
         senderName: auth.currentUser.displayName,
@@ -1487,7 +1486,7 @@ function App() {
         scrollTo.current.scrollIntoView();
       }, 1);
     }
-  });
+  }, [messages, location.pathname]);
 
   // GET LAST MESSAGE
   useEffect(() => {

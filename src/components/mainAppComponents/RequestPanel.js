@@ -43,13 +43,17 @@ function RequestPanel(props) {
     ));
   }
   return (
-    <div
-      className={`requestPanel ${
-        props.friendsRequestPanel === true ? "Active" : "Disable"
-      }`}
-    >
-      {friendsRequests}
-    </div>
+    <>
+      {props.friendsRequestPanel === true ? (
+        <div
+          className={`requestPanel ${
+            props.friendsRequestPanel === true ? "Active" : "Disable"
+          }`}
+        >
+          {friendsRequests}
+        </div>
+      ) : null}
+    </>
   );
 }
 
