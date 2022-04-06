@@ -8,8 +8,8 @@ const firebaseConfig = {
   authDomain: "tupchat-1c2aa.firebaseapp.com",
   projectId: "tupchat-1c2aa",
   storageBucket: "tupchat-1c2aa.appspot.com",
-  messagingSenderId: process.env.REACT_APP_MSG_ID,
-  appId: process.env.REACT_APP_APP_ID,
+  messagingSenderId: "963635092082",
+  appId: "1:963635092082:web:cc0ed25acea2e2cacc00eb",
 };
 
 const app = initializeApp(firebaseConfig);
