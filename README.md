@@ -10,3 +10,5 @@
 
 This app is made for Chrome and test on only 1920x1080 <br/>
 You can test this app on: https://dapper-cassata-8de476.netlify.app/
+
+Ps. It may be little bugged because this was my first project and now I don't feel like correcting it
